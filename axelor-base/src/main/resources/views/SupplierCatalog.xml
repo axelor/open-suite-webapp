@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.0.xsd">
+
+    <grid name="supplier-catalog-grid" title="Supplier Catalog" model="com.axelor.apps.base.db.SupplierCatalog">
+        <field name="supplierPartner" form-view="partner-form" grid-view="partner-grid"/>
+        <field name="productSupplierName"/>
+        <field name="productSupplierCode"/>
+        <field name="updateDate"/>
+        <field name="minQty"/>
+        <field name="price" x-scale="2" />
+    </grid>
+    
+    <form name="supplier-catalog-form" title="Supplier Catalog" model="com.axelor.apps.base.db.SupplierCatalog" 
+    onNew="action-supplier-catalog-attrs-scale-and-precision" onLoad="action-supplier-catalog-attrs-scale-and-precision" width="large">
+    	<panel name="main" colSpan="12">
+			<field name="supplierPartner" domain="self.isContact = false AND self.isSupplier = true" form-view="partner-form" grid-view="partner-grid"/>
+			<field name="updateDate"/>
+        	<field name="productSupplierName"/>
+        	<field name="productSupplierCode"/>
+        	<field name="minQty"/>
+        	<field name="price"/>
+       	</panel>
+		<panel name="description" title="Description" colSpan="12">
+			<field name="description" showTitle="false" colSpan="12"/>
+		</panel>
+    </form>
+    
+    <action-attrs name="action-supplier-catalog-attrs-scale-and-precision">
+		<attribute name="scale" for="price" expr="eval: __config__.generalService.getNbDecimalDigitForUnitPrice()"/>
+	</action-attrs>
+        
+</object-views>

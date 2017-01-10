@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_4.0.xsd">
+
+  <module name="stock" package="com.axelor.apps.stock.db"/>
+
+  <entity name="StockMove" lang="java">
+  
+	<integer name="importId" />
+
+	<string name="stockMoveSeq" namecolumn="true" title="Ref." readonly="true" unique="true"/>
+    <string name="name" title="Name"/>
+    <many-to-one name="fromLocation" ref="com.axelor.apps.stock.db.Location" required="true" title="From location"/>
+    <many-to-one name="toLocation" ref="com.axelor.apps.stock.db.Location" required="true" title="To location"/>
+    
+    <date name="estimatedDate" title="Estimated date"/>
+    <date name="realDate" title="Move date" readonly="true"/>
+    
+    <integer name="statusSelect" title="Status" selection="stock.move.status.select" required="true" readonly="true"/>
+    <integer name="typeSelect" title="Type Status" required="true" selection="stock.move.type.select"/>
+    
+    <many-to-one name="fromAddress" ref="com.axelor.apps.base.db.Address" title="From address"/>
+    <many-to-one name="toAddress" ref="com.axelor.apps.base.db.Address" title="To address"/>
+    
+    <many-to-one name="company" ref="com.axelor.apps.base.db.Company" title="Company" required="true"/>
+    <many-to-one name="partner" ref="com.axelor.apps.base.db.Partner" title="Partner"/>
+    
+    <one-to-many name="stockMoveLineList" ref="com.axelor.apps.stock.db.StockMoveLine" mappedBy="stockMove" title="Stock move content"/>
+    
+    <boolean name="isWithReturnSurplus" title="Return surplus"/>
+    <boolean name="isWithBackorder" title="Manage BackOrder" default="true"/>
+    
+    <string name="trackingNumber" title="Tracking Number"/>
+    <integer name="numOfPackages" title="Number Of Packages"/>
+    <integer name="numOfPalettes" title="Number Of Palettes"/>
+    <decimal name="grossWeight" title="Gross Weight"/>
+    
+    <decimal name="exTaxTotal" title="Total W.T." precision="20" scale="2"/>
+    
+    <string name="description" title="Description" large="true"/>
+    
+    <extra-code><![CDATA[
+	
+	   	// STATUS SELECT
+		public static final int STATUS_DRAFT = 1;
+		public static final int STATUS_PLANNED = 2;
+		public static final int STATUS_REALIZED = 3;
+		public static final int STATUS_CANCELED = 4;
+
+		// TYPE SELECT
+		public static final int TYPE_INTERNAL = 1;
+		public static final int TYPE_OUTGOING = 2;
+		public static final int TYPE_INCOMING = 3;
+
+	
+	]]></extra-code>
+    
+  </entity>
+</domain-models>

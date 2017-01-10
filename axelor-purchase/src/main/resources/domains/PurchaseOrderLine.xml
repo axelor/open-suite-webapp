@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_4.0.xsd">
+
+  <module name="purchase" package="com.axelor.apps.purchase.db"/>
+
+  <entity name="PurchaseOrderLine" lang="java">
+  	<integer name="importId"/>
+  	<string name="fullName" namecolumn="true">
+	  	<![CDATA[
+	  		String fullName = "";
+	  		if(purchaseOrder != null && purchaseOrder.getPurchaseOrderSeq() != null){
+	  			fullName += purchaseOrder.getPurchaseOrderSeq();
+	  		}
+	  		if(productName != null)  {
+	  			fullName += "-";
+	  			if(productName.length() > 100)  {
+	  				fullName += productName.substring(1, 100);
+	  			}
+	  			else  {  fullName += productName;  }
+	  		}
+	  		return fullName;
+	  	]]>
+  	</string>
+  	<many-to-one name="purchaseOrder" ref="com.axelor.apps.purchase.db.PurchaseOrder" title="Purchase order"/>
+  	<integer name="sequence" title="Seq."/>
+  	<many-to-one name="product" ref="com.axelor.apps.base.db.Product" title="Product"/>
+  	<decimal name="qty" title="Qty" default="1"/>
+  	<string name="productName" title="Displayed Product name" required="true"/>
+  	<decimal name="price" title="Unit price" precision="20" scale="10"/>
+  	<decimal name="priceDiscounted" title="Unit price discounted" precision="20" scale="10"/>
+  	<many-to-one name="taxLine" ref="com.axelor.apps.account.db.TaxLine" title="Tax"/>
+  	<decimal name="exTaxTotal" title="Subtotal W.T."/>
+  	<decimal name="inTaxTotal" title="Total A.T.I."/>
+  	
+  	<string name="description" title="Description" large="true"/>
+  	<many-to-one name="unit" ref="com.axelor.apps.base.db.Unit" title="Unit"/>
+  	
+  	<decimal name="discountAmount" title="Discount amount" precision="20" scale="10"/>
+  	<integer name="discountTypeSelect" title="Discount Type" selection="base.price.list.line.amount.type.select" default="3"/>
+  	
+  	<boolean name="isOrdered" title="Ordered ?"/>
+  	  	
+  	<decimal name="saleMinPrice" title="Min sale price" precision="20" scale="10"/>
+  	
+  	
+	<date name="estimatedDelivDate" title="Estim. delivery date" help="true"/>
+	<date name="desiredDelivDate" title="Desired delivery date"/>
+
+  	
+  	<!--   	Champ technique non affiché, utilisé pour les reportings -->
+  	<decimal name="companyExTaxTotal" title="Total W.T. in company currency" hidden="true"/>
+  	<decimal name="companyInTaxTotal" title="Total A.T.I. in company currency" hidden="true"/>
+<!--   	Highlight -->
+  	<decimal name="salePrice" precision="20" scale="10"/> 
+  	
+  	<boolean name="toInvoice"/>
+  	<boolean name="isTitleLine" title="Title Line"/>
+  	
+  	
+  </entity>
+
+</domain-models>

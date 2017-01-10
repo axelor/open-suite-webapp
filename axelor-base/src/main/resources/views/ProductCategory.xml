@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.0.xsd">
+    
+    <grid name="product-category-grid" title="Product categories" model="com.axelor.apps.base.db.ProductCategory" orderBy="name">
+        <field name="name"/>
+        <field name="code"/>
+        <field name="productFamily" form-view="product-family-form" grid-view="product-family-grid"/>
+        <field name="parentProductCategory" form-view="product-category-form" grid-view="product-family-grid"/>
+    </grid>
+    
+    <form name="product-category-form" title="Product category" model="com.axelor.apps.base.db.ProductCategory" width="large">
+	    <toolbar>
+			<button name="viewProducts" title="View Products" onClick="action-view-product-by-category"/>
+		</toolbar>
+		<panel name="main" >
+        	<field name="name"/>
+        	<field name="code" x-bind="{{code|uppercase}}"/>
+	        <field name="productFamily"  form-view="product-family-form" grid-view="product-family-grid"/>
+	        <field name="parentProductCategory" form-view="product-category-form" grid-view="product-family-grid"/>
+		</panel>
+   		<panel-dashlet  title="Sales Turnover" action="dashlet.category.sales.turnover.per.month" colSpan="12" height="350" if-module="axelor-supplychain"/>
+    </form>  
+    
+    <action-view name="action-view-product-by-category" title="Products (${ name })"
+		model="com.axelor.apps.base.db.Product">
+		<view type="grid" name="product-grid" />
+		<view type="form" name="product-form" />
+		<view-param name="search-filters" value="products-filters"/>
+		<domain>self.isModel = false AND self.productCategory.id = :_productCategoryId</domain>
+		<context name="_activeCompany" expr="eval:__user__.activeCompany"/>
+		<context name="_isModel" expr="false"/>
+		<context name="_productCategoryId" expr="eval:__this__.id" />
+	</action-view>
+	
+</object-views>

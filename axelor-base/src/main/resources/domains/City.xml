@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_4.0.xsd">
+
+  <module name="base" package="com.axelor.apps.base.db"/>
+
+  <entity name="City" lang="java" cachable="true">
+  
+    <string name="name" title="Name" required="true"/>
+    <string name="artmin" title="Artmin" selection="iterritory.artmin.select"/>
+    <many-to-one name="canton" ref="Canton" title="Canton Code"/>
+    <string name="inseeCode" title="National Code" index="true" />
+    <many-to-one name="department" ref="Department" title="Department"/>
+    <string name="importId" title="Import identifier"/>
+    <integer name="nbInhCommune" title="Nb. of Inhabitants"/>
+    <string name="zip" title="Zip code"/>
+    <boolean name="hasZipOnRight" title="Zip On Right ?" />
+    <many-to-one name="country" ref="com.axelor.apps.base.db.Country" title="Country" />
+    
+  </entity>
+
+</domain-models>

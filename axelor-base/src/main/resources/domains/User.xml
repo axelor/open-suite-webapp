@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_4.0.xsd">
+
+  <module name="auth" package="com.axelor.auth.db"/>
+
+  <entity name="User" sequential="true" lang="java">
+  
+  	<string name="importId" />
+    <many-to-many name="companySet" ref="com.axelor.apps.base.db.Company" title="Company"/>
+    <many-to-one name="activeCompany" ref="com.axelor.apps.base.db.Company" title="Active company" help="true"/>
+    <many-to-one name="partner" ref="com.axelor.apps.base.db.Partner" title="Partner" help="true"/>
+    <datetime name="today" title="Today date" tz="true" help="true"/>
+    <many-to-many name="teamSet" ref="com.axelor.apps.base.db.Team"  title="Teams"/>
+    <many-to-one name="activeTeam" ref="com.axelor.apps.base.db.Team"  title="Active Team" help="true"/>
+    
+    
+    <string name="fullName" namecolumn="true" search="partner,name" title="Partner name">
+    	<![CDATA[
+    	if(partner != null) {
+    		if(partner.getFirstName() != null){
+    			return partner.getFirstName()+" "+partner.getName();
+    		}
+    		return partner.getName();
+    	}
+    	return name;
+    	]]>
+   	</string>
+   	
+    
+  </entity>
+
+</domain-models>

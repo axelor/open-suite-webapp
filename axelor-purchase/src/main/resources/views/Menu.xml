@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.0.xsd">
+	
+	
+	<menuitem name="sc-root-purchase" title="Purchases" order="-105" 
+		icon="fa-shopping-cart" groups="admins,ERP" icon-background="#b6473f"/>
+		
+	<menuitem name="sc-root-purchase-suppliers" parent="sc-root-purchase" order="-200"
+		title="Suppliers" action="sc.root.purchase.suppliers" />
+
+	<action-view name="sc.root.purchase.suppliers" title="Suppliers"
+		model="com.axelor.apps.base.db.Partner" >
+		<view type="cards" name="partner-cards" />
+		<view type="grid" name="partner-supplier-grid" />
+		<view type="form" name="partner-supplier-form" />
+	  	<view-param name="limit" value="39"/>
+		<view-param name="search-filters" value="partner-filters"/>
+		<!-- <domain>self.curUser = null OR self.curUser = :user_id</domain> -->
+		<domain>self.isContact = false AND self.isSupplier = true</domain>
+		<context name="user_id" expr="eval:__user__" />
+		<context name="searchFields" expr="name;firstName"/>
+		<context name="_isSupplier" expr="true"/>
+	</action-view>
+	
+	<menuitem name="sc-root-purchase-contacts" parent="sc-root-purchase" order="-150"
+		title="Contacts" action="sc.root.purchase.contacts" />
+
+	<action-view name="sc.root.purchase.contacts" title="Contacts"
+		model="com.axelor.apps.base.db.Partner" >
+		<view type="cards" name="partner-contact-cards" />
+		<view type="grid" name="partner-contact-grid" />
+		<view type="form" name="partner-contact-form" />
+	  	<view-param name="limit" value="39"/>
+		<domain>self.isContact = true AND self.mainPartner.isSupplier = true</domain>
+	</action-view>
+		
+	<menuitem name="sc-root-purchase-order-new" title="New Purchase order" order="-3" 
+		groups="admins,ERP" action="sc.root.purchase.order.new" parent="sc-root-purchase"/>
+		
+	<action-view name="sc.root.purchase.order.new" title="New Purchase order"
+		model="com.axelor.apps.purchase.db.PurchaseOrder" >
+		<view type="form" name="purchase-order-form" />
+		<view type="grid" name="purchase-order-grid" />
+	</action-view>	
+	
+	<menuitem name="sc-root-purchase-orders" title="Purchase orders" order="-2" 
+		groups="admins,ERP" action="sc.root.purchase.orders" parent="sc-root-purchase"/>
+
+	<action-view name="sc.root.purchase.orders" title="Purchase orders"
+		model="com.axelor.apps.purchase.db.PurchaseOrder" >
+		<view type="grid" name="purchase-order-grid" />
+		<view type="form" name="purchase-order-form" />
+		<view-param name="search-filters" value="purchase-order-filters"/>
+		<context name="_internalUser" expr="eval: __user__.id"/>
+	</action-view>
+	
+	<menuitem name="sc-root-purchase-orders-lines" title="Purchase orders lines" order="-1" 
+		groups="admins,ERP" action="sc.root.purchase.orders.lines" parent="sc-root-purchase"/>
+
+	<action-view name="sc.root.purchase.orders.lines" title="Purchase orders lines"
+		model="com.axelor.apps.purchase.db.PurchaseOrderLine" >
+		<view type="grid" name="purchase-order-line-menu-grid" />
+		<view type="form" name="purchase-order-line-menu-form" />
+	</action-view>	
+	
+	<menuitem name="purchase-order-merge" parent="sc-root-purchase"
+    	title="Merge purchase orders" action="purchase.order.merge" groups="admins,ERP"/> 
+
+	<action-view name="purchase.order.merge" title="Merge purchase orders" model="com.axelor.apps.base.db.Wizard">
+	    <view type="form" name="purchase-order-merge-form"/>
+	</action-view>
+	
+	<menuitem name="sc-root-purchase-report" parent="sc-root-purchase" title="Reportings"/>
+
+	<menuitem name="purchase-maps-partner-suppliers" parent="sc-root-purchase-report" 
+		title="Suppliers Map" action="action-show-suppliers-on-map-page" order="10"/>		
+		
+	
+	
+	<menuitem name="sc-root-purchase-conf" parent="sc-root-purchase"
+		title="Configuration" order="300"/>
+		
+	<menuitem name="sc-root-purchase-conf-price-list" parent="sc-root-purchase-conf"
+		title="Price lists" action="sc.root.purchase.conf.price.list" />
+
+	<action-view name="sc.root.purchase.conf.price.list" title="Price lists"
+		model="com.axelor.apps.base.db.PriceList" >
+		<view type="grid" name="price-list-grid" />
+		<view type="form" name="purchase-price-list-form" />
+		<domain>self.typeSelect = 2</domain>
+	</action-view>
+
+<!-- ADMINISTRATION -->
+
+
+	<menuitem name="admin-root-batch-purchase" parent="admin-root-batch"
+		title="Purchase batches" action="admin.root.batch.purchase" />
+
+	<action-view name="admin.root.batch.purchase" title="Purchase batches"
+		model="com.axelor.apps.purchase.db.PurchaseBatch" >
+		<view type="grid" name="purchase-batch-grid"/>
+		<view type="form" name="purchase-batch-form"/>
+	</action-view>
+	
+	
+	<menuitem name="admin-root-conf-purchase-config" parent="admin-root-conf"
+		title="Purchase configurations" action="admin.root.conf.purchase.config" />
+		
+	<action-view name="admin.root.conf.purchase.config" title="Purchase configurations"
+		model="com.axelor.apps.purchase.db.PurchaseConfig" >
+		<view type="grid" name="purchase-config-grid" />
+		<view type="form" name="purchase-config-form" />
+	</action-view>
+
+
+
+<!-- TOP MENU -->
+
+	<menuitem name="top-purchase" title="Purchases" groups="admins,ERP" top="true" left="false" order="-150"/>
+	
+	<menuitem name="top-purchase-create-rfq" title="Create RFQ" order="-100" parent="top-purchase" top="true" action="sc.root.purchase.order.new"/>
+	<menuitem name="top-purchase-orders-all" title="RFQs &amp; Orders" order="-70" action="sc.root.purchase.orders" parent="top-purchase" groups="admins,ERP" top="true" left="false"/>		
+	
+	<menuitem name="top-purchase-quotes" title="View RFQ" order="-90" action="top.purchase.quotes" parent="top-purchase" groups="admins,ERP" top="true" left="false"/>		
+	
+	<action-view name="top.purchase.quotes" title="RFQ"
+		model="com.axelor.apps.purchase.db.PurchaseOrder" >
+		<view type="grid" name="purchase-order-grid" />
+		<view type="form" name="purchase-order-form" />
+		<view-param name="search-filters" value="purchase-order-filters"/>
+		<domain>self.statusSelect in (2,3) </domain>
+	</action-view>	
+	
+	<menuitem name="top-purchase-orders" order="-80" title="View Orders" action="top.purchase.orders" parent="top-purchase" groups="admins,ERP" top="true" left="false"/>		
+	
+	<action-view name="top.purchase.orders" title="Orders"
+		model="com.axelor.apps.purchase.db.PurchaseOrder" >
+		<view type="grid" name="purchase-order-grid" />
+		<view type="form" name="purchase-order-form" />
+		<view-param name="search-filters" value="purchase-order-filters"/>
+		<domain>self.statusSelect in (4,5) </domain>
+	</action-view>
+	
+	
+	<menuitem name="menu-purchase-dashboard-1" parent="sc-root-purchase-report"  
+		title="Purchase Buyer"  action="purchase.dashboard.1" />	
+		
+	<action-view name="purchase.dashboard.1" title="Purchase Buyer">
+		<view type="dashboard" name="purchase.dashboard.1" />	 
+		<context name="_user_id" expr="eval:__user__.id"/>   
+	</action-view>
+	
+	<menuitem name="menu-purchase-dashboard-2" parent="sc-root-purchase-report"  
+		title="Purchase Manager"  action="purchase.dashboard.2" />	
+		
+	<action-view name="purchase.dashboard.2" title="Purchase Manager">
+		<view type="dashboard" name="purchase.dashboard.2" />	    
+	</action-view>
+	
+	<menuitem name="menu-purchase-dashboard-3" parent="sc-root-purchase-report"  
+		title="Purchase Orders"  action="purchase.purchase.dashboard.3" />	
+		
+	<action-view name="purchase.purchase.dashboard.3" title="Purchase Orders Details">
+		<view type="dashboard" name="purchase.dashboard.3" />	    
+	</action-view>
+	
+	
+</object-views>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.0.xsd">
+    
+    <grid name="prod-product-grid" title="Products" model="com.axelor.apps.production.db.ProdProduct">
+    	<field name="product" form-view="product-form" grid-view="product-grid"/>
+    	<field name="qty" aggregate="sum"/>
+        <field name="unit" form-view="unit-form" grid-view="unit-grid"/>
+    </grid>
+    
+    <grid name="prod-product-detailed-grid" title="Products" model="com.axelor.apps.production.db.ProdProduct" groupBy="product">
+    	<field name="product" form-view="product-form" grid-view="product-grid"/>
+    	<field name="wasteManufOrder"/>
+        <field name="wasteManufOrder.billOfMaterial"/>
+        <field name="wasteManufOrder.prodProcess"/>
+    	<field name="qty" aggregate="sum"/>
+        <field name="unit" form-view="unit-form" grid-view="unit-grid"/>
+       
+        
+    </grid>
+    
+    <form name="prod-product-form" title="Product" model="com.axelor.apps.production.db.ProdProduct"
+    onNew="action-product-record-default">
+    	<panel name="main">
+	    	<field name="product" onChange="action-product-record-product-information" form-view="product-form" grid-view="product-grid"/>
+	    	<field name="qty"/>
+	        <field name="unit" form-view="unit-form" grid-view="unit-grid"/>
+        </panel>
+    </form>
+    
+    <action-record name="action-product-record-default" model="com.axelor.apps.production.db.ProdProduct">
+    	<field name="qty" expr="eval: 1"/>
+    </action-record>
+    
+    <action-record name="action-product-record-product-information" model="com.axelor.apps.production.db.ProdProduct">
+    	<field name="unit" expr="eval: product?.unit"/>
+    </action-record>
+    
+</object-views>

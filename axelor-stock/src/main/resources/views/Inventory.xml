@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.0.xsd">
+    
+    <grid name="inventory-grid" title="Inventory" model="com.axelor.apps.stock.db.Inventory">
+        <field name="inventorySeq"/>
+        <field name="location" form-view="location-form" grid-view="location-grid"/>
+        <field name="dateT"/>
+        <field name="statusSelect"/>
+    </grid>
+
+	<form name="inventory-form" title="Inventory" model="com.axelor.apps.stock.db.Inventory" onSave="action-set-inventory-seq" onNew="action-inventory-record-new">
+		<panel name="main">
+			<field name="inventorySeq" readOnly="true" colSpan="4"/>    
+			<field name="statusSelect" showTitle="false" widget="NavSelect" colSpan="8"/>
+			<field name="dateT" colSpan="4" readonlyIf="statusSelect == 3 || statusSelect == 4"/>
+			<field name="location" onSelect="action-inventory-attrs-set-location-domain" colSpan="8" readonlyIf="statusSelect == 3 || statusSelect == 4"  form-view="location-form" grid-view="location-grid"/>
+			<field name="description" colSpan="12" height="3"/>
+		</panel>  
+		<panel name="fillInventoryWith" title="Fill inventory with" hideIf="statusSelect == 3 || statusSelect == 4 || location == null">
+			<field name="productFamily" form-view="product-family-form" grid-view="product-family-grid" onChange="action-inventory-on-change-product-family"/>
+			<field name="productCategory" form-view="product-category-form" grid-view="product-category-grid" onSelect="action-inventory-on-select-product-category" onChange="action-inventory-on-change-product-category"/>
+			<field name="excludeOutOfStock"/>
+			<field name="includeObsolete"/>
+			<button name="fillInventory" title="Fill inventory" showIf="location != null" onClick="action-group-stock-inventory-fillinventory-click"/>
+		</panel>
+		<panel-related field="inventoryLineList" readonlyIf="statusSelect == 3 || statusSelect == 4 || location == null" colSpan="12"/>
+		<panel sidebar="true" name="actions" title="Actions">
+			<button name="plan" title="Plan" showIf="statusSelect == 1 &amp;&amp; location != null"   onClick="action-group-stock-inventory-plan-click"/>
+			<button name="realize" title="Realize" showIf="statusSelect == 2"   onClick="action-group-stock-inventory-realize-click"/>
+			<button name="cancel" title="Cancel" showIf="statusSelect == 1 || statusSelect == 2 || statusSelect == 3"   onClick="action-group-stock-inventory-cancel-click"/>
+			<button name="draft" title="Draft" showIf="statusSelect == 4" onClick="action-group-stock-inventory-draft-click"/>
+		</panel>
+		<panel name="export" title="Export" showIf="statusSelect == 2 || statusSelect == 3" sidebar="true">
+			<field name="formatSelect" colSpan="6"/>
+			<button name="showInventory" title="Export" readonlyIf="formatSelect == null" colSpan="6" onClick="save,action-inventory-method-show-inventory"/>
+		</panel>
+		<panel name="import" title="Import" showIf="statusSelect == 2" sidebar="true">
+			<field name="importFile" widget="binary-link"/>
+			<button name="importFile" title="Import" readonlyIf="importFile == null" colSpan="6" onClick="action-group-stock-inventory-importfile-click"/>
+		</panel>
+	</form>
+    
+    <action-group name="action-group-stock-inventory-importfile-click">
+    	<action name="save"/>
+    	<action name="action-set-inventory-seq"/>
+    	<action name="action-inventory-method-import-file"/>
+    	<action name="save"/>
+    </action-group>
+    
+    <action-group name="action-group-stock-inventory-fillinventory-click">
+    	<action name="save"/>
+    	<action name="action-inventory-method-fill-inventory"/>
+    	<action name="action-set-inventory-seq"/>
+    	<action name="save"/>
+    </action-group>
+    
+    <action-group name="action-group-stock-inventory-plan-click">
+    	<action name="save"/>
+    	<action name="action-inventory-record-plan"/>
+    	<action name="action-set-inventory-seq"/>    	
+    	<action name="save"/>
+    </action-group>
+
+    <action-group name="action-group-stock-inventory-realize-click">
+    	<action name="save"/>
+    	<action name="action-inventory-method-generate-stock-move"/>
+    	<action name="action-inventory-record-realize"/>    	
+    	<action name="save"/>
+    </action-group>
+
+    <action-group name="action-group-stock-inventory-cancel-click">
+    	<action name="save"/>
+    	<action name="action-inventory-record-cancel"/>    	
+    	<action name="save"/>
+    </action-group>
+
+    <action-group name="action-group-stock-inventory-draft-click">
+    	<action name="save"/>
+    	<action name="action-inventory-record-draft"/>    	
+    	<action name="save"/>
+    </action-group>
+
+    <action-record name="action-inventory-record-new" model="com.axelor.apps.stock.db.Inventory">
+	    <field name="statusSelect" expr="1"/>
+	    <field name="dateT" expr="eval:__config__.generalService.getTodayDateTime()"/>
+	    <field name="formatSelect" expr="pdf"/>
+	</action-record>
+	
+	<action-record name="action-inventory-record-draft" model="com.axelor.apps.stock.db.Inventory">
+	    <field name="statusSelect" expr="1"/>
+	</action-record>
+	
+	<action-record name="action-inventory-record-plan" model="com.axelor.apps.stock.db.Inventory">
+	    <field name="statusSelect" expr="2"/>
+	</action-record>
+    
+    <action-record name="action-inventory-record-realize" model="com.axelor.apps.stock.db.Inventory">
+	    <field name="statusSelect" expr="3"/>
+	</action-record>
+	
+	<action-record name="action-inventory-record-cancel" model="com.axelor.apps.stock.db.Inventory">
+	    <field name="statusSelect" expr="4"/>
+	</action-record>
+	
+	<action-method name="action-inventory-method-show-inventory">
+		<call class="com.axelor.apps.stock.web.InventoryController" method="showInventory"/>
+	</action-method>
+	
+	<action-method name="action-inventory-method-import-file">
+		<call class="com.axelor.apps.stock.web.InventoryController" method="importFile"/>
+	</action-method>
+	
+	<action-method name="action-inventory-method-generate-stock-move">
+		<call class="com.axelor.apps.stock.web.InventoryController" method="generateStockMove"/>
+	</action-method>
+        
+    <action-method name="action-inventory-method-fill-inventory">
+		<call class="com.axelor.apps.stock.web.InventoryController" method="fillInventoryLineList"/>
+	</action-method>
+	
+	<action-method name="action-set-inventory-seq" >
+		<call class="com.axelor.apps.stock.web.InventoryController" method="setInventorySequence"/>
+	</action-method>
+	
+	<action-attrs  name="action-inventory-attrs-set-location-domain">
+  		<attribute name="domain" for="location" expr="eval:&quot;(self.typeSelect = 1 OR self.typeSelect = 2) AND self.company.id = ${__user__.activeCompany?.id}&quot;" />
+	</action-attrs>
+	
+	<action-attrs name="action-inventory-on-change-product-family">
+		<attribute name="value" for="productCategory" expr="eval:null" />    
+	</action-attrs>
+	
+	<action-attrs name="action-inventory-on-change-product-category">
+		<attribute name="value" for="productFamily" expr="eval:__repo__.of(ProductFamily).find(productCategory.productFamily.id)" if="productFamily == null &amp;&amp; productCategory.productFamily != null"/>    
+	</action-attrs>
+	
+	<action-attrs name="action-inventory-on-select-product-category">
+		<attribute name="domain" for="productCategory" expr="eval:&quot;self.productFamily.id = ${productFamily.id}&quot;" if="productFamily != null"/>
+		<attribute name="domain" for="productCategory" expr="eval:null" if="productFamily == null"/>
+	</action-attrs>
+
+    <search-filters name="inventories-filters" model="com.axelor.apps.stock.db.Inventory" title="Inventories filters">
+		<filter title="Planned Inventories">
+			<domain>self.statusSelect = 1</domain>
+		</filter>
+		<filter title="Inventories History">
+			<domain>self.statusSelect = 2</domain>
+		</filter>
+	</search-filters>
+	
+</object-views>
