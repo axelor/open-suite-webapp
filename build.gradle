@@ -31,7 +31,6 @@ application {
 	// ADK version required
 	adkVersion "~4.0.0"
 
-
 	// depends on all modules
 	modules.each { dir ->
 		module "modules:$dir.name"
