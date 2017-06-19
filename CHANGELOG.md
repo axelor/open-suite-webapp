@@ -1,3 +1,7 @@
+# 4.0.1 (2017-06-19)
+
+# 4.0.0 (2017-01-30)
+
 # 3.0.0 (2015-01-21)
 
 Fully responsive mobile ready views, gradle based build system and much more.
@@ -34,7 +38,7 @@ Fully responsive mobile ready views, gradle based build system and much more.
 - Improve Business, Project and Task views
 - Fixed some issue on Target management
 - Fixed some issue on Expense
-- Manufacturing dashboard 
+- Manufacturing dashboard
 - Reset value on AccountEquiv
 - Fixed some index name
 - Fixed issue with sequence called twice on SaleOrder
