@@ -25,9 +25,9 @@ application {
 
 	name "axelor-erp"
 	title "Axelor :: ERP"
-	
-	version "4.0.0"
-	
+
+	version "4.0.1"
+
 	// ADK version required
 	adkVersion "~4.0.0"
 
@@ -35,12 +35,12 @@ application {
 	modules.each { dir ->
 		module "modules:$dir.name"
 	}
-	
+
 	// install all modules
 	installedModules.each { dir ->
 			install "$dir.name"
 	}
-	
+
 }
 
 allprojects {
