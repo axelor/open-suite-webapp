@@ -23,7 +23,7 @@ allprojects {
 	apply plugin: 'eclipse'
 	
 	group = "com.axelor"
-	version = "5.0.0-SNAPSHOT"
+	version = "2.0.0"
 
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
@@ -40,8 +40,8 @@ def customModules = new File('modules').listFiles().findAll { dir ->
 modules.addAll(customModules)
 
 axelor {
-	title "Axelor :: ERP"
-	description "Axelor Entreprise Application"
+	title "Fnath :: ERP"
+	description "Fnath Application"
 
 	modules.each { dir ->
 		install "$dir.name"
