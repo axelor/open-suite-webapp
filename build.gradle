@@ -23,7 +23,7 @@ allprojects {
 	apply plugin: 'eclipse'
 	
 	group = "com.axelor"
-	version = "2.0.0"
+	version = "5.0.0-SNAPSHOT"
 
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
@@ -37,8 +37,8 @@ new File("modules").eachDir(){
 }
 
 axelor {
-	title "Fnath :: ERP"
-	description "Fnath Application"
+	title "Axelor :: ERP"
+	description "Axelor Entreprise Application"
 
 	modules.each { dir ->
 		install "$dir.name"
