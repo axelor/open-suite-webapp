@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.1.xsd">
+	
+	<grid name="administration-board-grid" model="com.axelor.apps.fnath.db.AdministrationBoard" title="Conseil d'administration" >
+		<field name="member" />
+		<field name="structure" />
+		<field name="function" />
+   </grid>
+   
+   <grid name="administration-board-partner-grid" model="com.axelor.apps.fnath.db.AdministrationBoard" title="Conseil d'administration" >
+		<field name="structure" />
+		<field name="function" />
+   </grid>
+    
+   <form name="administration-board-form" model="com.axelor.apps.fnath.db.AdministrationBoard" title="Conseil d'administration" >
+   		<panel>
+			<field name="structure" domain="self.partnerCategorySelect LIKE '%4%' OR self.partnerCategorySelect LIKE '%5%'" canEdit="false"/>
+			<field name="member" canEdit="false"/>
+			<field name="function" canEdit="false"/>
+		</panel>
+   </form>
+   
+   <form name="administration-board-partner-form" model="com.axelor.apps.fnath.db.AdministrationBoard" title="Conseil d'administration" >
+		<panel>
+			<field name="member" canEdit="false"/>
+			<field name="function" canEdit="false" />
+		</panel>
+   </form>
+   
+	
+</object-views>

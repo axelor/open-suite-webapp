@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.1.xsd">
+    
+    <grid name="task-type-grid" model="com.axelor.apps.fnath.db.TaskType" title="Types de tâche" >
+			<field name="name" />
+    </grid>
+    
+    <form name="task-type-form" model="com.axelor.apps.fnath.db.TaskType" title="Type de tâche" >
+    	<panel>
+    		<field name="name" />
+    	</panel>
+    </form>
+    
+</object-views>

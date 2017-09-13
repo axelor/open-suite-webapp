@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_5.0.xsd">
+
+	<module name="contract" package="com.axelor.apps.contract.db" />
+
+	<entity name="Contract" repository="none">
+		
+		
+	</entity>
+
+	<entity name="ContractVersion" repository="none">
+		<integer name="contractManufacturingStatusSelect" title="État de fabrication de la carte" selection="contract.manufacturing.status.select" default="1"/>
+		<date name="waitingForManufacturingDate" title="Date de mise en attente" />
+		<date name="transferToFedDate" title="Date de transfert à la Fédération" />
+		<date name="manufacturingPrintingDate" title="Date d'impression et d'envoie" />
+		
+		<integer name="sendingTypeSelect" title="Type d'envoie" selection="contract.sending.type.select" default="1"/>
+		<integer name="sendingSourceSelect" title="Source d'envoie" selection="contract.sending.source.select" default="1"/>
+		
+	</entity>
+
+
+
+</domain-models>

@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<domain-models xmlns='http://axelor.com/xml/ns/domain-models' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_4.0.xsd'>
+
+	<module name="fnath" package="com.axelor.apps.fnath.db" />
+
+	<entity name="FnathAttachment">
+	
+		<string name="name" title="Nom de la pièce jointe" namecolumn="true"/>
+		<many-to-one name="metaFile" ref="com.axelor.meta.db.MetaFile" title="Pièce jointe" />
+		
+	</entity>
+
+</domain-models>

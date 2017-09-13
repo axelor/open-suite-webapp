@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.1.xsd">
+    
+   <grid name="partner-grid" title="Partners" id="fnath-partner-grid" model="com.axelor.apps.base.db.Partner" orderBy="name">
+	    <field name="fullName"/>
+	    <field name="fixedPhone"/>
+		<field name="emailAddress.address"/>
+	    <field name="partnerCategory" grid-view="partner-category-grid" form-view="partner-category-form"/>
+	</grid>
+	
+	<grid name="partner-adherent-grid" title="Partners" id="fnath-adherent-partner-grid" model="com.axelor.apps.base.db.Partner" orderBy="name">
+	    <field name="fullName"/>
+	    <field name="numberSeq"/>
+	    <field name="fixedPhone"/>
+		<field name="emailAddress.address"/>
+	</grid>
+   
+   
+   <action-attrs name="action-fnath-attrs-partner-category-selection-in">
+   		<attribute name="selection-in" for="partnerCategorySelect" expr="eval: typeSelect == 1 ? &quot;[1,2,3,4,5,6]&quot; : typeSelect == 2 ? &quot;[1,2,3]&quot; : &quot;&quot;"/>
+		<attribute name="domain" for="partnerCategorySelect" expr="self.value IN (1,2,3,4,5,6)" if="typeSelect == 1 "/>
+		<attribute name="domain" for="partnerCategorySelect" expr="self.value IN (1,2,3)" if="typeSelect == 2 "/>
+   </action-attrs>
+   
+   <action-record name="action-fnath-record-partner-on-new" model="com.axelor.apps.base.db.Partner">
+   		<field name="isCustomer" expr="eval: true"/>
+   		<field name="languageSelect" expr="fr"/>
+   </action-record>
+   
+	<action-record name="action-fnath-partner-wainting-status" model="com.axelor.apps.base.db.Partner">
+		<field name="memberStatus" expr="eval: 1"/>
+	</action-record>   
+	
+	<action-record name="action-fnath-partner-active-status" model="com.axelor.apps.base.db.Partner">
+		<field name="memberStatus" expr="eval: 2"/>
+	</action-record>   
+	
+	<action-record name="action-fnath-partner-removed-status" model="com.axelor.apps.base.db.Partner">
+		<field name="memberStatus" expr="eval: 3"/>
+		<field name="membershipEndDate" expr="eval: __date__"/>
+	</action-record>   
+	
+	<action-record name="action-fnath-partner-record-default-on-new" model="com.axelor.apps.base.db.Partner">
+			<field name="partnerCategorySelect" expr="eval: _partnerCategorySelect"/>
+			<field name="partnerTypeSelect" expr="eval: _partnerTypeSelect"/>
+	</action-record>
+    
+    <form id="fnath-partner-form" name="partner-form" title="Partner" model="com.axelor.apps.base.db.Partner"    
+    onNew="action-group-base-partner-onnew,action-fnath-partner-record-default-on-new" onLoad="action-group-partner-onload" 
+    onSave="action-partner-iban-check-on-save" width="large">
+    
+	    <toolbar>
+	   		<button name="waitingStatus" title="En attente" hidden="true" showIf="memberStatus != 1 &amp;&amp; partnerCategorySelect.includes('1')" onClick="action-fnath-partner-wainting-status"/>
+	    	<button name="activeStatus" title="Activer" hidden="true" showIf="memberStatus != 2 &amp;&amp; partnerCategorySelect.includes('1')" onClick="action-fnath-partner-active-status"/>
+	    	<button name="removedStatus" title="Radier" hidden="true" showIf="memberStatus != 3 &amp;&amp; partnerCategorySelect.includes('1')" onClick="action-fnath-partner-removed-status"/>
+	    </toolbar>
+	    
+	    <panel>
+	    	<field name="partnerTypeSelect" colSpan="3" readonlyIf="id != null" onChange="action-partner-attrs-change-name,action-fnath-attrs-partner-category-selection-in" required="true"/>
+		    <field name="partnerCategorySelect" widget="multi-select" colSpan="9" />    
+	    </panel>
+	  
+	    <panel name="main" >
+	    <field name="memberStatus" hidden="true" showIf="partnerCategorySelect.includes('1')" readonly="true" widget="NavSelect" colSpan="9"/>
+	    <field name="fedCreation" colSpan="3" hidden="true" showIf="partnerCategorySelect.includes('1')"/>
+	    	<panel colSpan="3">
+	    		<field name="partnerSeq" colSpan="12"/>
+	        	<field name="picture" showTitle="false" widget="Image" colSpan="12"/>
+	      	</panel>
+	      	<panel colSpan="9">
+	      	
+	      	
+	      	<field name="fullName" colSpan="12" showTitle="false">
+	      		<hilite strong="true" if="true" color="primary"/>        
+		        <editor x-show-titles="false">
+		            <field name="titleSelect" showTitle="false" hideIf="partnerTypeSelect != 2" placeholder="Civility" colSpan="2"/>
+		            <field name="extendedTitleSelect" title="Titre étendu" placeholder="Titre étendu" canEdit="false" canNew="false" colSpan="3" hidden="true" showIf="partnerTypeSelect == 2"/>
+		            <field name="name" showTitle="false" css="highlight" placeholder="Name" x-bind="{{name|uppercase}}" onChange="action-partner-record-full-name,action-partner-method-set-social-network-url" colSpan="4"/>
+		            <field name="firstName" showTitle="false" hideIf="partnerTypeSelect != 2" x-bind="{{firstName|uppercase}}" css="highlight" placeholder="First name" onChange="action-partner-record-full-name,action-partner-method-set-social-network-url" colSpan="3"/>            
+		        </editor>
+		    </field>
+		    
+					<field name="birthName" colSpan="4" hidden="true" showIf="partnerTypeSelect == 2" />
+					<field name="isActiveMembre" colSpan="3"/>
+					<field name="pmr" title="PMR" colSpan="2" showTitle="true"  showIf="partnerTypeSelect == 2" />
+		        <panel hidden="true" showIf="partnerCategorySelect.includes('1')" colSpan="12" >
+						
+						<field name="numberSeq" readonly="true" colSpan="4" hidden="true" showIf="partnerCategorySelect.includes('1')"  />
+						<field name="joinDate" colSpan="4" hidden="true" showIf="partnerCategorySelect.includes('1')"/>
+						<field name="membershipNumberCardCode" title="Code carte" colSpan="4"/>
+						
+						
+						<field name="membreCompany" canEdit="false" canNew="false" colSpan="4" requiredIf="partnerCategorySelect.includes('1')" />
+						<field name="membreSection" canNew="false" canEdit="false" domain="self.partnerCategorySelect LIKE '%5%'" colSpan="4" requiredIf="partnerCategorySelect.includes('1')"/>
+						<field name="sponsor" canNew="false" canEdit="false" colSpan="4"  domain="self.partnerCategorySelect LIKE '%1%'"/>
+						
+						<field name="membershipEndDate" hidden="true" showIf="memberStatus == 3" readonly="true" />
+						<field name="membershipEndReason" requiredIf="memberStatus == 3" hidden="true" showIf="memberStatus == 3" canEdit="false" canNew="false" />
+				    	
+					</panel>
+			<field name="isContact" hidden="true" colSpan="12" />
+		</panel>
+  		</panel>
+  		
+  		<panel-related field="contactPartnerSet" hideIf="isContact || partnerTypeSelect == 2" domain="self.isContact = 'true'" form-view="partner-contact-form" grid-view="partner-contact-grid" />
+  		<panel-tabs>
+  			
+  			<panel name="infomation" title="Général">
+  				<panel name="generalInfo" title="Infos générales" hidden="true" showIf="partnerTypeSelect == 2" colSpan="12" >
+					<field name="birthdate" colSpan="4"/>
+					<field name="familySituation" colSpan="4" />
+					<field name="childrenInCharge" colSpan="4" />
+					<field name="nationality" colSpan="4" />
+					<field name="socialCategory" colSpan="4" canNew="false" canEdit="false" />
+		    	</panel>
+		    	<panel title="Sections et groupements" hidden="true" showIf="partnerCategorySelect.includes('4') || partnerCategorySelect.includes('5')" colSpan="12">
+		    		<field name="department" />
+		    		<field name="sectionCode" hidden="true" requiredIf="partnerCategorySelect.includes('5')" showIf="partnerCategorySelect.includes('5')" colSpan="12" />
+		    		<field name="administrationBoard" colSpan="12" form-view="administration-board-partner-form" />
+	    		</panel>
+				<field name="isCustomer"  hidden="true" />
+				<panel name="partnerDetails" title="Informations société" hideIf="partnerTypeSelect == 2" colSpan="12" >
+					<panel colSpan="6">
+						<field name="partnerCategory" widget="SuggestBox" colSpan="6" form-view="partner-category-form" grid-view="partner-category-grid"/>
+						<field name="industrySector" colSpan="6" widget="SuggestBox"/>
+						<field name="source" title="Nature d'adhésion" colSpan="6" widget="SuggestBox" form-view="source-form" grid-view="source-grid"/>
+						<field name="department" colSpan="6"/>
+					</panel>
+					<panel  colSpan="6">
+						<field name="saleTurnover" colSpan="6"/>
+						<field name="nbrEmployees" colSpan="6"/>
+						<field name="registrationCode" colSpan="6"/>
+						<field name="taxNbr" colSpan="6"/>
+						<field name="paymentDelay" if-module="axelor-cash-management"/>
+						<field name="parentPartner" hideIf="partnerTypeSelect != 1" domain="self.isContact = false AND self.partnerTypeSelect = 1" colSpan="6" form-view="partner-form"  grid-view="partner-grid"/>
+					</panel>
+		      	</panel>
+		      	
+		      	<panel name="adhrent" title="Adhésion" hidden="true" showIf="partnerCategorySelect.includes('1')" colSpan="12">
+	    	
+	    		<field name="firstMembershipDate" colSpan="3" />
+	    		<field name="partnerCompany" hidden="true" showIf="isFromPartnerCompany" colSpan="3"  domain="self.partnerCategorySelect LIKE '%6%'" />
+		        <field name="isFromPartnerCompany" colSpan="3" />
+		        <field name="source" title="Nature d'adhésion" colSpan="3" widget="SuggestBox" canNew="false" canEdit="false"/>
+		        
+	      </panel>
+		      	<panel hidden="true"> 
+		      	<panel name="settings" title="Settings" colSpan="12">
+					<field name="languageSelect" colSpan="6" hidden="true"/>
+					<panel title="Assigned to" colSpan="12">
+						<field name="user" colSpan="6" form-view="user-form" grid-view="user-grid"/>
+						<field name="companySet" colSpan="12" widget="TagSelect" onChange="action-partner-method-generate-customer-credit-line" canNew="false" form-view="company-form" grid-view="company-grid"/>
+					</panel>
+				</panel>
+				<panel name="notes" title="Notes" colSpan="12">
+					<field name="description" colSpan="12" height="8" showTitle="false"/>
+				</panel>
+				</panel>
+	    	</panel>
+	    	
+	      <panel title="Coordonnées">
+	  		<panel name="postalAddresses" title="Postal addresses" colSpan="12">
+				<field name="partnerAddressList" colSpan="12" onChange="action-partner-address-list-change" >
+			        <editor layout="table" x-show-titles="false" >
+			        	<label title="The following address is invalid. Please use '+' button to create a new one :" colSpan="12" css="label-bold" name="addressHelper" hidden="true" showIf="address == null || address.addressL4 == null" />
+	          			<field name="address.addressL4" hidden="true" colSpan="12"/>
+						<field name="address" colSpan="3" canNew="true"/>
+						<field name="isInvoicingAddr" widget="toggle" x-icon="fa-list-alt" colSpan="1" hideIf="$readonly()"/>
+						<field name="isDeliveryAddr" widget="toggle" x-icon="fa-shopping-cart" colSpan="1" hideIf="$readonly()" />
+						<field name="isDefaultAddr" widget="toggle" x-icon="fa-star-o" colSpan="1" hideIf="$readonly()"  />
+			        </editor>
+				</field>
+			</panel>
+			<field name="district" hidden="true" showIf="partnerCategorySelect.includes('1')" />
+			<panel name="generalContactDetails" title="General contact details" colSpan="12">
+				<field name="fixedPhone" colSpan="3" placeholder="+33100000000" pattern="^\+?(?:[0-9]{2,3}(?:\s|\.)?){3,6}[0-9]{2,3}$" onChange="action-partner-record-normalize-fixed-phone-number"/>
+				<field name="redList" colSpan="3" />
+				<field name="fax" colSpan="3" pattern="^\+?(?:[0-9]{2,3}(?:\s|\.)?){3,6}[0-9]{2,3}$" placeholder="+33000000000" onChange="action-partner-record-normalize-fax-phone-number"/>
+				<field name="mobilePhone" colSpan="3" hideIf="partnerTypeSelect == 1" placeholder="+33100000000" pattern="^\+?(?:[0-9]{2,3}(?:\s|\.)?){3,6}[0-9]{2,3}$" onChange="action-partner-record-normalize-mobile-phone-number"/>
+				<field name="emailAddress" canSelect="false" colSpan="6" form-view="email-address-simple-form" x-show-icons="false">
+					<editor x-show-titles="false">
+						<field name="address" colSpan="12" placeholder="whatever@example.com" pattern="^[a-z0-9A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ!#$%&amp;'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,})$"/>
+					</editor>
+				</field>
+				<field name="webSite" placeholder="www.url.com" pattern="([^\s]+\.[^\s]+\.[^\s]{2,})"/>
+			</panel>
+		</panel>
+		
+		<panel title="Fonctions" hidden="true" showIf="partnerCategorySelect.includes('1')">
+			<panel-dashlet hidden="false" readonly="false" colSpan="12" height="350" action="action-view-administration-board-dashlet"/>
+		</panel>
+		
+		<panel title="Mutuelle" hidden="true" showIf="partnerCategorySelect.includes('1')">
+        	<field name="getSocialInsurance" colSpan="2"/>
+        	<field name="socialInsurance" canEdit="false" canNew="false" colSpan="5"/>
+        	<field name="otherSocialInsurance" colSpan="5" />
+        	<field name="socialProtectionCompany" canEdit="false" canNew="false" />
+        	<field name="socialInsuranceContract" canEdit="false" canNew="false"/>
+        	<field name="modificationDate" colSpan="4" />
+        	<field name="socialInsuranceStartDate" colSpan="4" />
+        	<field name="insuranceEndDate" colSpan="4" />
+        	
+        	<field name="socialInsuranceOption" colSpan="12" canEdit="false" canNew="false"/>
+        	<field name="comments" colSpan="12"/>
+		</panel>
+		
+		<panel title="Ayant droits" hidden="true" showIf="partnerCategorySelect.includes('1')">
+			<field name="linkedMember" canEdit="false" colSpan="12" canNew="false" />
+		</panel>
+		
+		<panel title="Cartes" hidden="true" showIf="partnerCategorySelect.includes('1')" >
+			<button name="createCard" title="Nouvelle carte" onClick="save,action-fnath-create-card-from-partner"/> <spacer/>
+			<field name="cardList" colSpan="12" form-view="contract-form" grid-view="contract-grid" edit-window="blank" canNew="false" />
+			<panel-dashlet action="action-consumption-line-view" readonly="false" colSpan="12" height="350"/>
+		</panel>
+		
+	      <panel title="Échéancier" hidden="true" showIf="partnerCategorySelect.includes('1')">
+	      	<field name="task" colSpan="12" form-view="fnath-partner-event-form" grid-view="crm-task-grid" />
+	      </panel>
+	      
+	      <panel title="Dons" hidden="true" showIf="partnerCategorySelect.includes('3')">
+	      	<panel-dashlet action="dons" colSpan="12"/>
+	      </panel>
+	      
+	      <panel title="Dossier juridique" hidden="true" showIf="partnerCategorySelect.includes('1')">
+	      	<field name="numberFile" colSpan="12" />
+	      </panel>
+	      
+	      <panel title="Envoi">
+	      	<field name="apeNumber" title="APE (journal)" />
+	      	<field name="infoSentDate" title="Info : date d'envoi" />
+	      	<field name="activeMemberCardDate" title="Carte militant : date d'envoi" />
+	      </panel>
+	      <panel title="Bénévolat">
+	      	<field name="volunteering" colSpan="12" />
+	      </panel>
+			
+			<panel name="customerCredit" title="Customer Credit" if-module="axelor-supplychain" colSpan="12" hideIf="isContact || !isCustomer" if="__config__.general.getManageCustomerCredit()">
+				<panel-include if-module="axelor-supplychain" view="incl-customer-credit-partner-form" from="axelor-supplychain" />
+			</panel>
+			<panel name="clientPortalAccess" title="Client portal access" if-module="axelor-client-portal" if="__config__.general.getClientPortalManagement()">
+				<field name="password" widget="password"/>
+			</panel>
+			<panel name="payment" title="Comptabilité" hideIf="isContact" if-module="axelor-account" colSpan="12" >
+				<panel-include view="incl-invoice-payment-partner-form" from="axelor-account"/>
+				<panel-include if-module="axelor-account" if="__config__.general.getManageDirectDebitPayment()"  view="incl-sepa-direct-debit-partner-form" from="axelor-account"/>
+		    	<panel name="balance" title="Accounting balance" hideIf="isContact" if-module="axelor-account" colSpan="12">
+					<panel-include if-module="axelor-account" view="incl-customer-balance-partner-form" from="axelor-account" />
+					<panel-include if-module="axelor-account" view="incl-reported-balance-partner-form" from="axelor-account" />
+				</panel>
+				<panel-include if-module="axelor-account" view="incl-blocking-partner-form" from="axelor-account" />
+		    </panel>
+		</panel-tabs>
+	</form>
+	
+	<cards name="partner-contact-cards" id="fnath-partner-contact-cards" model="com.axelor.apps.base.db.Partner" title="Contacts" css="rect-image">
+		<field name="fullName" />
+		<field name="picture" />
+		<field name="fixedPhone"/>
+		<field name="emailAddress.address" />
+		<field name="partnerCategorySelect"/>
+		<template><![CDATA[
+		    <div class="span12"><strong>{{fullName}}</strong></div>
+			<div>
+			  <div class="span4 card-image">
+			    <img ng-src="{{$image('picture', 'content')}}" />
+			  </div>
+			  <div class="span8">
+			    <span>{{fixedPhone}}<br/>
+			    {{emailAddress.address}}</span>
+			  </div>
+			</div>
+		]]>
+		</template>
+	</cards>
+	
+	<action-view name="action-fnath-create-card-from-partner" title="Nouvelle carte" model="com.axelor.apps.contract.db.Contract">
+    	<view type="form" name="contract-form"/>
+    	<view type="grid" name="contract-grid"/>
+    	<view-param name="forceEdit" value="true"/>
+    	<context name="_partner" expr="eval: __this__"/>
+    </action-view>
+	
+	<action-view name="action-view-administration-board-dashlet" title="Fonctions au sein de FNATH" model="com.axelor.apps.fnath.db.AdministrationBoard">
+        <view type="grid" name="administration-board-partner-grid"/>
+    	<view type="form" name="administration-board-partner-form"/>
+    	<domain>self.member.id = :id </domain>
+    </action-view>
+    
+   <action-view id="axelor-fnath-dons" name="dons" model="com.axelor.apps.sale.db.SaleOrderLine" title="Dons ">
+  		<view name="sale-order-line-grid" type="grid"/>
+	</action-view>
+	
+	<action-view name="action-consumption-line-view" title="Services" model="com.axelor.apps.contract.db.ContractLine" >
+		<view type="grid" name="contract-line-light-grid"/>
+		<view type="form" name="contract-line-form"/>
+		<domain> 
+			self.isConsumptionLine IS TRUE 
+			AND EXISTS ( SELECT 1 FROM Contract c 
+				WHERE self MEMBER OF c.currentVersion.contractLineList
+				AND c.statusSelect = 2 
+				AND c.partner.id = :partner) 
+		</domain>
+		<context name="partner" expr="eval: id"/>
+	</action-view>
+   
+	
+</object-views>

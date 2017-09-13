@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_4.1.xsd">
+
+  <module name="crm" package="com.axelor.apps.crm.db"/>
+
+  <entity name="Event" lang="java" extends="com.axelor.apps.base.db.ICalendarEvent">
+
+	<datetime name="limitDateT" title="Limit Date" help="true"/>
+  	<date name="limitDate" title="Limit Date" />
+  	<many-to-one name="taskType" title="Type de tâche" ref="com.axelor.apps.fnath.db.TaskType" />
+  	
+  	
+  	
+  	<boolean name="juridicalAction" title="Action juridique" default="false" />
+  	<!-- ACTION JURIDIQUE -->
+  	
+  	<many-to-one name="numberFile" title="Dossier juridique" ref="com.axelor.apps.fnath.db.NumberFile" />
+  	
+  	<string name="complement" title="Complément à l'objet" />
+  	<many-to-one name="appeal" title="Type de recours" ref="com.axelor.apps.fnath.db.Appeal" />
+  	<many-to-one name="appealObject" title="Type de recours" ref="com.axelor.apps.fnath.db.AppealObject" />
+  	<boolean name="externalUser" title="Intervenant exterieur" />
+  	<many-to-one name="internalUser" title="Intervenant interne" ref="com.axelor.auth.db.User" />
+  	<string name="externalUserName" title="Nom de l'intervenant" />
+  	<string name="costType" title="Type d'honoraire" />
+  	<decimal name="costAmount" title="Montant d'honoraire" />
+  	
+  	<date name="entryDate" title="Date de saisie" />
+  	<date name="audienceDate" title="Date d'audience" />
+  	<date name="decisionDate" title="Date de décision" />
+  	
+  	<integer name="decision" title="Décision" selection="action.juridique.decision.select" />
+  	
+  	<string name="commments" title="Commentaires" large="true" multiline="true" />
+  	
+
+  </entity>
+
+</domain-models>

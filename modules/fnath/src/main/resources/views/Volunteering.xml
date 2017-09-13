@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.1.xsd">
+    
+    <grid name="volunteering-grid" model="com.axelor.apps.fnath.db.Volunteering" title="Bénévolat" >
+    	<field name="volunteeringAction" />
+			<field name="startDate"   />
+			<field name="endDate"  />
+			<field name="partner" />
+    </grid>
+    
+    <form name="volunteering-form" model="com.axelor.apps.fnath.db.Volunteering" title="Bénévolat" >
+    	<panel>
+    		<field name="volunteeringAction" />
+			<field name="startDate"   />
+			<field name="endDate"  />
+			<field name="partner" />
+    	</panel>
+    </form>
+    
+    <grid name="volunteering-action-grid" model="com.axelor.apps.fnath.db.VolunteeringAction" title="Action bénévole" >
+    	<field name="name" />
+    </grid>
+    
+    <form name="volunteering-action-form" model="com.axelor.apps.fnath.db.VolunteeringAction" title="Action bénévole" >
+    	<panel>
+    		<field name="name" />
+    	</panel>
+    </form>
+    
+</object-views>

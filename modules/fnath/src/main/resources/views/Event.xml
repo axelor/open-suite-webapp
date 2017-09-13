@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.1.xsd">
+	
+	
+	<calendar name="fnath-event-calendar-type" title="Tâches" mode="month" colorBy="taskType" editable="true"
+    	eventStart="startDateTime" eventStop="endDateTime" eventLength="1" model="com.axelor.apps.crm.db.Event"
+    	onChange="action-event-method-compute-from-calendar">
+    	<field name="subjectTeam" />
+ 	</calendar>
+ 	
+	<grid name="crm-task-grid" id="fnath-crm-task-grid" title="Tasks" model="com.axelor.apps.crm.db.Event" orderBy="-startDateTime">
+	    <hilite color="primary" if="limitDateT &gt; __datetime__" background="danger"/>
+	    <field name="user" form-view="user-form" grid-view="user-grid"/>
+	    <field name="subject"/>
+	    <field name="startDateTime"/>
+	    <field name="limitDate"/>
+	    <field name="taskType"/>
+	    <field name="statusSelect" />
+	    <button name="accept" icon="fa-power-off" help="Finish" onClick="action-group-crm-task-accept-click,save" readonlyIf="statusSelect == 4"/>
+	</grid>
+	
+	<grid name="crm-task-grid-fnath-my-task" title="Tasks" model="com.axelor.apps.crm.db.Event" groupBy="limitDate" orderBy="-startDateTime">
+	    <hilite color="primary" if="limitDateT &gt; __datetime__" background="danger"/>
+	    <field name="user" form-view="user-form" grid-view="user-grid"/>
+	    <field name="clientPartner"/>
+	    <field name="clientPartner.numberSeq"/>
+	    <field name="subject"/>
+	    <field name="limitDate"/>
+	    <field name="taskType"/>
+	    <field name="statusSelect" />
+	    <button name="accept" icon="fa-power-off" help="Finish" onClick="action-group-crm-task-accept-click,save" readonlyIf="statusSelect == 4"/>
+	</grid>
+	
+	<grid name="crm-task-grid-fnath-my-team" groupBy="user" title="Tasks" model="com.axelor.apps.crm.db.Event" orderBy="-startDateTime">
+	    <hilite color="primary" if="limitDateT &gt; __datetime__" background="danger"/>
+	    <field name="user" form-view="user-form" grid-view="user-grid"/>
+	    <field name="subject"/>
+	    <field name="startDateTime"/>
+	    <field name="limitDate"/>
+	    <field name="taskType"/>
+	    <field name="statusSelect" />
+	    <button name="accept" icon="fa-power-off" help="Finish" onClick="action-group-crm-task-accept-click,save" readonlyIf="statusSelect == 4"/>
+	</grid>
+
+	<form name="crm-task-form" id="fnath-crm-task-form" title="Task" model="com.axelor.apps.crm.db.Event" onLoad="action-partner-attrs-hide-contact-partner" 
+		onNew="action-event-new-record,action-fnath-task-on-new" onSave="action-event-record-subjectTeam">
+		<toolbar>
+			<button name="accept" help="Finish" readonlyIf="statusSelect == 14" icon="fa-power-off" onClick="action-set-task-status-select-4,save"/>
+		</toolbar>
+		
+		<panel name="main" readonlyIf="statusSelect == 14">
+			<field name="subject" colSpan="12"/>
+			<field name="limitDate" colSpan="3" onChange="action-fnath-event-limit-date"/>
+			<field name="limitDateT" colSpan="3" hidden="true"/>
+			<field name="recurrenceConfiguration" />
+			
+			<panel colSpan="12">
+				<field name="description" widget="html" colSpan="12"/>
+			</panel>
+			<panel name="dates" title="Dates" colSpan="12">
+				<field name="startDateTime" colSpan="3" onChange="action-event-method-compute-from-start-date-time"/>
+				<field name="duration" widget="duration" colSpan="3" onChange="action-event-method-compute-from-duration" x-big="true"/>
+				<field name="endDateTime" colSpan="3" onChange="action-event-method-compute-from-end-date-time"/>
+				<panel-related field="eventReminderList" colSpan="12" hidden="true" showTitle="false" form-view="event-reminder-form" grid-view="event-reminder-grid"/>
+			</panel>
+			<field name="subjectTeam" hidden="true"/>
+		</panel>
+		
+		<panel sidebar="true" name="attributes" >
+			<field name="statusSelect" selection-in="[11,14]"/>
+			<field name="taskType"/>	
+			<field name="user" form-view="user-form" grid-view="user-grid"/>
+			<field name="clientPartner" title="Adhérent concerné" onChange="action-partner-attrs-hide-contact-partner" form-view="partner-form" grid-view="partner-grid"/>
+			<field name="juridicalAction" />
+			<field name="numberFile" />
+		</panel>
+		
+		<panel hidden="true" showIf="juridicalAction">
+	  		<field name="complement" /> 										<field name="internalUser" />
+	  		<field name="externalUser" /> 										<field name="externalUserName" hidden="true" showIf="externalUser"/>
+	  		<field name="costType" hidden="true" showIf="externalUser" />		<field name="costAmount" hidden="true" showIf="externalUser" />
+	  		<field name="appeal" />												<field name="appealObject" />
+	  		<field name="entryDate" /> 											<field name="audienceDate" />
+	  		<field name="decision" /> 											<field name="decisionDate" />
+	  		<field name="commments" colSpan="12" />
+		</panel>
+		
+	</form>
+	
+	
+	
+	
+	<form name="fnath-partner-event-form" title="Task" model="com.axelor.apps.crm.db.Event" onLoad="action-partner-attrs-hide-contact-partner" 
+		onNew="action-event-new-record,action-fnath-task-on-new" onSave="action-event-record-subjectTeam">
+		<toolbar>
+			<button name="accept" help="Finish" readonlyIf="statusSelect == 14" icon="fa-power-off" onClick="action-set-task-status-select-4,save"/>
+		</toolbar>
+		
+		<panel name="main" readonlyIf="statusSelect == 14">
+			<field name="subject" colSpan="12"/>
+			<field name="limitDate" colSpan="3" onChange="action-fnath-event-limit-date"/>
+			<field name="limitDateT" colSpan="3" hidden="true"/>
+			<field name="recurrenceConfiguration" />
+			<panel colSpan="12">
+				<field name="description" widget="html" colSpan="12"/>
+			</panel>
+			<panel name="dates" title="Dates" colSpan="12">
+				<field name="startDateTime" colSpan="3" onChange="action-event-method-compute-from-start-date-time"/>
+				<field name="duration" widget="duration" colSpan="3" onChange="action-event-method-compute-from-duration" x-big="true"/>
+				<field name="endDateTime" colSpan="3" onChange="action-event-method-compute-from-end-date-time"/>
+				<panel-related field="eventReminderList" colSpan="12" hidden="true" showTitle="false" form-view="event-reminder-form" grid-view="event-reminder-grid"/>
+			</panel>
+			<field name="subjectTeam" hidden="true"/>
+		</panel>
+		
+		<panel sidebar="true" name="attributes" >
+			<field name="statusSelect" selection-in="[11,14]"/>
+			<field name="taskType"/>	
+			<field name="user" form-view="user-form" grid-view="user-grid" readonly="true"/>
+		</panel>
+	</form>
+	
+	
+	<form name="fnath-number-file-event-form"  title="Task" model="com.axelor.apps.crm.db.Event" onLoad="action-partner-attrs-hide-contact-partner" 
+		onNew="action-event-new-record,action-fnath-task-on-new,action-fnath-number-file-task-on-new" onSave="action-event-record-subjectTeam">
+		<toolbar>
+			<button name="accept" help="Finish" readonlyIf="statusSelect == 14" icon="fa-power-off" onClick="action-set-task-status-select-4,save"/>
+		</toolbar>
+		
+		<panel name="main" readonlyIf="statusSelect == 14">
+			<field name="subject" colSpan="12"/>
+			<field name="limitDate" colSpan="3" onChange="action-fnath-event-limit-date"/>
+			<field name="limitDateT" colSpan="3" hidden="true"/>
+			<field name="recurrenceConfiguration" />
+			<panel colSpan="12">
+				<field name="description" widget="html" colSpan="12"/>
+			</panel>
+			<panel name="dates" title="Dates" colSpan="12">
+				<field name="startDateTime" colSpan="3" onChange="action-event-method-compute-from-start-date-time"/>
+				<field name="duration" widget="duration" colSpan="3" onChange="action-event-method-compute-from-duration" x-big="true"/>
+				<field name="endDateTime" colSpan="3" onChange="action-event-method-compute-from-end-date-time"/>
+				<panel-related field="eventReminderList" colSpan="12" hidden="true" showTitle="false" form-view="event-reminder-form" grid-view="event-reminder-grid"/>
+			</panel>
+			<field name="subjectTeam" hidden="true"/>
+		</panel>
+		
+		<panel sidebar="true" name="attributes" >
+			<field name="statusSelect" selection-in="[11,14]"/>
+			<field name="taskType"/>	
+			<field name="user" form-view="user-form" grid-view="user-grid"/>
+			<field name="clientPartner" title="Adhérent concerné" onChange="action-partner-attrs-hide-contact-partner" form-view="partner-form" grid-view="partner-grid"/>
+			<field name="juridicalAction" />
+			<field name="numberFile" required="true" />
+		</panel>
+		
+		<panel hidden="true" showIf="juridicalAction">
+	  		<field name="complement" /> 	<field name="internalUser" />
+	  		<field name="externalUser" /> 	<field name="externalUserName" hidden="true" showIf="externalUser"/>
+	  		<field name="costType" hidden="true" showIf="externalUser" />		<field name="costAmount" hidden="true" showIf="externalUser" />
+	  		<field name="appeal" />			<field name="appealObject" />
+	  		<field name="entryDate" /> 		<field name="audienceDate" />
+	  		<field name="decision" /> 		<field name="decisionDate" />
+	  		<field name="commments" colSpan="12" />
+		</panel>
+		
+	</form>
+	
+	
+	<action-record name="action-fnath-event-limit-date" model="com.axelor.apps.crm.db.Event">
+		<field name="limiteDateT" expr="eval: limiteDate"/>
+	</action-record>
+	
+	<action-record name="action-fnath-task-on-new" model="com.axelor.apps.crm.db.Event">
+		<field name="user" expr="eval: __user__"/>
+		<field name="statusSelect" expr="eval: 11"/>
+	</action-record>
+	
+	<action-record name="action-fnath-number-file-task-on-new" model="com.axelor.apps.crm.db.Event">
+		<field name="juridicalAction" expr="eval: true"/>
+		<field name="clientPartner" expr="eval: _parent?.partner"/>
+	</action-record>
+	
+		
+</object-views>
+	

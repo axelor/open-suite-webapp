@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.1.xsd">
+	
+	<!-- V5 -->
+	
+	<menuitem name="referential-root-partners" id="fnath-root-partners" parent="" left="false" hidden="true" title="Partners" action="referential.root.partners" order="10"/>
+	
+	<action-view name="referential.root.partners" title="Partners"
+		model="com.axelor.apps.base.db.Partner" >
+		<view type="cards" name="partner-cards" />
+		<view type="grid" name="partner-grid" />
+		<view type="form" name="partner-form" />
+	  	<view-param name="limit" value="39"/>
+		<view-param name="search-filters" value="partner-filters"/>
+		<!-- <domain>self.curUser = null OR self.curUser = :user_id</domain> -->
+		<domain>self.isContact != true</domain>
+		<context name="user_id" expr="eval:__user__" />
+		<context name="json-enhance" expr="eval:true" />
+	</action-view>
+	
+	<menuitem name="referential-root" id="fnath-referential-root" title="Referential"  order="-109"/>
+	
+	<menuitem name="referential-conf-partner-sources" id="fnath-referential-conf-partner-sources"
+		parent="referential-conf" title="Nature d'adhésion"
+		action="referential.conf.partner.sources" />
+		
+	<menuitem title="Supplier contracts" id="fnath-contracts-root-supplier-all" name="contracts-root-supplier-all" action="contracts.root.supplier.all" parent="" left="false" hidden="true"/>
+
+
+	<!-- HIDDEN MENUS -->
+	
+		<menuitem name="crm-root" title="CRM" order="-108" id="fnath-crm-root" left="false" parent=""
+		icon="fa-user" groups="admins,ERP,CRM" icon-background="#2fa042"/>
+		<menuitem name="sc-root-sale" title="Sales" order="-106" id="fnath-sc-root-sale" left="false" parent=""
+		icon="fa-line-chart" groups="admins,ERP,CRM" icon-background="#e0a83c"/>
+		<menuitem name="sc-root-purchase" title="Purchases" order="-105"  left="false" parent="" id="fnath-sc-root-purchase"
+		icon="fa-shopping-cart" groups="admins,ERP" icon-background="#b6473f"/>
+		<menuitem name="referential-report" parent="" order="90" id="fnath-referential-report" left="false" title="Reportings"/>
+		<menuitem name="referential-root-partners" parent="" id="fnath-referential-root-partners" left="false"
+		title="Partners" action="referential.root.partners" order="10"/>
+		
+		<menuitem name="referential-root-price-list" parent="referential-conf" id="fnath-referential-root-price-list"
+		title="Price lists" action="referential.root.price.list"  order="95" />
+		<menuitem name="referential-root-product-root" title="Products" order="30" parent="referential-conf" id="fnath-referential-root-product-root"/>
+		
+		<!-- SUIVI ADHERENT -->
+		
+		<menuitem name="adherent-root" title="Suivi adhérent" order="-108" icon="fa-user"/>
+		
+		<menuitem name="fnath-dossier-juridique" title="Dossiers juridiques" parent="adherent-root"
+		icon="fa-line-chart" icon-background="#e0a83c" />
+		
+		<menuitem name="fnath-my-number-file" title="Mes dossiers" parent="fnath-dossier-juridique" order="1"
+		icon="fa-line-chart" icon-background="#e0a83c" action="action-view-my-number-file" />
+		<menuitem name="fnath-number-file" title="Tous les dossiers" parent="fnath-dossier-juridique" order="2"
+		icon="fa-line-chart" icon-background="#e0a83c" action="action-view-number-file" />
+		
+		<menuitem name="fnath-transfered-number-file" title="Dossiers transferés" parent="fnath-dossier-juridique" order="3" action="action-view-transfered-number-file" />
+		<menuitem name="fnath-return-number-file" title="Dossiers retournés" parent="fnath-dossier-juridique" order="4" action="action-view-return-number-file" />
+		
+		<action-view name="action-view-transfered-number-file" title="Dossiers transférés" model="com.axelor.apps.fnath.db.NumberFile">
+			<view type="grid" name="numberfile-grid"/>
+			<view type="form" name="numberfile-form"/>
+			<domain>self.statusSelect = 2 AND self.company.id = :company</domain>
+			<context name="company" expr="eval: __user__.activeCompany?.id"/>
+		</action-view>
+		<action-view name="action-view-return-number-file" title="Dossiers retournés" model="com.axelor.apps.fnath.db.NumberFile">
+			<view type="grid" name="numberfile-grid"/>
+			<view type="form" name="numberfile-form"/>
+			<domain>self.statusSelect = 3</domain>
+		</action-view>
+		
+		
+		<action-view name="action-view-number-file" title="Dossier" model="com.axelor.apps.fnath.db.NumberFile">
+			<view type="grid" name="numberfile-grid"/>
+			<view type="form" name="numberfile-form"/>
+			
+		</action-view>
+		
+		<action-view name="action-view-my-number-file" title="Dossier" model="com.axelor.apps.fnath.db.NumberFile">
+			<view type="grid" name="numberfile-grid"/>
+			<view type="form" name="numberfile-form"/>
+			<domain>self.personInCharge.id = :userId</domain>
+			<context name="userId" expr="eval: __user__.id"/>
+		</action-view>
+		
+		<menuitem title="Échéancier" name="echeancier-menu" parent="adherent-root"/>
+		
+		<menuitem name="crm-root-create-task" parent="echeancier-menu" id="fnath-crm-root-create-task" 
+		title="Mes tâches" action="crm.root.my.task" />
+		<menuitem name="crm-root-my-task" parent="echeancier-menu" id="fnath-crm-root-my-task" 
+		title="Les tâches de mon équipe" action="crm.root.my.team.task" />
+		<menuitem name="crm-root-team-task" parent="echeancier-menu" id="fnath-crm-root-team-task" 
+		title="Toutes les tâches" action="crm.root.create.task" />
+		
+		
+		<menuitem name="crm-root-create-task" parent="adherent-root" id="fnath-crm-root-create-task" 
+		title="Task" action="crm.root.create.task" />
+
+		<action-view name="crm.root.my.task" title="Mes tâches" id="fnath-crm.root.my.task" model="com.axelor.apps.crm.db.Event" >
+			<view type="grid" name="crm-task-grid-fnath-my-task"/>
+			<view type="form" name="crm-task-form"/>
+			<view type="calendar" name="fnath-event-calendar-type"/>
+			<domain>self.user.id = :userId</domain>
+			<context name="userId" expr="eval: __user__.id"/>
+		</action-view>
+		
+		<action-view name="crm.root.my.team.task" title="Tâches de l'équipe" id="fnath-crm.root.my.team.task" model="com.axelor.apps.crm.db.Event" >
+			<view type="grid" name="crm-task-grid-fnath-my-team"/>
+			<view type="form" name="crm-task-form"/>
+			<view type="calendar" name="fnath-event-calendar-type"/>
+			<domain>self.user.activeTeam.id = :teamId</domain>
+			<context name="teamId" expr="eval: __user__.activeTeam.id"/>
+		</action-view>
+		
+		<action-view name="crm.root.create.task" title="Task" id="fnath-crm.root.create.task" model="com.axelor.apps.crm.db.Event" >
+			<view type="grid" name="crm-task-grid"/>
+			<view type="form" name="crm-task-form"/>
+			<view type="calendar" name="fnath-event-calendar-type"/>
+			<context name="_typeSelect" expr="3"/>
+			<context name="_internalUserId" expr="eval: __user__.id"/>
+		</action-view>
+		
+			<!-- conf suivi adhérent  -->
+			
+			<menuitem name="fnath-adherent-conf" title="Configurations" parent="adherent-root" />
+			
+			<menuitem name="fnath-extended-title" title="Titre étendu" parent="referential-conf" action="action-view-extended-title"/>
+		
+		<menuitem name="fnath-task-type" title="Type de tâche" parent="fnath-adherent-conf" action="action-view-task-type"/>
+		<menuitem name="fnath-appeal" title="Type de recours" parent="fnath-adherent-conf" action="action-view-appeal"/>
+		<menuitem name="fnath-appeal-object" title="Objets de recours" parent="fnath-adherent-conf" action="action-view-appeal-object"/>
+		
+		<action-view name="action-view-task-type" title="Types de tâche" model="com.axelor.apps.fnath.db.TaskType">
+			<view type="grid" name="task-type-grid"/>
+			<view type="form" name="task-type-form"/>
+		</action-view>
+		<action-view name="action-view-appeal" title="Types de recours" model="com.axelor.apps.fnath.db.Appeal">
+			<view type="grid" name="appeal-grid"/>
+			<view type="form" name="appeal-form"/>
+		</action-view>
+		<action-view name="action-view-appeal-object" title="Objets de recours" model="com.axelor.apps.fnath.db.AppealObject">
+			<view type="grid" name="appeal-object-grid"/>
+			<view type="form" name="appeal-object-form"/>
+		</action-view>
+		<action-view name="action-view-extended-title" title="Titres étendu" model="com.axelor.apps.fnath.db.ExtendedTitleSelect">
+			<view type="grid" name="extended-title-select-grid"/>
+			<view type="form" name="extended-title-select-form"/>
+		</action-view>
+		
+	<!-- REFERENTIAL -->
+		
+			<!-- Individus -->
+			
+			<menuitem name="fnath-partner-physical" title="Personnes physiques" parent="referential-root" />
+			
+			<menuitem name="fnath-partner-adherent" title="Adhérents" parent="fnath-partner-physical" action="action-view-partner-adherent"/>
+			<menuitem name="fnath-partner-personality" title="Personnalités" parent="fnath-partner-physical" action="action-view-partner-personality"/>
+			<menuitem name="fnath-partner-physical-all" title="Tous" parent="fnath-partner-physical" action="action-view-partner-all-physical"/>
+		
+		<action-view name="action-view-partner-adherent" title="Tiers adhérents" model="com.axelor.apps.base.db.Partner">
+			<view type="grid" name="partner-adherent-grid"/>
+			<view type="form" name="partner-form"/>
+			<view type="cards" name="partner-contact-cards"/>
+			<domain>self.partnerCategorySelect LIKE '%1%' AND self.partnerTypeSelect = 2</domain>
+			<context name="_partnerCategorySelect" expr="1"/>
+			<context name="_partnerTypeSelect" expr="2"/>
+			
+		</action-view>
+		<action-view name="action-view-partner-personality" title="Tiers personnalités" model="com.axelor.apps.base.db.Partner">
+			<view type="grid" name="partner-grid"/>
+			<view type="form" name="partner-form"/>
+			<view type="cards" name="partner-contact-cards"/>
+			<domain>self.partnerCategorySelect LIKE '%2%' AND self.partnerTypeSelect = 2</domain>
+			<context name="_partnerCategorySelect" expr="2"/>
+			<context name="_partnerTypeSelect" expr="2"/>
+		</action-view>
+		<action-view name="action-view-partner-all-physical" title="Tous" model="com.axelor.apps.base.db.Partner">
+			<view type="grid" name="partner-grid"/>
+			<view type="form" name="partner-form"/>
+			<view type="cards" name="partner-contact-cards"/>
+			<domain>self.partnerTypeSelect = 2</domain>
+			<context name="_partnerTypeSelect" expr="2"/>
+		</action-view>
+			
+			
+			<!-- Personnes morales -->
+			
+			<menuitem name="fnath-partner-company" title="Personnes morales" parent="referential-root" />
+		
+		<menuitem name="fnath-partner-groupment" title="Groupements" parent="fnath-partner-company" order="1" action="action-view-partner-groupment"/>
+		<menuitem name="fnath-partner-local-section" title="Sections locales" parent="fnath-partner-company" order="2" action="action-view-partner-local-section"/>
+		<menuitem name="fnath-partner-certified-association" title="Associations agréées" parent="fnath-partner-company" order="3" action="action-view-partner-certified-association"/>
+		<menuitem name="fnath-partner-local-committee" title="Comité local" parent="fnath-partner-company" order="4" action="action-view-partner-local-committee"/>
+		<menuitem name="fnath-partner-company-all" title="Tous" parent="fnath-partner-company" order="5" action="action-view-partner-all-company"/>
+		
+		<action-view name="action-view-partner-groupment" title="Tiers groupements" model="com.axelor.apps.base.db.Partner">
+			<view type="grid" name="partner-grid"/>
+			<view type="form" name="partner-form"/>
+			<view type="cards" name="partner-contact-cards"/>
+			<domain>self.partnerCategorySelect LIKE '%4%' AND self.partnerTypeSelect = 1</domain>
+			<context name="_partnerCategorySelect" expr="4"/>
+			<context name="_partnerTypeSelect" expr="1"/>
+		</action-view>
+		<action-view name="action-view-partner-local-section" title="Tiers sections locales" model="com.axelor.apps.base.db.Partner">
+			<view type="grid" name="partner-grid"/>
+			<view type="form" name="partner-form"/>
+			<view type="cards" name="partner-contact-cards"/>
+			<domain>self.partnerCategorySelect LIKE '%5%' AND self.partnerTypeSelect = 1</domain>
+			<context name="_partnerCategorySelect" expr="5"/>
+			<context name="_partnerTypeSelect" expr="1"/>
+		</action-view>
+		<action-view name="action-view-partner-certified-association" title="Tiers associations agréées" model="com.axelor.apps.base.db.Partner">
+			<view type="grid" name="partner-grid"/>
+			<view type="form" name="partner-form"/>
+			<view type="cards" name="partner-contact-cards"/>
+			<domain>self.partnerCategorySelect LIKE '%6%' AND self.partnerTypeSelect = 1</domain>
+			<context name="_partnerCategorySelect" expr="6"/>
+			<context name="_partnerTypeSelect" expr="1"/>
+		</action-view>
+		<action-view name="action-view-partner-local-committee" title="Tiers comité local" model="com.axelor.apps.base.db.Partner">
+			<view type="grid" name="partner-grid"/>
+			<view type="form" name="partner-form"/>
+			<view type="cards" name="partner-contact-cards"/>
+			<domain>self.partnerCategorySelect LIKE '%7%' AND self.partnerTypeSelect = 1</domain>
+			<context name="_partnerCategorySelect" expr="7"/>
+			<context name="_partnerTypeSelect" expr="1"/>
+		</action-view>
+		<action-view name="action-view-partner-all-company" title="Tous" model="com.axelor.apps.base.db.Partner">
+			<view type="grid" name="partner-grid"/>
+			<view type="form" name="partner-form"/>
+			<view type="cards" name="partner-contact-cards"/>
+			<domain>self.partnerTypeSelect = 1</domain>
+		</action-view>
+		
+		
+			<!-- CONF -->
+			
+			
+		<menuitem name="fnath-administration-board" title="Conseils d'administration" parent="referential-conf" order="3" action="action-view-administration-board"/>
+		<menuitem name="fnath-administration-function" title="Fonctions d'administration" parent="referential-conf" order="4" action="action-view-administration-function"/>
+		
+		<menuitem name="fnath-membership-end-reason" title="Motifs de radiation" parent="referential-conf" action="action-view-membership-end-reason"/>
+		
+		<menuitem name="fnath-social-insurance" title="Mutuelles" parent="referential-conf" action="action-view-social-insurance"/>
+		<menuitem name="fnath-social-protection-company" title="Organismes de protection sociale" parent="referential-conf" action="action-view-social-protection-company"/>
+		<menuitem name="fnath-social-insurance-contract" title="Contrats mutuelles" parent="referential-conf" action="action-view-social-insurance-contract"/>
+		<menuitem name="fnath-social-insurance-option" title="Options mutuelles" parent="referential-conf" action="action-view-social-insurance-option"/>
+		<menuitem name="fnath-social-category" title="CSP" parent="referential-conf" action="action-view-social-category"/>
+		
+		<action-view name="action-view-social-insurance" title="Mutuelle" model="com.axelor.apps.fnath.db.SocialInsurance">
+			<view type="grid" name="social-insurance-grid"/>
+			<view type="form" name="social-insurance-form"/>
+		</action-view>
+		<action-view name="action-view-social-protection-company" title="Organisme de protection sociale" model="com.axelor.apps.fnath.db.SocialProtectionCompany">
+			<view type="grid" name="social-protection-company-grid"/>
+			<view type="form" name="social-protection-company-form"/>
+		</action-view>
+		
+		<action-view name="action-view-social-insurance-contract" title="Contrat mutuelle" model="com.axelor.apps.fnath.db.SocialInsuranceContract">
+			<view type="grid" name="social-insurance-contract-grid"/>
+			<view type="form" name="social-insurance-contract-form"/>
+		</action-view>
+		<action-view name="action-view-social-insurance-option" title="Option mutuelle" model="com.axelor.apps.fnath.db.SocialInsuranceOption">
+			<view type="grid" name="social-insurance-option-grid"/>
+			<view type="form" name="social-insurance-option-form"/>
+		</action-view>
+		<action-view name="action-view-social-category" title="CSP" model="com.axelor.apps.fnath.db.SocialCategory">
+			<view type="grid" name="social-category-grid"/>
+			<view type="form" name="social-category-form"/>
+		</action-view>
+		
+		
+		<action-view name="action-view-administration-function" title="Fonction d'administration" model="com.axelor.apps.fnath.db.AdministrationFunction">
+			<view type="grid" name="administration-function-grid"/>
+			<view type="form" name="administration-function-form"/>
+		</action-view>
+		<action-view name="action-view-administration-board" title="Conseil d'administration" model="com.axelor.apps.fnath.db.AdministrationBoard">
+			<view type="grid" name="administration-board-grid"/>
+			<view type="form" name="administration-board-form"/>
+		</action-view>
+		
+		<action-view name="action-view-membership-end-reason" title="Raison de radiation" model="com.axelor.apps.fnath.db.MembershipEndReason">
+			<view type="grid" name="membership-end-reason-grid"/>
+			<view type="form" name="membership-end-reason-form"/>
+		</action-view>
+		
+		<menuitem name="fnath-volunteering" title="Bénévolat" parent="referential-conf"
+		icon="fa-line-chart" icon-background="#e0a83c" action="action-view-volunteering"/>
+		<menuitem name="fnath-volunteering-action" title="Action bénévole" parent="referential-conf"
+		icon="fa-line-chart" icon-background="#e0a83c" action="action-view-volunteering-action"/>
+		
+		<action-view name="action-view-volunteering" title="Bénévolat" model="com.axelor.apps.fnath.db.Volunteering">
+			<view type="grid" name="volunteering-grid"/>
+			<view type="form" name="volunteering-form"/>
+		</action-view>
+		<action-view name="action-view-volunteering-action" title="Actions bénévoles" model="com.axelor.apps.fnath.db.VolunteeringAction">
+			<view type="grid" name="volunteering-action-grid"/>
+			<view type="form" name="volunteering-action-form"/>
+		</action-view>
+		
+
+</object-views>

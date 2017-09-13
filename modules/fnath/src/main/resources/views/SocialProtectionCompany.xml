@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_4.1.xsd">
+    
+    <grid name="social-protection-company-grid" model="com.axelor.apps.fnath.db.SocialProtectionCompany" title="Organisme de protection sociale" >
+    	<field name="name" />
+    </grid>
+    
+    <form name="social-protection-company-form" model="com.axelor.apps.fnath.db.SocialProtectionCompany" title="Organisme de portection sociale" >
+    	<panel>
+    		<field name="name" />
+    	</panel>
+    </form>
+    
+</object-views>

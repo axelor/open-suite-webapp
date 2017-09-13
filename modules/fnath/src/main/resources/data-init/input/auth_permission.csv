@@ -1,0 +1,46 @@
+"name","object","canRead","canWrite","canCreate","canRemove","canExport","condition","conditionParams"
+"perms.user","com.axelor.auth.db.User","true","false","false","false","true",,
+"perm.base.rw","com.axelor.apps.base.db.*","true","true","false","false","true",,
+"perm.base.rwc","com.axelor.apps.base.db.*","true","true","true","false","true",,
+"perm.message.rwc","com.axelor.apps.message.db.*","true","true","true","false","true",,
+"perm.message.rw","com.axelor.apps.message.db.*","true","true","false","false","true",,
+"perm.account.rw","com.axelor.apps.account.db.*","true","true","false","false","true",,
+"perm.account.rwc","com.axelor.apps.account.db.*","true","true","true","false","true",,
+"perm.hr.rwc","com.axelor.apps.hr.db.*","true","true","true","false","true",,
+"perm.production.rwc","com.axelor.apps.production.db.*","true","true","true","false","true",,
+"perm.sale.rwc","com.axelor.apps.sale.db.*","true","true","true","false","true",,
+"perm.purchase.rwc","com.axelor.apps.purchase.db.*","true","true","true","false","true",,
+"perm.stock.rwc","com.axelor.apps.stock.db.*","true","true","true","false","true",,
+"perm.sale.saleOrder.r","com.axelor.apps.sale.db.SaleOrder","true","false","false","false","false",,
+"perm.sale.saleOrderLine.r","com.axelor.apps.sale.db.SaleOrderLine","true","false","false","false","false",,
+"perm.sale.saleOrderLineTax.r","com.axelor.apps.sale.db.SaleOrderLineTax","true","false","false","false","false",,
+"perm.crm.event.r","com.axelor.apps.crm.db.Event","true","true","true","false","false",,
+"perm.crm.eventCategory.r","com.axelor.apps.crm.db.EventCategory","true","false","false","false","false",,
+"perm.account.invoice.r","com.axelor.apps.account.db.Invoice","true","false","false","false","false",,
+"perm.account.invoiceLine.r","com.axelor.apps.account.db.InvoiceLine","true","false","false","false","false",,
+"perm.account.invoiceLineTax.r","com.axelor.apps.account.db.InvoiceLineTax","true","false","false","false","false",,
+"perm.base.partner.r","com.axelor.apps.base.db.Partner","true","false","false","false","false",,
+"perm.purchase.purchaseOrder.r","com.axelor.apps.purchase.db.PurchaseOrder","true","false","false","false","false",,
+"perm.purchase.purchaseOrderLine.r","com.axelor.apps.purchase.db.PurchaseOrderLine","true","false","false","false","false",,
+"perm.purchase.purchaseOrderLineTax.r","com.axelor.apps.purchase.db.PurchaseOrderLineTax","true","false","false","false","false",,
+"perm.suppliermanagement.PurchaseOrderSupplierLine.rw","com.axelor.apps.suppliermanagement.db.PurchaseOrderSupplierLine","true","true","false","false","false",,
+"perm.stock.stockMove.r","com.axelor.apps.stock.db.StockMove","true","false","false","false","false",,
+"perm.stock.stockMoveLine.r","com.axelor.apps.stock.db.StockMoveLine","true","true","false","false","false",,
+"perm.project.rwc","com.axelor.apps.project.db.*","true","true","true","false","true",,
+"perm.cash.management.rwc","com.axelor.apps.cash.management.db.*","true","true","true","false","true",,
+"perm.businessproject.rwc","com.axelor.apps.businessproject.db.*","true","true","true","false","true",,
+"perm.fnath.all","com.axelor.apps.fnath.db.*","true","true","true","true","true",,
+"perm.year.company.filter","com.axelor.apps.base.db.Year","true","true","true","true","true","self.company = ?","__user__.activeCompany"
+"perm.period.company.filter","com.axelor.apps.base.db.Period","true","true","true","true","true","self.year.company = ?","__user__.activeCompany"
+"perm.account.company.filter","com.axelor.apps.account.db.Account","true","true","true","true","true","self.company = ?","__user__.activeCompany"
+"perm.accountManagement.company.filter","com.axelor.apps.account.db.AccountManagement","true","true","true","true","true","self.company = ?","__user__.activeCompany"
+"perm.journal.company.filter","com.axelor.apps.account.db.Journal","true","true","true","true","true","self.company = ?","__user__.activeCompany"
+"perm.analyticJournal.company.filter","com.axelor.apps.account.db.AnalyticJournal","true","true","true","true","true","self.company = ?","__user__.activeCompany"
+"perm.cashRegister.company.filter","com.axelor.apps.account.db.CashRegister","true","true","true","true","true","self.company = ?","__user__.activeCompany"
+"perm.moveTemplate.company.filter","com.axelor.apps.account.db.MoveTemplate","true","true","true","true","true","self.company = ?","__user__.activeCompany"
+"perm.ebicsUser.company.filter","com.axelor.apps.bankpayment.db.EbicsUser","true","true","true","true","true","self.associatedUser.activeCompany = ?","__user__.activeCompany"
+"perm.ebicsPartner.company.filter","com.axelor.apps.bankpayment.db.EbicsPartner","true","true","true","true","true","self.bankStatementEbicsUser.activeCompany = ?","__user__.activeCompany"
+"perm.sequence.company.filter","com.axelor.apps.base.db.Sequence","true","true","true","true","true","self.bankStatementEbicsUser.activeCompany = ?","__user__.activeCompany"
+"perm.user.company.filter","com.axelor.auth.db.User","true","true","true","true","true","self.activeCompany = ?","__user__.activeCompany"
+"perm.company.company.filter","com.axelor.apps.base.db.Company","true","true","true","true","true","Self = ?","__user__.activeCompany"
+"perm.message.company.filter","com.axelor.apps.message.db.Message","true","true","true","true","true","Self.company = ?","__user__.activeCompany"
