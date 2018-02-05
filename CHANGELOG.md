@@ -1,6 +1,22 @@
 # Changelog
 
-## [Unreleased]
+## [4.1.2] - 2018-02-05
+### Improvements
+- Close pay period automatically when all payroll preparation are exported
+- KilometricExpenseLineList are no more duplicated in ExpenseLineList. ExpenseLineList is renamed into GeneralExpenseLineList.
+- The distinction between round-trip and one way ticket in kilometric expenses is now only informative.
+- Reconcile invoice with related refund
+- New boolean field "available to users" in expense type
+
+### Bug Fixes
+- Fix demo data en and fr on General config to set the correct value of the fields custStockMoveMgtOnSO and supplStockMoveMgtOnSO.
+- Fixes in invoicing timetable in sale order
+- Fix payment voucher report.
+- Check ICS number on direct debit sepa file generation
+- Fix receiver bank details filter in BankOrder
+- Years can have the same code as long as the company/type differ.
+- Fixes in expense form
+
 
 ## [4.1.1] - 2018-01-10
 - Ebics TS improvements
@@ -16,6 +32,29 @@
 - Employee bonus management
 - Expense improvements (multi user, kilometric compute with some rates)
 - Leave request improvements
+
+
+## [4.0.2] - 2018-01-09
+- BOM Componants tab order by priority
+- Set all field of all locationline view in readonly
+- Copy fix ICalendar and MailAccount
+- Fix NPE when generating an invoice from a stock move.
+- Fix currency conversion
+- Update translations
+- Fix google map api with api key
+- Toolbar does not show in special split popup anymore
+- Popup now closes after special split
+- Fixed multiple bug reported
+- Fix irrecoverable getInvoiceList request
+- Replace all __user__ context by __user__ directly on sql
+- Fix bad domain
+- STOCKMOVE - report with tracking number
+- Remove seeMonth Button on Project/MyPlanning
+- Timesheet lines and related elements are sorted by date DESC
+- Catch exception in TraceBack
+- Manage duplicate move lines in reports
+- CURRENCY CONVERSION : WS
+- Update license
 
 
 ## [4.0.1] - 2017-06-19
@@ -253,12 +292,14 @@ Fully responsive mobile ready views, gradle based build system and much more.
 - Production Management
 - Multi-company, multi-currency and multi-lingual
 
-[Unreleased]: https://github.com/axelor/abs-webapp/compare/v4.1.1...HEAD
-[4.1.1]: https://github.com/axelor/abs-webapp/compare/v4.1.0...v4.1.1
-[4.1.0]: https://github.com/axelor/abs-webapp/compare/v4.0.1...v4.1.0
-[4.0.1]: https://github.com/axelor/abs-webapp/compare/v4.0.0...v4.0.1
-[4.0.0]: https://github.com/axelor/abs-webapp/compare/v3.0.3...v4.0.0
-[3.0.3]: https://github.com/axelor/abs-webapp/compare/v3.0.2...v3.0.3
-[3.0.2]: https://github.com/axelor/abs-webapp/compare/v3.0.1...v3.0.2
-[3.0.1]: https://github.com/axelor/abs-webapp/compare/v3.0.0...v3.0.1
-[3.0.0]: https://github.com/axelor/abs-webapp/compare/9442200288c12977917a0668cf6f2e3812fdf0a9...v3.0.0
+
+[4.1.2]: https://github.com/axelor/axelor-business-suite/compare/v4.1.1...v4.1.2
+[4.1.1]: https://github.com/axelor/axelor-business-suite/compare/v4.1.0...v4.1.1
+[4.1.0]: https://github.com/axelor/axelor-business-suite/compare/v4.0.2...v4.1.0
+[4.0.2]: https://github.com/axelor/axelor-business-suite/compare/v4.0.1...v4.0.2
+[4.0.1]: https://github.com/axelor/axelor-business-suite/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/axelor/axelor-business-suite/compare/v3.0.3...v4.0.0
+[3.0.3]: https://github.com/axelor/axelor-business-suite/compare/v3.0.2...v3.0.3
+[3.0.2]: https://github.com/axelor/axelor-business-suite/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/axelor/axelor-business-suite/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/axelor/axelor-business-suite/compare/0f38e90dcd9126079eac78c1639a40c728e63d94...v3.0.0
