@@ -1,5 +1,198 @@
 # Changelog
 
+## [4.2.3] - 2018-02-28
+4.1.3 with axelor-process-studio modules
+
+## [4.1.3] - 2018-02-28
+### Improvements
+- New assistant in expense form to select payment mode
+- Leave management reset batch now creates a new line with negative quantity
+  instead of clearing old lines
+- Password encryption for ICALENDAR and SMTP account.
+- Title "IBAN" became "IBAN / BBAN" in bankdetails
+
+### Bug Fixes
+- Permission change in most HR form
+- Find kilometric allowance rate per company
+- Remove filter on company for historic timesheet
+- More fixes in expense form
+- Show time unit for the right user in timesheet lines
+- Hide button in leave request instead of making it readonly
+- Fix count tags in hr menus
+- Remove the wrong process to create an useless move for excess payment on refund invoice ventilation
+- Generate a signature user certificate in EBICS TS mode for Transport User
+- LEAD : convert wizard
+- On Invoice payment, if it's due to an invoice or a refund, payment mode become null and hidden
+- On Invoice payment, fix NPE by requiring paymentMode
+- Change menu leave.request.root.leave.calender to leave.request.root.leave.calendar
+
+## [4.1.2] - 2018-02-05
+### Improvements
+- Close pay period automatically when all payroll preparation are exported
+- KilometricExpenseLineList are no more duplicated in ExpenseLineList. ExpenseLineList is renamed into GeneralExpenseLineList.
+- The distinction between round-trip and one way ticket in kilometric expenses is now only informative.
+- Reconcile invoice with related refund
+- New boolean field "available to users" in expense type
+
+### Bug Fixes
+- Fix demo data en and fr on General config to set the correct value of the fields custStockMoveMgtOnSO and supplStockMoveMgtOnSO.
+- Fixes in invoicing timetable in sale order
+- Fix payment voucher report.
+- Check ICS number on direct debit sepa file generation
+- Fix receiver bank details filter in BankOrder
+- Years can have the same code as long as the company/type differ.
+- Fixes in expense form
+
+
+## [4.1.1] - 2018-01-10
+- Ebics TS improvements
+- Bank order improvements
+- HR improvments
+- Some fixes
+
+
+## [4.1.0] - 2017-06-19
+- Ebics TS implementation
+- Bank ordre implementation
+- Lunch voucher management
+- Employee bonus management
+- Expense improvements (multi user, kilometric compute with some rates)
+- Leave request improvements
+
+
+## [4.0.2] - 2018-01-09
+- BOM Componants tab order by priority
+- Set all field of all locationline view in readonly
+- Copy fix ICalendar and MailAccount
+- Fix NPE when generating an invoice from a stock move.
+- Fix currency conversion
+- Update translations
+- Fix google map api with api key
+- Toolbar does not show in special split popup anymore
+- Popup now closes after special split
+- Fixed multiple bug reported
+- Fix irrecoverable getInvoiceList request
+- Replace all __user__ context by __user__ directly on sql
+- Fix bad domain
+- STOCKMOVE - report with tracking number
+- Remove seeMonth Button on Project/MyPlanning
+- Timesheet lines and related elements are sorted by date DESC
+- Catch exception in TraceBack
+- Manage duplicate move lines in reports
+- CURRENCY CONVERSION : WS
+- Update license
+
+
+## [4.0.1] - 2017-06-19
+
+
+## [4.0.0] - 2017-01-30
+### Improvements
+- Default partner type
+- Remove sublines of SOlines : SubLine will be replaced per a title line to group some lines.
+- Rename saleOrder status and field :
+On saleOrder object :
+the "confirm" status must be rename to "finalize".
+the "validate" status must be rename to "orderConfirm"
+the "validationDate" field must be rename to "confirmationDate"
+the "validatedByUser" field must be rename to "confirmedByUser"
+- Add sale order version management :
+Versions will allow users to modify an order already finalyse :
+when switching to finalyse status, save the order's PDF as an attachment. If it is the first version, only use order sequence for the name of the PDF. For later version we have to suffix order's PDF name by "-V" + numversion
+Add new button called "New version" displayed in finalize status. This button will go back to draft status, and increment the version number.
+Add checkbox in general settings to know if the feature must be used or not into the application
+- Add cancel reason on saleOrder : When clicking on cancel sale order button, add intermediate popup to specify the cancel reason. Select a cancel reason must be required.
+- SaleOrder : modify stockMove generation management.
+Management of stockMove generation button display :
+This button must be displayed only on "orderConfirm" status
+By clicking on the button, a new StockMove will be created with all saleOrder's line and with "Planned" status. If a stockMove was already generated, an information message must appeared specifying that an other stock move can't be generated.
+- A new pointed field must be added into stockmove to know his invoicing state. A stockmove is linked to only one invoice, so we can based on invoice status to know if a stockmove is invoiced or not.
+- New status of delivery in sale order :
+Add new column status named "delivery state" containing 3 values :
+not delivered
+partially delivered
+delivered
+When the stockMove will be realized, the delivery status will change to "delivred" if there isn't any back order and "partially delivered" if there is one.
+- Removed definitively organisation module (and axelor-account-organisation) and added two new module axelor-human-resource and axelor-project
+- PARTNER : manage all addresses in a new tab with some attributes (Invoicing address, Delivery address, default address)
+- Invoice: the M2O to project is now defined per lines
+- SALEORDER : Message for inform user that there is a special process on order
+- PURCHASEORDER : Message for inform user that there is a special process on order
+- SALEORDER : Added the management of subscriptions
+- EXCEPTION : We don't support any more different kind of prefix for exception message depending of module.
+- SMTP Default port : Now the default port is taken into account when we change security access:
+Default: 25, SSL: 465, TLS: 587
+- MESSAGE : copy support
+- EVENT : Reschedule on Event
+- OPPORTUNITY : Transform opportunity in SaleOrder
+- INVOICE : Create from stockMove
+- FISCAL POSITION : added filter
+- SALEORDER: Management of models
+- CUSTOMERCREDITLINE : Manage the rules
+- PURCHASE ORDER : version management
+- PURCHASE ORDER : add generation from selected sale order lines
+- PRICELIST : Manage two price lists per partner (sale and purchase)
+- BATCH : added mail Batch
+- PURCHASE ORDER : merge purchase orders
+- PurchaseOrder : status modification and workflow modification with supplier arrivals and invoice
+Remove receipt status
+Add new field receipt state with 3 possible values :
+not received
+partially received
+received
+Add 2 new checkboxes in general settings : 1 to know if supplier arrivals will be use in the application. And another one to know if the generation will be manual or automatic. If not, a button will be available
+If an active supplier arrival already exists for a purchase order (ie status must be different from cancel)
+In case of manual generation, an information message will be displayed to specify that an active supplier arrival already exists (in case of no auto-generation).
+In case of auto generation, no new supplier arrival will be generated automatically (no impact for the user)
+Add M2O into invoice to purchase order
+Add M2O into invoice line to purchase order line (like sale order)
+Use the checkbox "manageAmountInvoiceByLine" in general settings to know if the invoice amount management is done by line or not (as for sale order)
+Automatically update remaining amount to invoice for purchase order :
+if the M2O on invoice to sale order (purchase order) is not null, then use it
+if it is null, then use the M2O on invoice line to sale order line (purchase order line)
+this auto-update must be called during :
+invoice ventilation
+invoice cancellation
+- SaleOrder : manage objects generation depending on general settings parameters
+Add 6 new checkboxes in general settings to know if the generation process must be triggered automatically or not :
+2 for stock move generation : 1 to know if it we want to use stock moves in the application. And another one if the first is checked to know if the generation will be manual or automatic
+2 for purchase order generation : 1 to know if it we want to use purchase orders in the application. And another one if the first is checked to know if the generation will be manual or automatic
+2 for stock production order : 1 to know if it we want to use production orders in the application. And another one if the first is checked to know if the generation will be manual or automatic
+In case of auto generation, this 3 generation will be triggered during sale order confirmation
+In case of manual generation, display a button and open the generated object after click on it :
+Generate stock move button if sale order status is “order confirmed”
+Generate purchase order button if sale order status is “finalise” or “order confirmed”
+Generate production order button if sale order status is “order confirmed”
+Add new checkbox to know if it is possible to generate invoice directly from sale order
+- SaleOrder and PurchaseOrder : change remaining amount to invoice
+- SaleOrder : show invoices
+- B2B and B2C : manage the amount in ATI and WT
+- INVOICE : Manage the possibility to hide discount
+- DISCOUNTS : For discounts, the sign is changed, it means that when you enter a discount like 10%, this is really a discount of 10% on the price. Before, you had to put -10% if you wanted to have a lower price.
+Now, if you put a discount of -10%, this is not a discount, it is an addition.
+- SALEORDER : Duration of validity
+- PARTNER : CustomerTypeSelect and SupplierTypeSelect are now some booleans
+- BUSINESS FOLDER : Create a new saleOrder
+- PRICELIST : 3 new ways to manage priceLists
+in admin general, there is now a select "Compute Methode for Discounts" with 3 values:
+* Compute Discount Separately : this is the default value, we don't put the discount in the unit price, we have an other field "price discounted" which will display the unit price discounted.
+* Include Discount in unit price only for replace type : we replace the unit price with the unit price discounted and we don't show that there is a discount. Only if in the priceList we have the type "Replace"
+* Include Discount in unit price : we replace the unit price with the unit price discounted and we don't show that there is a discount for all the types of discount.
+- SALEORDER : Invoice
+If no lines are selected, the button "Generate invoice" should generate an invoice for all lines.
+If some lines are selected, the button "Generate invoice" should generate an invoice for the selected lines only.
+- GENERAL : Added some parameters to enabled/disabled some features
+- SEQUENCE :
+Added four M2O to sequences object in account config :
+- sequence for customer refund
+- sequence for customer invoice
+- sequence for supplier refund
+- sequence for supplier invoice
+# Changelog
+
+## [4.2.3] - 2018-02-28
+4.1.3 with axelor-process-studio modules
+
 ## [4.1.3] - 2018-02-28
 ### Improvements
 - New assistant in expense form to select payment mode
@@ -316,6 +509,7 @@ Fully responsive mobile ready views, gradle based build system and much more.
 - Multi-company, multi-currency and multi-lingual
 
 
+[4.2.3]: https://github.com/axelor/abs-webapp/compare/v4.1.3...v4.2.3
 [4.1.3]: https://github.com/axelor/abs-webapp/compare/v4.1.2...v4.1.3
 [4.1.2]: https://github.com/axelor/abs-webapp/compare/v4.1.1...v4.1.2
 [4.1.1]: https://github.com/axelor/abs-webapp/compare/v4.1.0...v4.1.1
