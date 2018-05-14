@@ -153,7 +153,9 @@
                             map.setZoom(15);
                         }
                     }
-                } // end if
+                } else {
+                    window.location = "error.html?msg=" + result.errorMsg;
+                }
             });
 
             requestP.fail(function(jqXHR, textStatus) {
