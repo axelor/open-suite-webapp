@@ -51,7 +51,7 @@
 
         var options = {
             zoom: 3,
-            center: new google.maps.LatLng(48.8357120, 2.5856770),
+            center: new google.maps.LatLng(20.8948062, 1.6760691),
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
@@ -144,13 +144,22 @@
 
                     } //end loop
 
-                    if (markers.length > 0) {
-                        if (id) {
-                            map.fitBounds(bounds);
+                    if (markers.length < 2) {
+                        var latLng;
+
+                        if (markers.length) {
+                            latLng = markers[0].getPosition();
+                        } else {
+                            latLng = result.company ? new google.maps.LatLng(result.company) : options.center;
                         }
 
-                        if (markers.length == 1) {
-                            map.setZoom(15);
+                        map.setCenter(latLng);
+                        map.setZoom(10);
+                    } else {
+                        map.fitBounds(bounds);
+
+                        if (map.getZoom() < 4) {
+                            map.setCenter(options.center);
                         }
                     }
                 } else {
