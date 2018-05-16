@@ -56,7 +56,6 @@
         };
 
         var map = new google.maps.Map(document.getElementById('map'), options);
-        var appHome = location.protocol + '//' + location.host + '/' + location.pathname.split('/')[1];
 
 
         google.maps.event.addListenerOnce(map, 'bounds_changed', function() {
@@ -68,7 +67,7 @@
 
             var bounds = new google.maps.LatLngBounds();
 
-            var url = appHome + "/ws/map/" + getQueryVariable("object");
+            var url = getAppHome() + "/ws/map/" + getQueryVariable("object");
             var id = getQueryVariable("id");
 
             if (id) {
@@ -154,7 +153,9 @@
                             map.setZoom(15);
                         }
                     }
-                } // end if
+                } else {
+                    window.location = "error.html?msg=" + result.errorMsg;
+                }
             });
 
             requestP.fail(function(jqXHR, textStatus) {
