@@ -34,7 +34,7 @@ application {
 	name "axelor-erp"
 	title "Axelor :: ERP"
 
-	version "4.2.3"
+	version "4.2.4"
 
 	// ADK version required
 	adkVersion "~4.1.4"
