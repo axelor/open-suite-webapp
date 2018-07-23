@@ -2,10 +2,19 @@ buildscript {
 	apply from: "gradle/adk.gradle"
 	dependencies {
 		classpath adkPlugins()
+		classpath "com.diffplug.spotless:spotless-plugin-gradle:3.12.0"
 	}
 }
 
 apply plugin: 'axelor-app'
+apply plugin: "com.diffplug.gradle.spotless"
+
+spotless { 
+	java {  
+		googleJavaFormat()
+	} 
+}
+
 
 def modules = new File('modules/abs').listFiles().findAll { dir ->
 	new File(dir, 'build.gradle').exists()
@@ -52,8 +61,10 @@ application {
 }
 
 allprojects {
+	apply plugin: "com.diffplug.gradle.spotless"
 	sourceCompatibility = 1.7
 	targetCompatibility = 1.7
+	afterEvaluate { generateCode.finalizedBy( tasks.getByName('spotlessApply') ) }
 }
 
 tomcat {
