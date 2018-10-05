@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.2.5] - 2018-10-06
+### Improvements
+- Replace justification binary field in ExpenseLine with justificationMetaFile m2o MetaFile field
+- BANK ORDER : receiver address management for internationnal transfer
+- Hide Ebics user full name in grid view.
+- Add a new button on bank order grids to display the bank order lines.
+- Bank orders can now be deleted when their status is "draft" or "canceled".
+- Improve bank order printing layout.
+
+### Bug Fixes
+- Fix NPE in BankOrder generation on missing bank name.
+- Timesheets : use the timesheet user to filter the projects/tasks instead of the connected user.
+- Cannot create a new bank order from the menu entry "awaiting signature".
+
 ## [4.2.4] - 2018-07-12
 ### Improvements
 - Fiscal Position interface reworked and moved from Account to Base module
@@ -535,6 +549,8 @@ Fully responsive mobile ready views, gradle based build system and much more.
 - Production Management
 - Multi-company, multi-currency and multi-lingual
 
+
+[4.2.5]: https://github.com/axelor/abs-webapp/compare/v4.2.4...v4.2.5
 [4.2.4]: https://github.com/axelor/abs-webapp/compare/v4.2.3...v4.2.4
 [4.2.3]: https://github.com/axelor/abs-webapp/compare/v4.1.3...v4.2.3
 [4.2.2]: https://github.com/axelor/abs-webapp/compare/v4.1.2...v4.2.2
