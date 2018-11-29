@@ -4,7 +4,7 @@ steps:
   args:
   - kms
   - decrypt
-  - --ciphertext-file='gs://vuminhtuan_fit_bucket/id_rsa.enc'
+  - --ciphertext-file=id_rsa.enc
   - --plaintext-file=/root/.ssh/id_rsa
   - --location=global
   - --keyring=my-keyring
