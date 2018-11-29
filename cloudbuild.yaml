@@ -1,5 +1,5 @@
 steps:
-- name: gcr.io/cloud-builders/gsutil
+- name: 'gcr.io/cloud-builders/gsutil'
   args: 
   - cp
   - gs://vuminhtuan_fit_bucket/id_rsa.enc
