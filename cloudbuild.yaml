@@ -38,12 +38,24 @@ steps:
   - name: 'ssh'
     path: /root/.ssh
 
-# Use git clone.
+# Checkout modules
 - name: 'gcr.io/cloud-builders/git'
-  args:
-  - clone
-  # - git@github.com:[GIT-USERNAME]/[REPOSITORY]
-  - git@github.com:minhtuanvu/abs-webapp.git
+  args: ['submodule', 'init']
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+- name: 'gcr.io/cloud-builders/git'
+  args: ['submodule', 'update']
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+- name: 'gcr.io/cloud-builders/git'
+  args: ['submodule', 'foreach', 'git', 'checkout', $BRANCH_NAME]
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+- name: 'gcr.io/cloud-builders/git'
+  args: ['submodule', 'foreach', 'git', 'pull', 'origin', $BRANCH_NAME]
   volumes:
   - name: 'ssh'
     path: /root/.ssh
