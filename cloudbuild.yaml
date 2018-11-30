@@ -1,6 +1,12 @@
 steps:
+
+# Copy key
 - name: 'gcr.io/cloud-builders/gsutil'
   args: ['cp', 'gs://vuminhtuan_fit_bucket/id_rsa.enc', 'id_rsa.enc']
+
+# Copy key
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['cp', 'gs://vuminhtuan_fit_bucket/known_hosts', 'known_hosts']
 
 # Decrypt the file containing the key
 - name: 'gcr.io/cloud-builders/gcloud'
