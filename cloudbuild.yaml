@@ -59,3 +59,18 @@ steps:
   volumes:
   - name: 'ssh'
     path: /root/.ssh
+
+steps:
+- name: 'openjdk:8'
+  entrypoint: "bash"
+  args: [ "-c", "./gradlew --no-daemon -x test npm-build build"]
+
+# Use git clone.
+# - name: 'gcr.io/cloud-builders/git'
+  # args:
+  # - clone
+  # - git@github.com:[GIT-USERNAME]/[REPOSITORY]
+  # - git@github.com:minhtuanvu/abs-webapp.git
+  # volumes:
+  # - name: 'ssh'
+    # path: /root/.ssh
