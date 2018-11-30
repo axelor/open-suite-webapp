@@ -60,7 +60,6 @@ steps:
   - name: 'ssh'
     path: /root/.ssh
 
-steps:
 - name: 'openjdk:8'
   entrypoint: "bash"
   args: [ "-c", "./gradlew --no-daemon -x test npm-build build"]
