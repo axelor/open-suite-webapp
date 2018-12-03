@@ -34,24 +34,29 @@ steps:
     IdentityFile /root/.ssh/id_rsa
     EOF
     mv known_hosts /root/.ssh/known_hosts
+    git submodule sync
+    git submodule init
+    git submodule update
+    git submodule foreach git checkout master
+    git submodule foreach git pull origin master
   volumes:
   - name: 'ssh'
     path: /root/.ssh
 
 # Checkout modules
-- name: 'gcr.io/cloud-builders/git'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    git submodule sync && \
-    git submodule init && \
-    git submodule update && \
-    git submodule foreach git checkout master && \
-    git submodule foreach git pull origin master
-  volumes:
-  - name: 'ssh'
-    path: /root/.ssh
+#- name: 'gcr.io/cloud-builders/git'
+#  entrypoint: 'bash'
+#  args:
+#  - '-c'
+#  - |
+#    git submodule sync && \
+#    git submodule init && \
+#    git submodule update && \
+#    git submodule foreach git checkout master && \
+#    git submodule foreach git pull origin master
+#  volumes:
+#  - name: 'ssh'
+#    path: /root/.ssh
 #- name: 'gcr.io/cloud-builders/git'
 #  args: ['submodule', 'init']
 #  volumes:
