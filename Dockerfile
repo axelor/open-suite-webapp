@@ -23,7 +23,7 @@ COPY . $APP_SRC
 
 # build sources
 RUN set -ex \
-	&& cd $TMP_SRC \
+	&& cd $APP_SRC \
 	&& ./gradlew --no-daemon -x test npm-build build
 
 FROM tomcat:8.5-slim
