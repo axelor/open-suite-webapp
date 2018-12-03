@@ -62,7 +62,18 @@ steps:
 
 - name: 'openjdk:8'
   entrypoint: "bash"
-  args: [ "-c", "./gradlew --no-daemon -x test npm-build build"]
+  # args: [ "-c", "./gradlew --no-daemon -x test npm-build build"]
+  args: [ "-c", "./gradlew --no-daemon -x test build"]
+
+# - name: 'gcr.io/cloud-builders/docker'
+  # args: ['build',
+         # '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA',
+         # '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
+         # '-f', 'Dockerfile', '.'
+  # ]
+# images:
+# - 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+# - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
 
 # Use git clone.
 # - name: 'gcr.io/cloud-builders/git'
