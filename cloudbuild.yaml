@@ -64,13 +64,13 @@ steps:
   entrypoint: 'bash'
   args: [
     '-c',
-    'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:builder || true']
+    'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:builder']
 
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
   args: [
     '-c',
-    'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:latest || true']
+    'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:latest']
 
 - name: 'gcr.io/cloud-builders/docker'
   args: [
