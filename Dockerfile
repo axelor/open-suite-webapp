@@ -21,6 +21,8 @@ WORKDIR $APP_SRC
 # copy sources
 COPY . $APP_SRC
 
+RUN ls -lah $APP_SRC
+
 # build sources
 RUN set -ex \
 	&& cd $APP_SRC \
