@@ -31,5 +31,5 @@ RUN set -ex \
 FROM tomcat:8.5-slim
 LABEL maintainer="TuanVM <vuminhtuan@live.com>"
 
-COPY --from=builder /app/src/axelor-erp/build/libs/axelor-erp-*.war $CATALINA_BASE/webapps/ROOT.war
+COPY --from=builder /app/src/build/libs/axelor-erp-*.war $CATALINA_BASE/webapps/ROOT.war
 CMD ["start"]
