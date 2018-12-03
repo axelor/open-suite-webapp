@@ -40,37 +40,50 @@ steps:
 
 # Checkout modules
 - name: 'gcr.io/cloud-builders/git'
-  args: ['submodule', 'init']
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    git submodule sync && \
+    git submodule init && \
+    git submodule update && \
+    git submodule foreach git checkout master && \
+    git submodule foreach git pull origin master
   volumes:
   - name: 'ssh'
     path: /root/.ssh
-- name: 'gcr.io/cloud-builders/git'
-  args: ['submodule', 'update']
-  volumes:
-  - name: 'ssh'
-    path: /root/.ssh
-- name: 'gcr.io/cloud-builders/git'
-  args: ['submodule', 'foreach', 'git', 'checkout', $BRANCH_NAME]
-  volumes:
-  - name: 'ssh'
-    path: /root/.ssh
-- name: 'gcr.io/cloud-builders/git'
-  args: ['submodule', 'foreach', 'git', 'pull', 'origin', $BRANCH_NAME]
-  volumes:
-  - name: 'ssh'
-    path: /root/.ssh
+#- name: 'gcr.io/cloud-builders/git'
+#  args: ['submodule', 'init']
+#  volumes:
+#  - name: 'ssh'
+#    path: /root/.ssh
+#- name: 'gcr.io/cloud-builders/git'
+#  args: ['submodule', 'update']
+#  volumes:
+#  - name: 'ssh'
+#    path: /root/.ssh
+#- name: 'gcr.io/cloud-builders/git'
+#  args: ['submodule', 'foreach', 'git', 'checkout', $BRANCH_NAME]
+#  volumes:
+#  - name: 'ssh'
+#    path: /root/.ssh
+#- name: 'gcr.io/cloud-builders/git'
+#  args: ['submodule', 'foreach', 'git', 'pull', 'origin', $BRANCH_NAME]
+#  volumes:
+#  - name: 'ssh'
+#    path: /root/.ssh
 
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
   args: [
     '-c',
-    'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:builder']
+    'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:builder || true']
 
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
   args: [
     '-c',
-    'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:latest']
+    'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:latest || true']
 
 - name: 'gcr.io/cloud-builders/docker'
   args: [
