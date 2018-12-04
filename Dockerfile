@@ -27,7 +27,7 @@ RUN \
   git clone https://github.com/axelor/abs-webapp.git axelor-erp && \
   sed -e 's|git@github.com:|https://github.com/|' -i axelor-erp/.gitmodules && \
   cd axelor-erp && \
-  git checkout master && \
+  git checkout tags/v5.0.6 && \
   git submodule sync && \
   git submodule init && \
   git submodule update && \
