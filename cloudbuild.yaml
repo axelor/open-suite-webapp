@@ -115,27 +115,37 @@ steps:
 
 
 
-- name: 'gcr.io/cloud-builders/docker'
-  args: [
-    'build',
-    '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
-    '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA',
-    '.']
-
-images: [
-  'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
-  'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA']
-
-
+#- name: 'gcr.io/cloud-builders/docker'
+#  args: [
+#    'build',
+#    '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
+#    '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA',
+#    '.']
+#
+#images: [
+#  'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
+#  'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA']
 
 
-
-
-#- name: 'openjdk:8'
-#  entrypoint: "bash"
+- name: 'openjdk:8'
+  entrypoint: "bash"
   # args: [ "-c", "./gradlew --no-daemon -x test npm-build build"]
-#  args: [ "-c", "./gradlew --no-daemon -x test build"]
+  # args: [ "-c", "./gradlew --no-daemon -x test build"]
+  args: [ "-c", "./gradlew --no-daemon -x copyWebapp"]
 
+- name: node:10.10.0
+  entrypoint: npm
+  args: ['install --prefix ./build/webapp']
+
+- name: node:10.10.0
+  entrypoint: npm
+  args: ['run build ./build/webapp']
+
+- name: 'openjdk:8'
+  entrypoint: "bash"
+  # args: [ "-c", "./gradlew --no-daemon -x test npm-build build"]
+  args: [ "-c", "./gradlew --no-daemon -x test build"]
+  
 #- name: 'gcr.io/cloud-builders/docker'
 #  args: ['build',
 #         '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA',
