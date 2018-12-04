@@ -34,7 +34,6 @@ steps:
     IdentityFile /root/.ssh/id_rsa
     EOF
     mv known_hosts /root/.ssh/known_hosts
-    git checkout tags/v5.0.6
     git submodule sync
     git submodule init
     git submodule update
