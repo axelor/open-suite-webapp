@@ -131,11 +131,11 @@ steps:
   entrypoint: "bash"
   # args: [ "-c", "./gradlew --no-daemon -x test npm-build build"]
   # args: [ "-c", "./gradlew --no-daemon -x test build"]
-  args: [ "-c", "./gradlew --no-daemon copyWebapp && ls ./build -lah"]
+  args: [ "-c", "./gradlew --no-daemon copyWebapp"]
 
 - name: node:10.10.0
   entrypoint: "bash"
-  args: ['cd ./build/webapp && npm install']
+  args: ['ls ./build -lah && cd ./build/webapp && npm install']
 
 - name: node:10.10.0
   entrypoint: "bash"
