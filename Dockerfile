@@ -14,7 +14,7 @@ RUN set -ex \
 
 #RUN mkdir -p ~/.m2
 
-RUN git clone https://github.com/minhtuanvu/gradle.git ~/.gradle
+#RUN git clone https://github.com/minhtuanvu/gradle.git ~/.gradle
 
 #ENV APP_SRC_CACHE /app/src_cache
 
