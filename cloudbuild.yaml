@@ -133,17 +133,17 @@ steps:
   # args: [ "-c", "./gradlew --no-daemon -x test build"]
   args: [ "-c", "./gradlew --no-daemon copyWebapp"]
 
-- name: node
-  entrypoint: "bash"
-  args: ['ls -lah']
+# - name: node
+  # entrypoint: "bash"
+  # args: [ "-c", 'ls -lah']
 
 - name: node
   entrypoint: "bash"
-  args: ['cd ./build/webapp && npm install']
+  args: [ "-c", 'cd ./build/webapp && npm install']
 
 - name: node
   entrypoint: "bash"
-  args: ['cd ./build/webapp && npm run build']
+  args: [ "-c", 'cd ./build/webapp && npm run build']
 
 - name: 'openjdk:8'
   entrypoint: "bash"
