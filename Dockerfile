@@ -12,9 +12,9 @@ RUN set -ex \
 		nodejs yarn \
 	&& rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p ~/.m2
+#RUN mkdir -p ~/.m2
 
-RUN git clone https://github.com/minhtuanvu/erp-mvn-cache.git ~/.m2/repository
+#RUN git clone https://github.com/minhtuanvu/erp-mvn-cache.git ~/.m2/repository
 
 ENV APP_SRC_CACHE /app/src_cache
 
