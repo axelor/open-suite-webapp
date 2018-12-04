@@ -12,31 +12,31 @@ RUN set -ex \
 		nodejs yarn \
 	&& rm -rf /var/lib/apt/lists/*
 
-#RUN mkdir -p ~/.m2
+RUN mkdir -p ~/.m2
 
-#RUN git clone https://github.com/minhtuanvu/erp-mvn-cache.git ~/.m2/repository
+RUN git clone https://github.com/minhtuanvu/erp-mvn-cache.git ~/.m2/repository
 
-ENV APP_SRC_CACHE /app/src_cache
+#ENV APP_SRC_CACHE /app/src_cache
 
-RUN mkdir -p $APP_SRC_CACHE
+#RUN mkdir -p $APP_SRC_CACHE
 
-WORKDIR $APP_SRC_CACHE
+#WORKDIR $APP_SRC_CACHE
 
-RUN \
-  set -ex && \
-  git clone https://github.com/axelor/abs-webapp.git axelor-erp && \
-  sed -e 's|git@github.com:|https://github.com/|' -i axelor-erp/.gitmodules && \
-  cd axelor-erp && \
-  git checkout tags/v5.0.6 && \
-  git submodule sync && \
-  git submodule init && \
-  git submodule update && \
-  git submodule foreach git checkout master && \
-  git submodule foreach git pull origin master && \
-  sed -e 's|^application.theme.*|application.theme = modern|g' -i src/main/resources/application.properties && \
-  ./gradlew --no-daemon -x test npm-build build && \
-  cd && \
-  rm $APP_SRC_CACHE -rf
+#RUN \
+#  set -ex && \
+#  git clone https://github.com/axelor/abs-webapp.git axelor-erp && \
+#  sed -e 's|git@github.com:|https://github.com/|' -i axelor-erp/.gitmodules && \
+#  cd axelor-erp && \
+#  git checkout tags/v5.0.6 && \
+#  git submodule sync && \
+#  git submodule init && \
+#  git submodule update && \
+#  git submodule foreach git checkout master && \
+#  git submodule foreach git pull origin master && \
+#  sed -e 's|^application.theme.*|application.theme = modern|g' -i src/main/resources/application.properties && \
+#  ./gradlew --no-daemon -x test npm-build build && \
+#  cd && \
+#  rm $APP_SRC_CACHE -rf
 
 ENV APP_SRC /app/src
 
