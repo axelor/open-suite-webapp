@@ -34,7 +34,9 @@ RUN \
   git submodule foreach git checkout master && \
   git submodule foreach git pull origin master && \
   sed -e 's|^application.theme.*|application.theme = modern|g' -i src/main/resources/application.properties && \
-  ./gradlew --no-daemon -x test npm-build build
+  ./gradlew --no-daemon -x test npm-build build && \
+  cd && \
+  cd rm $APP_SRC_CACHE -rf
 
 ENV APP_SRC /app/src
 
