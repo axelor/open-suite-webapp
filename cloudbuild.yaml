@@ -1,12 +1,8 @@
 steps:
 
-# Copy key
+# Copy id_rsa.enc, known_hosts ... from buck
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', 'gs://vuminhtuan_fit_bucket/id_rsa.enc', 'id_rsa.enc']
-
-# Copy key
-- name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', 'gs://vuminhtuan_fit_bucket/known_hosts', 'known_hosts']
+  args: ['cp', 'gs://$BUCKET_NAME/*', '.']
 
 # Decrypt the file containing the key
 - name: 'gcr.io/cloud-builders/gcloud'
@@ -16,7 +12,7 @@ steps:
   - --ciphertext-file=id_rsa.enc
   - --plaintext-file=/root/.ssh/id_rsa
   - --location=global
-  - --keyring=my-keyring
+  - --keyring=$KEYRING_NAME
   - --key=github-key
   volumes:
   - name: 'ssh'
@@ -37,136 +33,41 @@ steps:
     git submodule sync
     git submodule init
     git submodule update
-    git submodule foreach git checkout master
-    git submodule foreach git pull origin master
   volumes:
   - name: 'ssh'
     path: /root/.ssh
-
-# Checkout modules
-#- name: 'gcr.io/cloud-builders/git'
-#  entrypoint: 'bash'
-#  args:
-#  - '-c'
-#  - |
-#    git submodule sync && \
-#    git submodule init && \
-#    git submodule update && \
-#    git submodule foreach git checkout master && \
-#    git submodule foreach git pull origin master
-#  volumes:
-#  - name: 'ssh'
-#    path: /root/.ssh
-#- name: 'gcr.io/cloud-builders/git'
-#  args: ['submodule', 'init']
-#  volumes:
-#  - name: 'ssh'
-#    path: /root/.ssh
-#- name: 'gcr.io/cloud-builders/git'
-#  args: ['submodule', 'update']
-#  volumes:
-#  - name: 'ssh'
-#    path: /root/.ssh
-#- name: 'gcr.io/cloud-builders/git'
-#  args: ['submodule', 'foreach', 'git', 'checkout', $BRANCH_NAME]
-#  volumes:
-#  - name: 'ssh'
-#    path: /root/.ssh
-#- name: 'gcr.io/cloud-builders/git'
-#  args: ['submodule', 'foreach', 'git', 'pull', 'origin', $BRANCH_NAME]
-#  volumes:
-#  - name: 'ssh'
-#    path: /root/.ssh
-
-#- name: 'gcr.io/cloud-builders/docker'
-#  entrypoint: 'bash'
-#  args: [
-#    '-c',
-#    'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:builder || true']
-#
-#- name: 'gcr.io/cloud-builders/docker'
-#  entrypoint: 'bash'
-#  args: [
-#    '-c',
-#    'docker pull gcr.io/$PROJECT_ID/$REPO_NAME:latest || true']
-#
-#- name: 'gcr.io/cloud-builders/docker'
-#  args: [
-#    'build',
-#    '--target', 'builder',
-#    '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:builder',
-#    '--cache-from', 'gcr.io/$PROJECT_ID/$REPO_NAME:builder',
-#    '.']
-#
 
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
     '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
     '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA',
-    '--cache-from', 'gcr.io/$PROJECT_ID/$REPO_NAME:builder',
-    '--cache-from', 'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
-    '.']
-
-images: [
-    # 'gcr.io/$PROJECT_ID/$REPO_NAME:builder',
-    'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
-    'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA']
-
-
-
+#    '--cache-from', 'gcr.io/$PROJECT_ID/$REPO_NAME:builder',
+#    '--cache-from', 'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
+    '.'
+  ]
 
 #- name: 'gcr.io/cloud-builders/docker'
+#  args: ['build',
+#         '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA', 
+#         '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
+#         '-f', 'Dockerfile.slim',
+#         '.'
+#  ]
+#- name: 'gcr.io/cloud-builders/docker'
 #  args: [
-#    'build',
-#    '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
-#    '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA',
-#    '.']
-#
-#images: [
-#  'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
-#  'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA']
+#            'build',
+#            '-t', 'gcr.io/$PROJECT_ID/[IMAGE_NAME]:latest',
+#            '--cache-from', 'gcr.io/$PROJECT_ID/[IMAGE_NAME]:latest',
+#            '.'
+#        ]
+#images: ['gcr.io/$PROJECT_ID/[IMAGE_NAME]:latest']
 
+images: [
+  'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
+  'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+]
 
-# - name: 'openjdk:8'
-  # entrypoint: "bash"
-  # args: [ "-c", "./gradlew --no-daemon -x test npm-build build"]
-  # args: [ "-c", "./gradlew --no-daemon -x test build"]
-  # args: [ "-c", "./gradlew --no-daemon copyWebapp"]
-
-# - name: node
-  # entrypoint: "bash"
-  # args: [ "-c", 'ls -lah']
-
-# - name: node
-  # entrypoint: "bash"
-  # args: [ "-c", 'cd ./build/webapp && npm install']
-
-# - name: node
-  # entrypoint: "bash"
-  # args: [ "-c", 'cd ./build/webapp && npm run build']
-
-# - name: 'openjdk:8'
-  # entrypoint: "bash"
-  # args: [ "-c", "./gradlew --no-daemon -x test npm-build build"]
-  # args: [ "-c", "./gradlew --no-daemon -x test build"]
-  
-# - name: 'gcr.io/cloud-builders/docker'
- # args: ['build',
-        # '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA',
-        # '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
-        # '-f', 'Dockerfile', '.'
- # ]
-# images:
-# - 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
-# - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
-
-# Use git clone.
-# - name: 'gcr.io/cloud-builders/git'
-  # args:
-  # - clone
-  # - git@github.com:[GIT-USERNAME]/[REPOSITORY]
-  # - git@github.com:minhtuanvu/abs-webapp.git
-  # volumes:
-  # - name: 'ssh'
-    # path: /root/.ssh
+substitutions:
+    BUCKET_NAME: htc-net-vn-common-bucket
+    KEYRING_NAME: htc-net-vn-common-keyring
