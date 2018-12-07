@@ -69,5 +69,5 @@ images: [
 ]
 
 substitutions:
-    _BUCKET_NAME: htc-net-vn-common-bucket
-    _KEYRING_NAME: htc-net-vn-common-keyring
+    _BUCKET_NAME: vuminhtuan_fit_bucket
+    _KEYRING_NAME: my-keyring
