@@ -12,21 +12,20 @@ RUN set -ex \
 		git-core nodejs yarn \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV APP_SRC /app/src
-RUN mkdir -p $APP_SRC
-WORKDIR $APP_SRC
+RUN mkdir -p /app/src
+WORKDIR /app/src
 
 # copy sources
-COPY . $APP_SRC
+COPY . /app/src
 
 # build sources
 RUN \
   set -ex && \
-  cd $APP_SRC && \
+  cd /app/src && \
   ./gradlew --no-daemon -x test npm-build build
 
 FROM tomcat:8.5-slim
 LABEL maintainer="TuanVM <vuminhtuan@live.com>"
 
-COPY --from=builder $APP_SRC/build/libs/axelor-erp-*.war $CATALINA_BASE/webapps/ROOT.war
+COPY --from=builder /app/src/build/libs/axelor-erp-*.war $CATALINA_BASE/webapps/ROOT.war
 CMD ["start"]
