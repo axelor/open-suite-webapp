@@ -2,7 +2,7 @@ steps:
 
 # Copy id_rsa.enc, known_hosts ... from buck
 - name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', 'gs://$BUCKET_NAME/*', '.']
+  args: ['cp', 'gs://$_BUCKET_NAME/*', '.']
 
 # Decrypt the file containing the key
 - name: 'gcr.io/cloud-builders/gcloud'
@@ -12,7 +12,7 @@ steps:
   - --ciphertext-file=id_rsa.enc
   - --plaintext-file=/root/.ssh/id_rsa
   - --location=global
-  - --keyring=$KEYRING_NAME
+  - --keyring=$_KEYRING_NAME
   - --key=github-key
   volumes:
   - name: 'ssh'
@@ -69,5 +69,5 @@ images: [
 ]
 
 substitutions:
-    BUCKET_NAME: htc-net-vn-common-bucket
-    KEYRING_NAME: htc-net-vn-common-keyring
+    _BUCKET_NAME: htc-net-vn-common-bucket
+    _KEYRING_NAME: htc-net-vn-common-keyring
