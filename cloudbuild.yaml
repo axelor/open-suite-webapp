@@ -40,19 +40,19 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'pull',
-    'runmymind/docker-android-sdk'
-  ]
-
-- name: 'gcr.io/cloud-builders/docker'
-  args: [
-    'tag',
-    'runmymind/docker-android-sdk',
     'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
   ]
 
-images: [
-  'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
-]
+#- name: 'gcr.io/cloud-builders/docker'
+#  args: [
+#    'tag',
+#    'runmymind/docker-android-sdk',
+#    'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+#  ]
+
+#images: [
+#  'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+#]
 
 substitutions:
     _BUCKET_NAME: vuminhtuan_fit_bucket
