@@ -43,9 +43,15 @@ steps:
     'runmymind/docker-android-sdk'
   ]
 
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'tag',
+    'runmymind/docker-android-sdk',
+    'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+  ]
+
 images: [
-  'gcr.io/$PROJECT_ID/$REPO_NAME:latest',
-  'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+  'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
 ]
 
 substitutions:
