@@ -1,5 +1,26 @@
 # Changelog
 
+## [5.0.8] - 2019-01-17
+## Features
+- Account: add option to automatically create partners' accounts
+- Account: use partner name as default account name when creating from partner's account configuration screen.
+
+## Improvements
+- Disabled 'canEdit' attribute for some fields
+- Invoice : journal & partner account are now set on validation rather than on ventilation.
+- Advanced exports: store dates as dates and numbers as numbers in Excel export.
+- Base : Removal of PartnerList object and its relevant controller because of no use.
+
+## Bug Fixes
+- Invoice Interco: assign account and taxLine to Invoice Line according to operationSelect.
+- MANUF. ORDER PRINTING: hide barcode column when it is empty.
+- Purchase Order: remove save on loading purchase order form.
+- Stock Chart: fix wrong action name.
+- App Sale: fix unresolved action error.
+- Payment voucher: fix confirm button display on credit card supplier payments.
+- General balance report : fix wrong sums when we filter on some accounts of the same branch
+- Remove Inconsistency in selections
+
 ## [5.0.7] - 2018-12-13
 ## Features
 - MRP : Display createdBy user and stockLocation.company in form and grid view.
@@ -159,7 +180,6 @@ Moreover, the amount_remaining calculation on move line was wrong. Now we comput
 - Partner : Fix add partner seq on card view.
 - Purchase Order Line : Fix NPE when clear the 'Tax' field.
 
-
 ## [5.0.5] - 2018-09-19
 ## Features
 - Add Data Backup and Restore
@@ -261,7 +281,7 @@ Moreover, the amount_remaining calculation on move line was wrong. Now we comput
 - Stock location line: add the dotted field 'product.unit'.
 - Stock move: make lines fully editable and removable on planned status.
 - Harmonization of Sale order line, purchase order line and invoice line form views.
-- Account : prefill employee/supplier/customer account creation form with default values from configuration.
+- Account : prefill employee/supplier/customer account creation form with default values from configuration.
 - Timesheet on operation order: Compute operation order total duration so its always up to date.
 - Improve partner form view.
 - Address: rework coordinates updating.
@@ -1057,6 +1077,7 @@ Fully responsive mobile ready views, gradle based build system and much more.
 - Multi-company, multi-currency and multi-lingual
 
 
+[5.0.8]: https://github.com/axelor/abs-webapp/compare/v5.0.7...v5.0.8
 [5.0.7]: https://github.com/axelor/abs-webapp/compare/v5.0.6...v5.0.7
 [5.0.6]: https://github.com/axelor/abs-webapp/compare/v5.0.5...v5.0.6
 [5.0.5]: https://github.com/axelor/abs-webapp/compare/v5.0.4...v5.0.5
