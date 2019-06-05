@@ -1,5 +1,33 @@
 # Changelog
 
+## [5.0.9] - 2019-06-19
+## Improvements
+- HR : Update kilometric Allowance demo data(fr and en).
+- MOVE : Disable canEdit on journal
+- SUBROGATION RELEASE : Remove CanEdit attribute on Company and InvoiceSet
+- CUSTOMER DELIVERY : add deliveryCondition from saleOrder in stockMove and picking order printing
+- VEHICLE : removed isArchived field.
+
+## Bug Fixes
+- LEAVE TO JUSTIFY : Fix leave reason select issue when user is empty.
+- EXPENSE : complete my expense (Error message when no expense is selected)
+- HR : Fix employeeSet domain.
+- Base : Updation of type in demo-data in Birt Template Parameter.
+- RECONCILE : Update missing sequence alert
+- Naming Tool : Missing reserved java litterals
+- Configurator: Fix total computation on sale order when generating sale order line.
+- Stock Move : wrong qty in outgoing move printing
+- MRPLine : Specify views for proposalSelect. 
+- HR : Fix NoSuchField Error.
+- JOURNAL ENTRY EXPORT (FEC) : Add columns header in export file that is mistakenly removed
+- JOURNAL ENTRY EXPORT (FEC) : Use move reference instead of move line reference
+- JOURNAL ENTRY EXPORT (FEC) : Amount format : replace dot per comma
+- JOURNAL ENTRY EXPORT (FEC) : Manage the currency amount sign
+- JOURNAL ENTRY EXPORT (FEC) : Sort per validation date
+- JOURNAL ENTRY EXPORT (FEC) : Fix issue with year shift on the last day of year.
+- DateTimeFormatter : Changed pattern from 'YYYY' to 'yyyy'.
+- Client invoice merging : Fix the constraint violation in stockMove when deleting the base invoices.
+
 ## [5.0.8] - 2019-01-17
 ## Features
 - Account: add option to automatically create partners' accounts
@@ -12,7 +40,7 @@
 - Base : Removal of PartnerList object and its relevant controller because of no use.
 
 ## Bug Fixes
-- Invoice Interco: assign account and taxLine to Invoice Line according to operationSelect.
+- Invoice Interco : Assign account and taxLine to Invoice Line according to operationSelect.
 - MANUF. ORDER PRINTING: hide barcode column when it is empty.
 - Purchase Order: remove save on loading purchase order form.
 - Stock Chart: fix wrong action name.
@@ -1077,6 +1105,7 @@ Fully responsive mobile ready views, gradle based build system and much more.
 - Multi-company, multi-currency and multi-lingual
 
 
+[5.0.9]: https://github.com/axelor/abs-webapp/compare/v5.0.8...v5.0.9
 [5.0.8]: https://github.com/axelor/abs-webapp/compare/v5.0.7...v5.0.8
 [5.0.7]: https://github.com/axelor/abs-webapp/compare/v5.0.6...v5.0.7
 [5.0.6]: https://github.com/axelor/abs-webapp/compare/v5.0.5...v5.0.6
