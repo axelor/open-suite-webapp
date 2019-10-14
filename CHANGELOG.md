@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased 5.2.0]
+## Features
+
+## Improvements
+- Theme : set modern theme as default
+
+## Bug Fixes
+
 ## [5.1.9] - 2019-10-07
 ## Features
 - SUPPLYCHAIN CONFIG: added new value in defaultEstimatedDate
