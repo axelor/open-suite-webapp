@@ -19,7 +19,7 @@ application {
 	name "axelor-erp"
 	title "Axelor :: ERP"
 	
-	version "3.0.3"
+	version "3.0.4"
 	
 	// ADK version required
 	adkVersion "~3.3.1"
