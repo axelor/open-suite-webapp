@@ -1,28 +1,20 @@
-# 3.0.0 (2015-01-21)
-
-Fully responsive mobile ready views, gradle based build system and much more.
-
-## Features
-
-- migrated to gradle build system
-- fully responsive mobile ready views
-- Split object per modules
-- Customer Relationship Management
-- Sales management
-- Financial and cost management
-- Human Resource Management
-- Project Management
-- Inventory and Supply Chain Management
-- Production Management
-- Multi-company, multi-currency and multi-lingual
-
-# 3.0.1 (2015-05-13)
+# 3.0.4 (2019-11-12)
 ## Bug Fixes
-- Fixed somes issues
 
-## Improvements
-- Sequence management
-- Message management
+- USER: improve full name computation.
+- Invoice: fix filter problem on invoice operation type selection.
+
+# 3.0.3 (2017-02-28)
+## Bug Fixes
+	
+- Fixed issue on the method to get the next period
+- Changed display of CFONB field, by using nested, on AccontConfig
+- Restore client view wizard action
+- Updated translations of Invoice and SaleOrder report
+- Fixed issue on sequence assignment on SaleOrder
+- CRM Calls dashboard fix
+- Unused actions removed
+- Sequence onNew fix: nextNum removed
 
 # 3.0.2 (2015-09-09)
 ## Bug Fixes
@@ -52,3 +44,28 @@ Fully responsive mobile ready views, gradle based build system and much more.
 - Change management of manageCustomerCredit field
 - No check of account config if amount if null on a line of invoice during ventilation
 - Per default, translation doesn't contains the context, according ADK improvement
+
+# 3.0.1 (2015-05-13)
+## Bug Fixes
+- Fixed somes issues
+
+## Improvements
+- Sequence management
+- Message management
+
+
+# 3.0.0 (2015-01-21)
+Fully responsive mobile ready views, gradle based build system and much more.
+
+## Features
+- migrated to gradle build system
+- fully responsive mobile ready views
+- Split object per modules
+- Customer Relationship Management
+- Sales management
+- Financial and cost management
+- Human Resource Management
+- Project Management
+- Inventory and Supply Chain Management
+- Production Management
+- Multi-company, multi-currency and multi-lingual
