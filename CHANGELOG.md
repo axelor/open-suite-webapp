@@ -1,5 +1,22 @@
 # Changelog
 
+## [5.0.10] - 2019-11-27
+## Improvements
+- YEAR : can no longer edit a company from the year form.
+- MRP : improved exception management when generating all proposals.
+- TIMESHEET : throw an alert on timesheet validation.
+- PAYMENTMODE : form and grid views defined for bankOrderFileFormat.
+- EbicsBank : Disable canEdit on language field in ebics-bank-form
+
+## Bug Fixes
+- STOCK MOVE : fixed issue on printing where origin sale order's reference number wouldn't be displayed
+- STOCK MOVE : fixed invoicing of stock moves containing several lines with the same product
+- SALE ORDER : fixed an error happening when changing contactPartner
+- EMPLOYEE : fixed timesheet dashlet domain
+- INVOICE REPORT / INVOICE : invoice identifiers are now correctly managed based on the status, the type and the sub type of the invoice.
+- Moved various fields and actions to convenient modules.
+- TaxLine: tax field is now readonly and cannot be edited when selected.
+
 ## [5.0.9] - 2019-06-19
 ## Improvements
 - HR : Update kilometric Allowance demo data(fr and en).
@@ -1105,6 +1122,7 @@ Fully responsive mobile ready views, gradle based build system and much more.
 - Multi-company, multi-currency and multi-lingual
 
 
+[5.0.10]: https://github.com/axelor/abs-webapp/compare/v5.0.9...v5.0.10
 [5.0.9]: https://github.com/axelor/abs-webapp/compare/v5.0.8...v5.0.9
 [5.0.8]: https://github.com/axelor/abs-webapp/compare/v5.0.7...v5.0.8
 [5.0.7]: https://github.com/axelor/abs-webapp/compare/v5.0.6...v5.0.7
