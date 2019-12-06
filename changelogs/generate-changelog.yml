@@ -1,0 +1,3 @@
+---
+title: "Webapp: add `generateChangelog` Gradle task to generate CHANGELOG file"
+type: feature
