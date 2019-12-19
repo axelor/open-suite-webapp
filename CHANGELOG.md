@@ -1,5 +1,14 @@
 # Changelog
 
+## [5.0.11] - 2019-12-19
+## Improvements
+- INVOICE: add boolean in Accounting config and add string Head office address in "partner-form" and "invoice-form".
+
+## Bug Fixes
+- PURCHASEORDERLINE: autofill productCode and productName when choosing a product.
+- Sale order/quotation: fix tab title when generating a quotation from an opportunity.
+- BATCH: Empty batchList on copy for BankPaymentBatch.
+
 ## [5.0.10] - 2019-11-27
 ## Improvements
 - YEAR : can no longer edit a company from the year form.
@@ -1122,6 +1131,7 @@ Fully responsive mobile ready views, gradle based build system and much more.
 - Multi-company, multi-currency and multi-lingual
 
 
+[5.0.11]: https://github.com/axelor/abs-webapp/compare/v5.0.10...5.0.11
 [5.0.10]: https://github.com/axelor/abs-webapp/compare/v5.0.9...v5.0.10
 [5.0.9]: https://github.com/axelor/abs-webapp/compare/v5.0.8...v5.0.9
 [5.0.8]: https://github.com/axelor/abs-webapp/compare/v5.0.7...v5.0.8
