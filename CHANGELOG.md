@@ -1,4 +1,45 @@
 # Changelog
+
+## [5.2.7] - 2020-03-31
+## Improvements
+- CLIENT-PORTAL: Chart now only shows invoices corresponding to the client partner.
+- ACCOUNTING REPORT: improved bank statement report.
+- Fixed asset: add EU and US prorata temporis.
+- TRADING NAME: Fill default company printing settings if trade name printing setttings is not there in company.
+- Accounting Report: add the possibility to filter the ledger report to only see not completely lettered move lines.
+
+## Bug Fixes
+- SALE ORDER: Fix NPE when interco sale order is finalized.
+- SALE CONFIG: Fixed "Action not allowed" error when we try to update customer's accepted credit.
+- TIMESHEET: Fix auto-generation of leave days not generating the first day.
+- CLIENT-PORTAL: fixed the NPE when the user does not correspond to any partner.
+- Partner: Invoice copy number selection field display when the partner is a supplier.
+- EXCEPTION ORIGIN: Split selection values per module.
+- SALEORDER: Fixed NPE when trying to select a customer with a company with no linked partner.
+- INVENTORY: Add missing translations.
+- MANUF ORDER: add missing translation.
+- STOCK CORRECTION: Add missing translations.
+- BANK RECONCILIATION: corrected error with bank statement load where no others statements were loaded.
+- LEAD: Fix "action does not exist" error on LEAD convert.
+- STOCK LOCATION : Add missing translation.
+- Account Config: display correct form view on clicking products.
+- Stock Move invoicing: Fix NPE on opening invoicing wizard when a line has no products.
+- Fixed asset: corrected calculation of amortization.
+- Product: prevent the update of salePrice if autoUpdateSalePrice is disabled.
+- Fix a french word in an english message file.
+- Production Order: fix typo in french translation.
+- Accounting Situation: fix computation of balance due debt recovery.
+- Stock Move: empty all references to orders and invoices on copy.
+- MANUFACTURING ORDER: On consumed product, no longer display tracking numbers if available quantity equals 0.
+- WORK CENTER: Fix machine not set to null for a human type work center.
+- Logistial Form: Fix NPE when computing volume.
+- Sale Order Report: fix title being shown above address when there is only one address.
+- LEAD: Fix display issue for description field on lead-event-grid
+- User: Added domain filter on icalendar field in user-preferences-form
+- Stock Move: Fix 'Invoiced' tag displaying in internal stock moves and stock move lines.
+- MOVE: Add missing translation.
+- EBICS CERTIFICATE : Fix serial number not saved.
+
 ## [5.2.6] - 2020-03-13
 ## Improvements
 - Workflow: Add support to select real status fields.
@@ -199,6 +240,7 @@ In this case, the file is correctly retrieved from the bank server, but not save
 - STOCK MOVE: Add default supplier partner in mrp line grid.
 - STOCK MOVE: Maximized pop up of projected stock and counter.
 - STOCK MOVE: store invoicing status in database.
+
 
 ## Bug Fixes
 - Ebics User: resolve error getting on export and modify import config and export template to include BankOrderList and BankStatementList of EbicsPartner.
@@ -496,6 +538,7 @@ In this case, the file is correctly retrieved from the bank server, but not save
 - LEAVE REQUEST: Add error when leave reason has no unit.
 - LEAVE REQUEST: Set duration value 0 if day planning of selected weekly planning is empty
 
+[5.2.7]: https://github.com/axelor/axelor-open-suite/compare/v5.2.6...v5.2.7
 [5.2.6]: https://github.com/axelor/axelor-open-suite/compare/v5.2.5...v5.2.6
 [5.2.5]: https://github.com/axelor/axelor-open-suite/compare/v5.2.4...v5.2.5
 [5.2.4]: https://github.com/axelor/axelor-open-suite/compare/v5.2.3...v5.2.4
