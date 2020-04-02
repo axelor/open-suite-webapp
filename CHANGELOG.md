@@ -1,5 +1,21 @@
 # Changelog
 
+## [5.0.12] - 2020-04-02
+## Improvements
+- ACCOUNTING REPORT: display a message on editing some reports to warn the user to have all moves validated.
+- Partner: rename 'Create order' button & translation.
+- User: Add domain filter on icalendar field in user-preferences-form.
+
+## Bug Fixes
+- INVOICE: now the date verification of the ventilation process depends of invoices of the same company.
+- EBICS USER: fix log display when importing.
+- LEAVE REQUEST: Updated calendar filter.
+- STOCK MOVE: Fix link between sale order and backorder stockmove
+- MOVE: corrected sequence generation, now use correctly the date of the move and not the date of validation.
+- Invoice payment: fix issue in invoice payment form when invoice due date is empty.
+- Account Config: display correct form view on clicking products.
+- Accounting Situation: fix computation of balance due debt recovery.
+
 ## [5.0.11] - 2019-12-19
 ## Improvements
 - INVOICE: add boolean in Accounting config and add string Head office address in "partner-form" and "invoice-form".
@@ -779,7 +795,6 @@ Also, improve the sale order line grid and form views.
 - Fix custom model form view with latest from adk.
 - Fix resource management from project, removed unwanted menus and views related to it. 
 
-
 ## [4.2.5] - 2018-10-06
 ### Improvements
 - Replace justification binary field in ExpenseLine with justificationMetaFile m2o MetaFile field
@@ -1131,31 +1146,35 @@ Fully responsive mobile ready views, gradle based build system and much more.
 - Multi-company, multi-currency and multi-lingual
 
 
-[5.0.11]: https://github.com/axelor/abs-webapp/compare/v5.0.10...5.0.11
-[5.0.10]: https://github.com/axelor/abs-webapp/compare/v5.0.9...v5.0.10
-[5.0.9]: https://github.com/axelor/abs-webapp/compare/v5.0.8...v5.0.9
-[5.0.8]: https://github.com/axelor/abs-webapp/compare/v5.0.7...v5.0.8
-[5.0.7]: https://github.com/axelor/abs-webapp/compare/v5.0.6...v5.0.7
-[5.0.6]: https://github.com/axelor/abs-webapp/compare/v5.0.5...v5.0.6
-[5.0.5]: https://github.com/axelor/abs-webapp/compare/v5.0.4...v5.0.5
-[5.0.4]: https://github.com/axelor/abs-webapp/compare/v5.0.3...v5.0.4
-[5.0.3]: https://github.com/axelor/abs-webapp/compare/v5.0.2...v5.0.3
-[5.0.2]: https://github.com/axelor/abs-webapp/compare/v5.0.1...v5.0.2
-[5.0.1]: https://github.com/axelor/abs-webapp/compare/v5.0.0...v5.0.1
-[5.0.0]: https://github.com/axelor/abs-webapp/compare/v5.0.0-rc3...v5.0.0
-[5.0.0-rc3]: https://github.com/axelor/abs-webapp/compare/v5.0.0-rc2...v5.0.0-rc3
-[5.0.0-rc2]: https://github.com/axelor/abs-webapp/compare/v5.0.0-rc1...v5.0.0-rc2
-[5.0.0-rc1]: https://github.com/axelor/abs-webapp/compare/4.2-dev...v5.0.0-rc1
-[Unreleased 4.x]: https://github.com/axelor/abs-webapp/compare/v4.2.3...4.2-dev
-[4.2.3]: https://github.com/axelor/abs-webapp/compare/v4.1.3...v4.2.3
-[4.1.3]: https://github.com/axelor/abs-webapp/compare/v4.1.2...v4.1.3
-[4.1.2]: https://github.com/axelor/abs-webapp/compare/v4.1.1...v4.1.2
-[4.1.1]: https://github.com/axelor/abs-webapp/compare/v4.1.0...v4.1.1
-[4.1.0]: https://github.com/axelor/abs-webapp/compare/v4.0.2...v4.1.0
-[4.0.2]: https://github.com/axelor/abs-webapp/compare/v4.0.1...v4.0.2
-[4.0.1]: https://github.com/axelor/abs-webapp/compare/v4.0.0...v4.0.1
-[4.0.0]: https://github.com/axelor/abs-webapp/compare/v3.0.3...v4.0.0
-[3.0.3]: https://github.com/axelor/abs-webapp/compare/v3.0.2...v3.0.3
-[3.0.2]: https://github.com/axelor/abs-webapp/compare/v3.0.1...v3.0.2
-[3.0.1]: https://github.com/axelor/abs-webapp/compare/v3.0.0...v3.0.1
-[3.0.0]: https://github.com/axelor/abs-webapp/compare/9442200288c12977917a0668cf6f2e3812fdf0a9...v3.0.0
+[5.0.12]: https://github.com/axelor/axelor-open-suite/compare/v5.0.11...v5.0.12
+[5.0.11]: https://github.com/axelor/axelor-open-suite/compare/v5.0.10...5.0.11
+[5.0.10]: https://github.com/axelor/axelor-open-suite/compare/v5.0.9...v5.0.10
+[5.0.9]: https://github.com/axelor/axelor-open-suite/compare/v5.0.8...v5.0.9
+[5.0.8]: https://github.com/axelor/axelor-open-suite/compare/v5.0.7...v5.0.8
+[5.0.7]: https://github.com/axelor/axelor-open-suite/compare/v5.0.6...v5.0.7
+[5.0.6]: https://github.com/axelor/axelor-open-suite/compare/v5.0.5...v5.0.6
+[5.0.5]: https://github.com/axelor/axelor-open-suite/compare/v5.0.4...v5.0.5
+[5.0.4]: https://github.com/axelor/axelor-open-suite/compare/v5.0.3...v5.0.4
+[5.0.3]: https://github.com/axelor/axelor-open-suite/compare/v5.0.2...v5.0.3
+[5.0.2]: https://github.com/axelor/axelor-open-suite/compare/v5.0.1...v5.0.2
+[5.0.1]: https://github.com/axelor/axelor-open-suite/compare/v5.0.0...v5.0.1
+[5.0.0]: https://github.com/axelor/axelor-open-suite/compare/v5.0.0-rc3...v5.0.0
+[5.0.0-rc3]: https://github.com/axelor/axelor-open-suite/compare/v5.0.0-rc2...v5.0.0-rc3
+[5.0.0-rc2]: https://github.com/axelor/axelor-open-suite/compare/v5.0.0-rc1...v5.0.0-rc2
+[5.0.0-rc1]: https://github.com/axelor/axelor-open-suite/compare/4.2-dev...v5.0.0-rc1
+[4.2.5]: https://github.com/axelor/axelor-open-suite/compare/v4.2.4...v4.2.5
+[4.2.4]: https://github.com/axelor/axelor-open-suite/compare/v4.2.3...v4.2.4
+[4.2.3]: https://github.com/axelor/axelor-open-suite/compare/v4.1.3...v4.2.3
+[4.2.2]: https://github.com/axelor/axelor-open-suite/compare/v4.1.2...v4.2.2
+[4.2.1]: https://github.com/axelor/axelor-open-suite/compare/v4.1.1...v4.2.1
+[4.1.3]: https://github.com/axelor/axelor-open-suite/compare/v4.1.2...v4.1.3
+[4.1.2]: https://github.com/axelor/axelor-open-suite/compare/v4.1.1...v4.1.2
+[4.1.1]: https://github.com/axelor/axelor-open-suite/compare/v4.1.0...v4.1.1
+[4.1.0]: https://github.com/axelor/axelor-open-suite/compare/v4.0.2...v4.1.0
+[4.0.2]: https://github.com/axelor/axelor-open-suite/compare/v4.0.1...v4.0.2
+[4.0.1]: https://github.com/axelor/axelor-open-suite/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/axelor/axelor-open-suite/compare/v3.0.3...v4.0.0
+[3.0.3]: https://github.com/axelor/axelor-open-suite/compare/v3.0.2...v3.0.3
+[3.0.2]: https://github.com/axelor/axelor-open-suite/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/axelor/axelor-open-suite/compare/v3.0.0...v3.0.1
+[3.0.0]: https://github.com/axelor/axelor-open-suite/compare/0f38e90dcd9126079eac78c1639a40c728e63d94...v3.0.0
