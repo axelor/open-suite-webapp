@@ -1,4 +1,32 @@
 # Changelog
+## [5.2.8] - 2020-04-14
+## Improvements
+- AnalyticMoveLine: Validate total percentage.
+- STOCK LOCATION LINE: show wap dashlet when accessing line from a product.
+
+## Bug Fixes
+- EBICS: Display correctly hash code in certificates EBICS.
+- SALE ORDER TIMETABLE: Prevent removal of invoiced lines.
+- SUPPLIER INVOICE: supplier invoices to pay can now be selected when activate passed for payment config is disabled.
+- LEAD: Fixed the blank pdf when printing.
+- Purchase Request: Add missing translation.
+- Purchase Request Line: fix product domain.
+- Manuf Order: fix issue when printing multiple manufacturing orders.
+When printing multiple manufacturing orders, operations from all orders were printed for each one.
+- Availability request: do not ask to allocate stock if the product is not managed in stock.
+- CostSheet: Add exception when purchase currency is needed in computation and missing in product.
+- WORK CENTER: Fix human resource list not set to null for machine only work center.
+- EmailAddress: Fix email address pattern.
+- DEMO DATA: add analytic journals to demo data.
+- BANK ORDER REPORT: fix the problem of empty report if bank order lines sequences are too big.
+- COST SHEET: properly take purchase unit into account.
+- Partner: fix view marked as dirty when an archived partner exists with the same name.
+- INVENTORY: Fixed an issue whith tracking number where the currrent quantity was not based on the tracking number.
+- INVOICE: Company currency is now set on new invoice.
+- Cost sheet: Fix print button being readonly.
+- MOVE TEMPLATE LINE: fix for analytic template and tax field being editable or required depending to the account settings.
+- Partner: Fix customer situation report display value of contact partner jobTitle.
+- PRODUCT: fix position if Variant button.
 
 ## [5.2.7] - 2020-03-31
 ## Improvements
@@ -538,6 +566,7 @@ In this case, the file is correctly retrieved from the bank server, but not save
 - LEAVE REQUEST: Add error when leave reason has no unit.
 - LEAVE REQUEST: Set duration value 0 if day planning of selected weekly planning is empty
 
+[5.2.8]: https://github.com/axelor/axelor-open-suite/compare/v5.2.7...v5.2.8
 [5.2.7]: https://github.com/axelor/axelor-open-suite/compare/v5.2.6...v5.2.7
 [5.2.6]: https://github.com/axelor/axelor-open-suite/compare/v5.2.5...v5.2.6
 [5.2.5]: https://github.com/axelor/axelor-open-suite/compare/v5.2.4...v5.2.5
