@@ -10,6 +10,7 @@
 - MOVE LINE: removed massUpdate from move-line-grid.
 - LEAVE LINE: remove fields length constraints.
 - Accounting Partner General Ledger: Manage title visibility.
+- Add documentation button on navbar
 
 ## Bug Fixes
 - CONTRACT: Add filter on payment mode.
