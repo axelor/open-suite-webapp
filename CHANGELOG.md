@@ -1,4 +1,22 @@
 # Changelog
+## [5.2.12] - 2020-06-19
+## Improvements
+- LEAVE REQUEST: remove field duration length constraint.
+
+## Bug Fixes
+- INVENTORY: prevent having more than one line for the same product and the same tracking number.
+- EMPLOYEE: add missing translation of "Employee PhoneBook".
+- CRM/SALES: Contact menu also shows contacts from prospects.
+- Mail message: fix an issue where some emails are not being sent in a batch.
+- Configurator creator: fix demo data import.
+- PAYMENT MODE: Fix wrong translation.
+- ACCOUNT: Fix wrong move line grid view.
+- TIMESHEET: Fix error message showing when there were no mail templates.
+- SALE ORDER: Set duration when created from opportunity.
+- Bill of Material: Replace NPE by an explicit message to the user when product unit is not configured.
+- EMPLOYEE: add button for Employee.rptdesign report on form.
+- Employee email address: prevent the selection of existing email addresses.
+
 ## [5.2.11] - 2020-05-26
 ## Improvements
 - Add civility for partner contact in birt report printing.
@@ -636,6 +654,7 @@ In this case, the file is correctly retrieved from the bank server, but not save
 - LEAVE REQUEST: Add error when leave reason has no unit.
 - LEAVE REQUEST: Set duration value 0 if day planning of selected weekly planning is empty
 
+[5.2.12]: https://github.com/axelor/axelor-open-suite/compare/v5.2.11...v5.2.12
 [5.2.11]: https://github.com/axelor/axelor-open-suite/compare/v5.2.10...v5.2.11
 [5.2.10]: https://github.com/axelor/axelor-open-suite/compare/v5.2.9...v5.2.10
 [5.2.9]: https://github.com/axelor/axelor-open-suite/compare/v5.2.8...v5.2.9
