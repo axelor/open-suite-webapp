@@ -664,6 +664,11 @@ header .dropdown-submenu:focus > a {
 	padding: 0 1px 2px 1px !important;
 }
 
+ .btn-default {
+	background-color: #fff;
+	color: #0275d8;
+}
+
 .btn-primary {
 	background-color: #0275d8;
 	border-color: #0275d8;
@@ -673,6 +678,7 @@ header .dropdown-submenu:focus > a {
 .btn:hover {
 	background-color: transparent;
 	border-color: transparent;
+	color: #0275d8;
 }
 
 .info-button {
