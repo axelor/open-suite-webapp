@@ -1,4 +1,32 @@
 # Changelog
+## [5.1.16] - 2020-09-09
+## Improvements
+- CONTRACT: fix for unit price null on generated invoice.
+- MRP: add a job to run calculation of a mrp in a scheduler.
+
+## Bug Fixes
+- Account Config: display correct form view on clicking products.
+- Fix "Characteristics" being translated in french when the user was configured to english language.
+- Accounting Situation: fix computation of balance due debt recovery.
+- LEAD: Fix display issue for description field on lead-event-grid.
+- User: Added domain filter on icalendar field in user-preferences-form.
+- EBICS CERTIFICATE: Fix serial number not being saved.
+- COST SHEET: properly take purchase unit into account.
+- BANK ORDER REPORT: fix the ordering by sequence.
+- Partner: fix view marked as dirty when an archived partner exists with the same name.
+- Account: Fix incomplete sequences in english data init.
+- Product form: fix typo in help message.
+- Inventory: fix error on stock location select when company is not filled.
+- INVOICE: corrected the possibility to add a payment when the amount remaining is inferior or equal to 0.
+- Stock Move: empty all references to orders and invoices on copy.
+- Invoice: Fix multiple invoices not ventilating when generated from sale order with advance payment.
+- BANK PAYMENT: fix ICS number being linked to EBICS.
+- ICalendar: Resolve synchronisation issue & Manage synchronisation select.
+- Invoice line: corrected view error when trying to change an invoice line.
+- Batch payroll preparation generation: corrected batch error no session.
+- TRACKING MAIL NOTIFICATION: corrected wrong partner receiving email selected.
+- Partner: fix supplierQualityRating not being synchronized with supplierQualityRatingSelect.
+
 ## [5.1.15] - 2020-03-23
 ## Improvements
 - PurchaseRequestLine: cacheable removed for this entity.
@@ -1552,6 +1580,7 @@ Moreover, the amount_remaining calculation on move line was wrong. Now we comput
 - Purchase Order: remove save on loading purchase order form.
 
 
+[5.1.16]: https://github.com/axelor/axelor-open-suite/compare/v5.1.15...v5.1.16
 [5.1.15]: https://github.com/axelor/axelor-open-suite/compare/v5.1.14...v5.1.15
 [5.1.14]: https://github.com/axelor/axelor-open-suite/compare/v5.1.13...v5.1.14
 [5.1.13]: https://github.com/axelor/axelor-open-suite/compare/v5.1.12...v5.1.13
