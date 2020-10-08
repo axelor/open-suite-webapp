@@ -1,4 +1,19 @@
 # Changelog
+## [5.2.16] - 2020-10-08
+## Improvements
+- Declaration Of Exchanges: corrected wrong translation for product type.
+- SaleOrderLine: Not showing picking order info for services.
+- Stock config: set all the booleans of the stock move printing settings section by default to true.
+
+## Bug Fixes
+- INVOICE: Fix copy still having references to orders and stock moves.
+- Tracking number: Fix wrong form view on search.
+- Account Equiv: fix NPE and make accounts fields required.
+- SMTP Account: the user can now configure the sending email address instead of using the login.
+- App Supplychain: Hide configuration 'Block deallocation on availability request' if 'Manage stock reservation' is disabled.
+- Stock location line: Fix display issue of button text on popup.
+- ACCOUNTING BATCH: Fix issue on closure/opening accounting batch due to a conflict with the configuration to require tax on move line.
+
 ## [5.2.15] - 2020-09-28
 ## Improvements
 - Analytic distribution: Autocomplete analytic distribution details while creating intercompany sale order or purchase order.
@@ -707,6 +722,7 @@ In this case, the file is correctly retrieved from the bank server, but not save
 - LEAVE REQUEST: Add error when leave reason has no unit.
 - LEAVE REQUEST: Set duration value 0 if day planning of selected weekly planning is empty
 
+[5.2.16]: https://github.com/axelor/axelor-open-suite/compare/v5.2.15...v5.2.16
 [5.2.15]: https://github.com/axelor/axelor-open-suite/compare/v5.2.14...v5.2.15
 [5.2.14]: https://github.com/axelor/axelor-open-suite/compare/v5.2.13...v5.2.14
 [5.2.13]: https://github.com/axelor/axelor-open-suite/compare/v5.2.12...v5.2.13
