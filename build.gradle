@@ -43,8 +43,17 @@ allprojects {
   group = "com.axelor"
   version = "${appVersion}"
 
-	sourceCompatibility = 11
-	targetCompatibility = 11
+  sourceCompatibility = 11
+  targetCompatibility = 11
+
+  afterEvaluate {
+    test {
+      useJUnitPlatform()
+      beforeTest { descriptor ->
+        logger.lifecycle('Running: ' + descriptor)
+      }
+    }
+  }
 
 }
 
@@ -64,7 +73,7 @@ dependencies {
 }
 
 task("dataImport", type: JavaExec) {
-  main = "com.axelor.apps.erp.Main"
+  mainClass = "com.axelor.apps.erp.Main"
   classpath = sourceSets.main.runtimeClasspath
   if (System.getProperty("exec.args") != null) {
     args System.getProperty("exec.args").split()
