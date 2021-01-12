@@ -5,7 +5,7 @@
     String language = AuthUtils.getUser().getLanguage();
 %>
 <li id="docBtn" class="nav-link-user">
-    <a id="docLink" href="https://docs.axelor.com/abs/5.0-fr/functional/"><i class="fa fa-book"></i></a>
+    <a id="docLink" href="https://docs.axelor.com/abs/5.0/functional/" target="_blank"><i class="fa fa-book"></i></a>
 </li>
 <li id="docSplit" class="divider-vertical"></li>
 <script>
@@ -17,7 +17,7 @@
     prnBtn.parentNode.insertBefore(docBtn, prnBtn);
     prnBtn.parentNode.insertBefore(docSplit, prnBtn);
 
-    if ('<%= language %>' === 'en') {
-        docLink.setAttribute("href", "https://docs.axelor.com/abs/5.0/functional/index.html");
+    if ('<%= language %>' === 'fr') {
+        docLink.setAttribute("href", "https://docs.axelor.com/abs/5.0-fr/functional/index.html");
     }
 </script>
