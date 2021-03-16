@@ -5,4 +5,9 @@ pipeline {
       step {
         echo 'executing command'
         withGradle() {
-          sh './gra
+          sh './gradlew -x test build'
+        }
+      }
+    }
+  }
+}
