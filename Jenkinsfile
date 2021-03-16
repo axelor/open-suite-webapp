@@ -2,7 +2,7 @@ pipeline {
   agent any 
   stages {
     stage("Build Axelor") {
-      step {
+      steps {
         echo 'executing command'
         withGradle() {
           sh './gradlew -x test build'
