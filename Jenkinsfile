@@ -1,9 +1,9 @@
 pipeline {
   agent any 
   stages {
-    stage("Build Axelor") {
+    stage("Clone Source") {
       steps {
-        echo 'executing command'
+        git url: 'https://github.com/sdn3098/open-suite-webapp.git'
       }
     }
   }
