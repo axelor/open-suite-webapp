@@ -1,12 +1,21 @@
 buildscript {
   ext.repos = {
-    mavenCentral()
-    mavenLocal()
-    jcenter()
-    maven { url 'https://plugins.gradle.org/m2/' }
-    maven { url 'https://repository.axelor.com/nexus/public/' }
+    mavenCentral() {
+      content {
+        excludeGroup 'com.axelor'
+      }
+    }
+    maven {
+      url 'https://plugins.gradle.org/m2/'
+      content {
+        excludeGroup 'com.axelor'
+      }
+    }
+    maven {
+      url 'https://repository.axelor.com/nexus/public/'
+    }
   }
-  ext.openPlatformVersion = '5.3.6'
+  ext.openPlatformVersion = '5.3.9'
   ext.appVersion = '5.4.7'
   repositories repos
   dependencies {
