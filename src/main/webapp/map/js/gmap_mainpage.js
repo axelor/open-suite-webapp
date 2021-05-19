@@ -71,46 +71,17 @@
                 if (result.status == 0) {
                     for (var i = 0; i < result.data.length; i++) {
                         var d = result.data[i];
-                        var icon = 'http://thydzik.com/thydzikGoogleMap/markerlink.php?text=' + d['pinChar'];
+                        
                         var latlng = new google.maps.LatLng(d['latit'], d['longit']);
                         var title = d['fullName'] ? d['fullName'].trim() : '';
                         var address = d['address'] ? d['address'] + '<br/>' : '';
                         var fixedPhone = d['fixedPhone'] ? "<i class='fa fa-phone'></i>&nbsp;" + d['fixedPhone'] + '<br/>' : '';
                         var emailAddress = d['emailAddress'] ? "<i class='fa fa-envelope'></i>&nbsp;" + d['emailAddress'] : '';
                         var content = "<b>" + title + "</b><br/>" + address + fixedPhone + emailAddress;
-                        var iconcolor;
-                        switch (d['pinColor']) {
-                            case 'blue':
-                                iconcolor = '5680FC';
-                                break;
-                            case 'gray':
-                                iconcolor = 'A8A8A8 ';
-                                break;
-                            case 'orange':
-                                iconcolor = 'EF9D3F';
-                                break;
-                            case 'yellow':
-                                iconcolor = 'FCF356';
-                                break;
-                            case 'purple':
-                                iconcolor = '7D54FC';
-                                break;
-                            case 'pink':
-                                iconcolor = 'E14E9D';
-                                break;
-                            case 'brown':
-                                iconcolor = '9E7151';
-                                break;
-                            default:
-                                iconcolor = 'FC6355';
-                                break;
-                        }
-                        icon = icon + '&color=' + iconcolor;
                         var marker = new google.maps.Marker({
                             position: latlng,
                             map: map,
-                            title: title.split('<br/>')[0],
-                            icon: icon
+                            title: title.split('<br/>')[0]
                         });
                         google.maps.event.addListener(marker, 'click', (function(content) {
                             return function() {
