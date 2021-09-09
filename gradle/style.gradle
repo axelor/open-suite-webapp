@@ -1,20 +1,43 @@
-buildscript {
-  repositories repos
-  dependencies {
-    classpath "com.diffplug.spotless:spotless-plugin-gradle:5.15.0"
-  }
-}
-
-apply plugin: com.diffplug.gradle.spotless.SpotlessPlugin
-
 spotless {
+  format 'misc', {
+    target fileTree(projectDir) {
+      include '**/.gitignore'
+      include '**/*.gradle'
+      include '**/*.adoc'
+      include '**/*.sh'
+      include '**/*.html'
+      include '**/*.js'
+      include '**/*.css'
+      include '**/*.xml'
+      include '**/*.xsd'
+      exclude '**/webapp/lib/*'
+      exclude '**/webapp/dist/*'
+      exclude '**/webapp/node_modules/*'
+      exclude '**/build/*'
+      exclude '**/bin/*'
+    }
+    indentWithSpaces(2)
+    trimTrailingWhitespace()
+    endWithNewline()
+  }
+  format 'markdown', {
+    target '**/*.md'
+    indentWithSpaces(2)
+    endWithNewline()
+  }
   java {
     target fileTree(projectDir) {
       include '**/*.java'
-      exclude '**/build/**'
     }
     googleJavaFormat()
   }
+}
+
+spotlessMisc.dependsOn(spotlessMarkdown)
+
+project.afterEvaluate {
+  tasks.spotlessJava.dependsOn(tasks.spotlessMisc)
+  tasks.spotlessJava.dependsOn(tasks.generateCode)
 }
 
 task formatCode(dependsOn: ['licenseFormat', 'spotlessApply'])

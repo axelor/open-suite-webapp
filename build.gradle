@@ -1,50 +1,25 @@
-import com.axelor.gradle.tasks.GenerateAosChangelog
-
-buildscript {
-  ext.repos = {
-    mavenCentral() {
-      content {
-        excludeGroup 'com.axelor'
-      }
-    }
-    maven {
-      url 'https://plugins.gradle.org/m2/'
-      content {
-        excludeGroup 'com.axelor'
-      }
-    }
-    maven { url 'https://repository.axelor.com/nexus/public/' }
-  }
-  ext.openPlatformVersion = '6.0.+'
-  ext.appVersion = '7.0.0'
-  repositories repos
-  dependencies {
-    classpath "com.axelor:axelor-gradle:${openPlatformVersion}"
-  }
+plugins {
+  id 'com.axelor.app'
+  id 'com.diffplug.spotless'
 }
 
-allprojects { repositories repos }
-
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply plugin: "com.axelor.app"
-
-apply from: './gradle/style.gradle'
+axelor {
+  title "Axelor ERP"
+  description "Axelor Entreprise Application"
+}
 
 allprojects {
-
-  configurations {
-    runtimeClasspath.exclude group: "org.eclipse.birt.runtime.3_7_1", module: "org.apache.commons.codec"
-  }
-
   apply plugin: 'idea'
   apply plugin: 'eclipse'
 
-  group = "com.axelor"
-  version = "${appVersion}"
+  group = 'com.axelor.apps'
+  version = '7.0.0'
 
-  sourceCompatibility = 11
-  targetCompatibility = 11
+  java {
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(11)
+    }
+  }
 
   afterEvaluate {
     test {
@@ -55,15 +30,10 @@ allprojects {
     }
   }
 
-}
+  configurations {
+    runtimeClasspath.exclude group: "org.eclipse.birt.runtime.3_7_1", module: "org.apache.commons.codec"
+  }
 
-subprojects {
-  group = "com.axelor.apps"
-}
-
-axelor {
-  title "Axelor ERP"
-  description "Axelor Entreprise Application"
 }
 
 dependencies {
@@ -71,6 +41,8 @@ dependencies {
     implementation project(":modules:$dir.name")
   }
 }
+
+apply from: 'gradle/style.gradle'
 
 task("dataImport", type: JavaExec) {
   mainClass = "com.axelor.apps.erp.Main"
@@ -94,7 +66,7 @@ task archiveReports(type: Zip) {
   destinationDirectory = file("$buildDir/libs")
 }
 
-
+import com.axelor.gradle.tasks.GenerateAosChangelog
 task generateChangelog(type: GenerateAosChangelog) {
   group "Axelor application"
   description "Generate change logs from unreleased entries."
