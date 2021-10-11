@@ -1,6 +1,5 @@
 plugins {
   id 'com.axelor.app'
-  id 'com.diffplug.spotless'
 }
 
 axelor {
@@ -40,6 +39,10 @@ dependencies {
   gradle.appModules.each { dir ->
     implementation project(":modules:$dir.name")
   }
+}
+
+war {
+  archiveFileName = 'open-suite.war'
 }
 
 apply from: 'gradle/style.gradle'

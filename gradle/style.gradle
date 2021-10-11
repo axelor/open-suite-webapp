@@ -1,16 +1,35 @@
-spotless {
-  java {
-    target fileTree(projectDir) {
-      include '**/*.java'
-    }
-    googleJavaFormat()
+buildscript {
+  repositories {
+    gradlePluginPortal()
+  }
+  dependencies {
+    classpath "com.diffplug.spotless:spotless-plugin-gradle:5.16.0"
   }
 }
 
-project.afterEvaluate {
-  tasks.spotlessJava.dependsOn(tasks.generateCode)
+allprojects { p ->
+
+  apply plugin: com.diffplug.gradle.spotless.SpotlessPlugin
+
+  spotless {
+    java {
+      target fileTree(projectDir) {
+        include 'src/*/java/**/*.java'
+        if (p.file('src/main/resources/domains').exists()) {
+          include 'build/src-gen/java/**/*.java'
+        }
+      }
+      googleJavaFormat()
+    }
+  }
+
+  if (p.file('src/main/resources/domains').exists()) {
+    p.afterEvaluate {
+      p.spotlessJava.dependsOn(p.generateCode)
+    }
+  }
+
+  build.dependsOn 'spotlessApply'
 }
 
 task formatCode(dependsOn: ['licenseFormat', 'spotlessApply'])
-
-build.dependsOn 'spotlessApply'
