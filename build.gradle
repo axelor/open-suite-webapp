@@ -16,7 +16,7 @@ buildscript {
     }
   }
   ext.openPlatformVersion = '5.3.9'
-  ext.appVersion = '5.4.14'
+  ext.appVersion = '5.4.15'
   repositories repos
   dependencies {
     classpath "com.axelor:axelor-gradle:${openPlatformVersion}"
