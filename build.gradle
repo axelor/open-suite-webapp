@@ -15,7 +15,7 @@ allprojects {
   apply plugin: 'eclipse'
 
   group = 'com.axelor.apps'
-  version = '7.0.0'
+  version = '7.0.+'
 
   java {
     toolchain {
@@ -38,6 +38,11 @@ allprojects {
 }
 
 dependencies {
+
+  gradle.requiredModules.each {module ->
+    implementation "com.axelor.apps:${module}:${version}"
+  }
+
   gradle.appModules.each { dir ->
     implementation project(":modules:$dir.name")
   }

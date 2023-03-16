@@ -58,3 +58,36 @@ modules.each { dir ->
   include "modules:$dir.name"
   project(":modules:$dir.name").projectDir = dir
 }
+
+def requiredModules = [
+        "axelor-account",
+        "axelor-bank-payment",
+        "axelor-base",
+        "axelor-business-production",
+        "axelor-business-project",
+        "axelor-business-support",
+        "axelor-cash-management",
+        "axelor-client-portal",
+        "axelor-contract",
+        "axelor-crm",
+        "axelor-fleet",
+        "axelor-gdpr",
+        "axelor-helpdesk",
+        "axelor-human-resource",
+        "axelor-maintenance",
+        "axelor-marketing",
+        "axelor-mobile",
+        "axelor-production",
+        "axelor-project",
+        "axelor-project-dms",
+        "axelor-purchase",
+        "axelor-quality",
+        "axelor-sale",
+        "axelor-stock",
+        "axelor-supplier-management",
+        "axelor-supplier-portal",
+        "axelor-supplychain",
+        "axelor-talent"
+]
+
+gradle.ext.requiredModules = requiredModules
