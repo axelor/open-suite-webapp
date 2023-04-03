@@ -76,7 +76,7 @@ def requiredModules = [
         "axelor-human-resource",
         "axelor-maintenance",
         "axelor-marketing",
-        "axelor-mobile",
+        "axelor-mobile-settings",
         "axelor-production",
         "axelor-project",
         "axelor-project-dms",
