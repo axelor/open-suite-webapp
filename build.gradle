@@ -15,6 +15,7 @@ allprojects {
   apply plugin: 'eclipse'
 
   group = 'com.axelor.apps'
+  ext.aosVersion = '7.0.0-SNAPSHOT'
   version = '7.0.0'
 
   java {
@@ -40,8 +41,8 @@ allprojects {
 tasks.withType(PublishToMavenRepository).configureEach { it.enabled = false }
 
 dependencies {
-  gradle.appModules.each { dir ->
-    implementation project(":modules:$dir.name")
+  gradle.appModules.each { module ->
+    implementation "com.axelor.apps:${module}:${aosVersion}"
   }
 }
 
@@ -54,21 +55,6 @@ task("dataImport", type: JavaExec) {
     args System.getProperty("exec.args").split()
   }
 }
-
-task archiveReports(type: Zip) {
-  file("modules").traverse(type: groovy.io.FileType.DIRECTORIES, maxDepth: 1) { dir ->
-    if (new File(dir, "build.gradle").exists() && new File(dir, "/src/main/resources/reports").exists()) {
-      new File(dir, "/src/main/resources/reports/").listFiles().each { report ->
-        from report.getPath()
-      }
-    }
-  }
-
-  classifier 'reports'
-  includeEmptyDirs = false
-  destinationDirectory = file("$buildDir/libs")
-}
-
 
 task generateChangelog(type: GenerateAosChangelog) {
   group "Axelor application"
@@ -89,5 +75,3 @@ task checkCsvEOL(type: CheckEOLCharsInCsv) {
     include '**/*.csv'
   }
 }
-
-build.finalizedBy archiveReports
