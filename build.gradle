@@ -1,4 +1,5 @@
 import com.axelor.gradle.tasks.CheckCredentialsInRptdesign
+import com.axelor.gradle.tasks.CheckXmlAttributes
 import com.axelor.gradle.tasks.GenerateAosChangelog
 import com.axelor.gradle.tasks.CheckEOLCharsInCsv
 
@@ -99,6 +100,17 @@ task checkBirtCredentials(type: CheckCredentialsInRptdesign) {
     exclude '**/bin'
     exclude '**/out'
     include '**/*.rptdesign'
+  }
+}
+
+task checkXmlAttributes(type: CheckXmlAttributes) {
+  group "Axelor application"
+  description "Verify errors in XML files."
+  files = fileTree(projectDir) {
+    exclude '**/build'
+    exclude '**/bin'
+    exclude '**/out'
+    include '**/src/main/resources/views/*.xml'
   }
 }
 
