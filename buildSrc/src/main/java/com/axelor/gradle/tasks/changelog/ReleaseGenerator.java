@@ -17,13 +17,13 @@
  */
 package com.axelor.gradle.tasks.changelog;
 
-import org.apache.commons.lang3.StringUtils;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 
 public class ReleaseGenerator {
 

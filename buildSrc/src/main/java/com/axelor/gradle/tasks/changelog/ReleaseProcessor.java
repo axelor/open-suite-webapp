@@ -63,17 +63,20 @@ public class ReleaseProcessor {
     }
 
     Optional<ChangelogEntry> entryWithoutModule =
-            changelogEntries.stream().filter(entry -> entry.getModule() == null).findFirst();
+        changelogEntries.stream().filter(entry -> entry.getModule() == null).findFirst();
     if (entryWithoutModule.isPresent()) {
       throw new IllegalArgumentException(
-              "Module cannot be null in changelog entry: " + entryWithoutModule.get());
+          "Module cannot be null in changelog entry: " + entryWithoutModule.get());
     }
 
     Optional<ChangelogEntry> entryWithNonExistingModule =
-            changelogEntries.stream().filter(entry -> ModuleName.UNKNOWN.equals(entry.getModule())).findFirst();
+        changelogEntries.stream()
+            .filter(entry -> ModuleName.UNKNOWN.equals(entry.getModule()))
+            .findFirst();
     if (entryWithNonExistingModule.isPresent()) {
       throw new IllegalArgumentException(
-              "The module filled in changelog entry is not recognized: " + entryWithNonExistingModule.get());
+          "The module filled in changelog entry is not recognized: "
+              + entryWithNonExistingModule.get());
     }
   }
 }
