@@ -39,9 +39,9 @@ public class ReleaseProcessor {
     release.setVersion(version);
     release.setDate(getCurrentDate());
 
-    Map<EntryType, List<ChangelogEntry>> entriesGroupedByType =
-        changelogEntries.stream().collect(Collectors.groupingBy(ChangelogEntry::getType));
-    release.setEntries(entriesGroupedByType);
+    Map<ModuleName, List<ChangelogEntry>> entriesGroupedByModules =
+        changelogEntries.stream().collect(Collectors.groupingBy(ChangelogEntry::getModule));
+    release.setEntries(entriesGroupedByModules);
 
     return release;
   }
@@ -55,18 +55,28 @@ public class ReleaseProcessor {
   private void validate(Collection<ChangelogEntry> changelogEntries) {
     Objects.requireNonNull(changelogEntries);
 
-    Optional<ChangelogEntry> entryWithNullType =
-        changelogEntries.stream().filter(entry -> entry.getType() == null).findFirst();
-    if (entryWithNullType.isPresent()) {
-      throw new IllegalArgumentException(
-          "Type cannot be null in changelog entry: " + entryWithNullType.get());
-    }
-
     Optional<ChangelogEntry> entryWithNullTitle =
         changelogEntries.stream().filter(entry -> entry.getTitle() == null).findFirst();
     if (entryWithNullTitle.isPresent()) {
       throw new IllegalArgumentException(
-          "Title cannot be null in changelog entry: " + entryWithNullType.get());
+          "Title cannot be null in changelog entry: " + entryWithNullTitle.get());
+    }
+
+    Optional<ChangelogEntry> entryWithoutModule =
+        changelogEntries.stream().filter(entry -> entry.getModule() == null).findFirst();
+    if (entryWithoutModule.isPresent()) {
+      throw new IllegalArgumentException(
+          "Module cannot be null in changelog entry: " + entryWithoutModule.get());
+    }
+
+    Optional<ChangelogEntry> entryWithNonExistingModule =
+        changelogEntries.stream()
+            .filter(entry -> ModuleName.UNKNOWN.equals(entry.getModule()))
+            .findFirst();
+    if (entryWithNonExistingModule.isPresent()) {
+      throw new IllegalArgumentException(
+          "The module filled in changelog entry is not recognized: "
+              + entryWithNonExistingModule.get());
     }
   }
 }
