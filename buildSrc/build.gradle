@@ -20,5 +20,4 @@ buildscript.repositories repos
 dependencies {
     implementation 'org.yaml:snakeyaml:1.30'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.12.2'
-    implementation 'com.google.guava:guava:32.1.3-jre'
 }
