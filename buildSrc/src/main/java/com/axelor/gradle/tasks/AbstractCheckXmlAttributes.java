@@ -39,7 +39,18 @@ public abstract class AbstractCheckXmlAttributes extends DefaultTask {
   }
 
   @TaskAction
-  public void check() throws XmlLineException {}
+  public void check() throws XmlLineException {
+    boolean initialized = false;
+    for (File file : getFiles()) {
+      if (!initialized) {
+        initialized = initialize(file, findSchemaPath());
+      }
+      checkXmlFile(file);
+    }
+    if (!errorList.isEmpty()) {
+      throw new XmlLineException(String.join("\n", errorList));
+    }
+  }
 
   protected boolean initialize(File inputFile, String schemaUrl) throws XmlLineException {
     try {
@@ -62,6 +73,8 @@ public abstract class AbstractCheckXmlAttributes extends DefaultTask {
       throw new XmlLineException(e);
     }
   }
+
+  protected abstract String findSchemaPath();
 
   protected void checkXmlFile(File file) throws XmlLineException {
     try {

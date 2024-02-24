@@ -8,17 +8,8 @@ public class CheckXmlDomainsAttributes extends AbstractCheckXmlAttributes {
 
   protected static final String SCHEMA_PATH = "http://axelor.com/xml/ns/domain-models";
 
-  @TaskAction
-  public void check() throws XmlLineException {
-    boolean initialized = false;
-    for (File file : getFiles()) {
-      if (!initialized) {
-        initialized = initialize(file, SCHEMA_PATH);
-      }
-      checkXmlFile(file);
-    }
-    if (!errorList.isEmpty()) {
-      throw new XmlLineException(String.join("\n", errorList));
-    }
+  @Override
+  protected String findSchemaPath() {
+    return SCHEMA_PATH;
   }
 }
