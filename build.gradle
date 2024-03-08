@@ -1,4 +1,7 @@
 import com.axelor.gradle.tasks.CheckCredentialsInRptdesign
+import com.axelor.gradle.tasks.CheckXmlDomainsAttributes
+import com.axelor.gradle.tasks.CheckXmlImportsAttributes
+import com.axelor.gradle.tasks.CheckXmlViewsAttributes
 import com.axelor.gradle.tasks.GenerateAosChangelog
 import com.axelor.gradle.tasks.CheckEOLCharsInCsv
 
@@ -101,5 +104,44 @@ task checkBirtCredentials(type: CheckCredentialsInRptdesign) {
     include '**/*.rptdesign'
   }
 }
+
+
+task checkXmlDomainsAttributes(type: CheckXmlDomainsAttributes) {
+  group "Axelor application"
+  description "Verify errors in XML domain files."
+  files = fileTree(projectDir) {
+    exclude '**/build'
+    exclude '**/bin'
+    exclude '**/out'
+    include '**/modules/**/src/main/resources/domains/*.xml'
+  }
+}
+
+task checkXmlViewsAttributes(type: CheckXmlViewsAttributes) {
+  group "Axelor application"
+  description "Verify errors in XML view files."
+  files = fileTree(projectDir) {
+    exclude '**/build'
+    exclude '**/bin'
+    exclude '**/out'
+    include '**/modules/**/src/main/resources/views/*.xml'
+  }
+}
+
+task checkXmlImportsAttributes(type: CheckXmlImportsAttributes) {
+  group "Axelor application"
+  description "Verify errors in XML import files."
+  files = fileTree(projectDir) {
+    exclude '**/build'
+    exclude '**/bin'
+    exclude '**/out'
+    include "**/modules/**/src/main/resources/apps/**/*.xml"
+    include "**/modules/**/src/main/resources/data-import/*.xml"
+    include "**/modules/**/src/main/resources/data-init/*.xml"
+    include '**/modules/**/src/main/resources/import-configs/*.xml'
+  }
+}
+
+task checkXml(dependsOn: ['checkXmlDomainsAttributes','checkXmlViewsAttributes', 'checkXmlImportsAttributes'])
 
 build.finalizedBy archiveReports
