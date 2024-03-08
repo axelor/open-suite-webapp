@@ -105,6 +105,7 @@ task checkBirtCredentials(type: CheckCredentialsInRptdesign) {
   }
 }
 
+
 task checkXmlDomainsAttributes(type: CheckXmlDomainsAttributes) {
   group "Axelor application"
   description "Verify errors in XML domain files."
@@ -140,5 +141,7 @@ task checkXmlImportsAttributes(type: CheckXmlImportsAttributes) {
     include '**/modules/**/src/main/resources/import-configs/*.xml'
   }
 }
+
+task checkXml(dependsOn: ['checkXmlDomainsAttributes','checkXmlViewsAttributes', 'checkXmlImportsAttributes'])
 
 build.finalizedBy archiveReports
