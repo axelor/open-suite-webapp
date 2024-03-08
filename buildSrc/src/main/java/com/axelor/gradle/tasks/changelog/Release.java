@@ -24,7 +24,7 @@ public class Release {
 
   private String version;
   private String date;
-  private Map<EntryType, List<ChangelogEntry>> entries;
+  private Map<ModuleName, List<ChangelogEntry>> entries;
 
   public String getVersion() {
     return version;
@@ -42,11 +42,11 @@ public class Release {
     this.date = date;
   }
 
-  public Map<EntryType, List<ChangelogEntry>> getEntries() {
+  public Map<ModuleName, List<ChangelogEntry>> getEntries() {
     return entries;
   }
 
-  public void setEntries(Map<EntryType, List<ChangelogEntry>> entries) {
+  public void setEntries(Map<ModuleName, List<ChangelogEntry>> entries) {
     this.entries = entries;
   }
 }

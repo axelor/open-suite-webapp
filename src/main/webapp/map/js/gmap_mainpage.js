@@ -63,55 +63,29 @@
             if (id) {
                 url += "/" + id;
             }
-            var requestP = $.ajax({
-                type: "GET",
-                contentType: 'application/json',
-                url: url
-            });
-            requestP.done(function(result) {
-                if (result.status == 0) {
+            fetch(url, {
+                  method: 'GET',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  }
+              })
+            .then(function (response) {
+                  return response.json();
+             })
+             .then(function (result) {
+                  if (result.status == 0) {
                     for (var i = 0; i < result.data.length; i++) {
                         var d = result.data[i];
-                        var icon = 'http://thydzik.com/thydzikGoogleMap/markerlink.php?text=' + d['pinChar'];
                         var latlng = new google.maps.LatLng(d['latit'], d['longit']);
                         var title = d['fullName'] ? d['fullName'].trim() : '';
                         var address = d['address'] ? d['address'] + '<br/>' : '';
                         var fixedPhone = d['fixedPhone'] ? "<i class='fa fa-phone'></i>&nbsp;" + d['fixedPhone'] + '<br/>' : '';
                         var emailAddress = d['emailAddress'] ? "<i class='fa fa-envelope'></i>&nbsp;" + d['emailAddress'] : '';
                         var content = "<b>" + title + "</b><br/>" + address + fixedPhone + emailAddress;
-                        var iconcolor;
-                        switch (d['pinColor']) {
-                            case 'blue':
-                                iconcolor = '5680FC';
-                                break;
-                            case 'gray':
-                                iconcolor = 'A8A8A8 ';
-                                break;
-                            case 'orange':
-                                iconcolor = 'EF9D3F';
-                                break;
-                            case 'yellow':
-                                iconcolor = 'FCF356';
-                                break;
-                            case 'purple':
-                                iconcolor = '7D54FC';
-                                break;
-                            case 'pink':
-                                iconcolor = 'E14E9D';
-                                break;
-                            case 'brown':
-                                iconcolor = '9E7151';
-                                break;
-                            default:
-                                iconcolor = 'FC6355';
-                                break;
-                        }
-                        icon = icon + '&color=' + iconcolor;
                         var marker = new google.maps.Marker({
                             position: latlng,
                             map: map,
                             title: title.split('<br/>')[0],
-                            icon: icon
                         });
                         google.maps.event.addListener(marker, 'click', (function(content) {
                             return function() {
@@ -122,6 +96,9 @@
                         markers.push(marker);
                         bounds.extend(marker.getPosition());
                     } //end loop
+                    
+                     // Create the MarkerClusterer after creating individual markers
+                    var markerclusterer = new MarkerClusterer(map, markers);
 
                     // Create the search box and link it to the UI element.
                     var input = document.getElementById('pac-input');
@@ -206,19 +183,19 @@
                 } else {
                     window.location = "error.html?msg=" + result.errorMsg;
                 }
-            });
-            requestP.fail(function(jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
-            });
-            requestP.complete(function() {
-                mapElement.style.visibility = "visible";
-                sbElement.style.display = "inline";
-                sbElement.style.marginTop = "15px";
-                sbElement.style.marginRight = "15px";
-                loadingImage.style.display = "none";
-            });
-            var markerclusterer = new MarkerClusterer(map, markers);
-        });
+             })
+             .catch(function (error) {
+		alert('Request failed: ' + error.message);
+  	     })
+  	     .finally(function () {
+                      mapElement.style.visibility = "visible";
+                      sbElement.style.display = "inline";
+                      sbElement.style.marginTop = "15px";
+                      sbElement.style.marginRight = "15px";
+                      loadingImage.style.display = "none";
+
+             });
+          });
     }
     window.onload = function() {
 		try {

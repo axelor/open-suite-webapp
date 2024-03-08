@@ -20,8 +20,8 @@ package com.axelor.gradle.tasks.changelog;
 public class ChangelogEntry {
 
   private String title;
-  private String description;
-  private EntryType type;
+  private ModuleName module;
+  private String developer;
 
   public void setTitle(String title) {
     this.title = title;
@@ -31,24 +31,24 @@ public class ChangelogEntry {
     return title;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
+  public void setDeveloper(String developer) {
+    this.developer = developer;
   }
 
-  public String getDescription() {
-    return description;
+  public String getDeveloper() {
+    return developer;
   }
 
-  public void setType(EntryType type) {
-    this.type = type;
+  public ModuleName getModule() {
+    return module;
   }
 
-  public EntryType getType() {
-    return type;
+  public void setModule(ModuleName module) {
+    this.module = module;
   }
 
   @Override
   public String toString() {
-    return "ChangelogEntry [title=" + getTitle() + ", type=" + getType() + "]";
+    return "ChangelogEntry [module=" + getModule() + ", title=" + getTitle() + "]";
   }
 }
