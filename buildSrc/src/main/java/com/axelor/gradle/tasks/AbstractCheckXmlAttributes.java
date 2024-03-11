@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -88,7 +88,7 @@ public abstract class AbstractCheckXmlAttributes extends DefaultTask {
 
   protected void addErrorsProperlyToErrorList(List<String> errorList, Exception error) {
     if (!error.getLocalizedMessage().startsWith("cvc-elt.1.a")) {
-      errorList.addAll(List.of(error.toString().split(";")));
+      errorList.addAll(Arrays.asList(error.toString().split(";")));
     }
   }
 }
