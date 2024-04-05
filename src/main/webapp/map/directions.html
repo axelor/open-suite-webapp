@@ -30,7 +30,6 @@
     <!-- <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?sensor=false&region=FR">
     </script> -->
-	<script src="../lib/jquery.ui/js/jquery.js" type="text/javascript"></script>
 	<script type="text/javascript" src="js/apphome.js"></script>
 	<script type="text/javascript">
 
@@ -72,59 +71,93 @@
 
 		function translateResult(element, status) {
 			var url = getAppHome() + "/ws/map/translation/" + "MapRest." + status;
-			$.get(url)
-				.done(function(data) {
-					element.innerHTML = data.translation;
-				})
-				.fail(function (jqXHR, textStatus, errorThrown) {
-					console.log(jqXHR);
-					console.log(textStatus);
-					console.log(errorThrown );
-					element.innerHTML = status;
-				});
+			fetch(url)
+	        .then(function(response) {
+	            return response.json(); 
+	        })
+	        .then(function(data) {
+	            element.innerHTML = data.translation;
+	        });
 		}
 
 		function initialize() {
-		 	var directionsDisplay;
-			var directionsService = new google.maps.DirectionsService();
-			var map;
-			var dx = getQueryVariable("dx");
-			var dy = getQueryVariable("dy");
-			var ax = getQueryVariable("ax");
-			var ay = getQueryVariable("ay");
+		    var url = getAppHome() + "/ws/map/" + getQueryVariable("object");
+		    var id = getQueryVariable("id");
+		    if (id) {
+		        url += "/" + id;
+		    }
+		    fetch(url, {
+		        method: 'GET',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        }
+		    })
+		    .then(function (response) {
+		        return response.json();
+		    })
+		    .then(function (result) {
+		        if (result.status == 0) {
+		            var directionsDisplay;
+		            var directionsService = new google.maps.DirectionsService();
+		            var map;
+		            var locations = [];
+		            var errors = [];
+		            for (var i = 0; i < result.data.length; i++) {
+		            	 var { latit, longit ,address, errorMsg} = result.data[i];
+		            	 if (errorMsg){
+		            		 	errors.push("\u2022 " +errorMsg);
+			                	continue;
+			                }
+		                locations.push(new google.maps.LatLng(latit, longit));
+		            }
+		            if (errors.length > 0) {
+		            	    alert(errors.join("\n"));
+		            }
+		            var waypoints = locations.slice(1, -1).map(function (location) {
+		                return {
+		                    location: location,
+		                    stopover: true
+		                };
+		            });
 
-		  var rendererOptions = {
-		    draggable: true
-		  };
+		            var rendererOptions = {
+		                draggable: true
+		            };
 
-		  directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-		  var start = new google.maps.LatLng(dx, dy);
-		  var end = new google.maps.LatLng(ax, ay);
-		  var request = {
-		      origin:start,
-		      destination:end,
-		      travelMode: google.maps.DirectionsTravelMode.DRIVING
-		  };
-		  directionsService.route(request, function(response, status) {
-		    if (status == google.maps.DirectionsStatus.OK) {
-		      directionsDisplay.setDirections(response);
-		  } else {
-			  translateResult(document.getElementById('directionsPanel') , status);
-		  }
-		  });
-		  var mapOptions = {
-		    zoom:7,
-		    mapTypeId: google.maps.MapTypeId.ROADMAP,
-		    center: start
-		  }
-		  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-		  directionsDisplay.setMap(map);
-		  directionsDisplay.setPanel(document.getElementById('directionsPanel'));
+		            directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+		            var start = locations[0];
+		            var end = locations[locations.length - 1];
+		            var request = {
+		                origin: start,
+		                destination: end,
+		                waypoints: waypoints,
+		                optimizeWaypoints: false,
+		                travelMode: google.maps.DirectionsTravelMode.DRIVING
+		            };
+		            directionsService.route(request, function(response, status) {
+		                if (status == google.maps.DirectionsStatus.OK) {
+		                    directionsDisplay.setDirections(response);
+		                } else {
+		                    translateResult(document.getElementById('directionsPanel'), status);
+		                }
+		            });
+		            var mapOptions = {
+		                zoom: 7,
+		                mapTypeId: google.maps.MapTypeId.ROADMAP,
+		                center: start
+		            }
+		            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+		            directionsDisplay.setMap(map);
+		            directionsDisplay.setPanel(document.getElementById('directionsPanel'));
 
-		  google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
-		    computeTotalDistance(directionsDisplay.directions);
-		  });
-
+		            google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
+		                computeTotalDistance(directionsDisplay.directions);
+		            });
+		        }
+		    })
+		    .catch(function (error) {
+		        alert('Request failed: ' + error.message);
+		    });
 		}
 
 		window.onload = function() {
