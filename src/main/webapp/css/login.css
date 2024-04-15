@@ -1,0 +1,258 @@
+/**
+ * Axelor Business Solutions
+ *
+ * Copyright (C) 2005-2023 Axelor (<http://axelor.com>).
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+ /*
+    Kapsiki Styles
+ */
+ .login-card-title{
+  text-align: center;
+    font-weight: bold;
+    color: #a0a0a1;
+    font-size: 1.5em;
+    margin-bottom: 2.5rem;
+}
+
+.form-fields{
+  background-color: #fff;
+}
+
+.login-button {
+  width: 100%;
+  padding: 8px 16px;
+  color: #ffffff;
+  background-color: #FF4816;
+  border-radius: 5px;
+  font-size: 1.2em;
+  display: inline-block;
+  padding: 14px 15px;
+  margin-bottom: 0;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: all 0.5s ease-out;
+  font-weight: bold;
+}
+
+.ibox .box:before {
+  border-radius: 5px;
+}
+
+.login-button:hover {
+  background-color: #A0A0A1;
+}
+
+body {
+  height: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  display: block;
+  padding-top: 60px;
+  overflow-x: hidden;
+}
+
+@media (max-width: 979px) {
+  body {
+      padding-top: 20px;
+  }
+}
+
+header .navbar .brand-logo {
+  float: left;
+}
+
+header .navbar .brand-logo img {
+  height: 32px;
+  margin-top: 4px;
+}
+
+.panel {
+  border: 1px solid #d4d4d4;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+  background-color: #fff;
+}
+
+.panel .panel-header {
+  text-align: center;
+}
+
+.panel .panel-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.panel .panel-body {
+  overflow: hidden;
+  border-radius: 5px;
+  color: #A0A0A1;
+  font-family: var(--title-font-family);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  max-width: 23rem;
+}
+
+.panel {
+  margin-bottom: 18px;
+}
+
+.login-panel {
+  float: inherit !important;
+  margin: 4vh auto !important;
+  width: fit-content;
+  border: 0;
+  box-shadow: none;
+  background-color: transparent;
+}
+
+.login-footer {
+  text-align: center;
+}
+
+.alert {
+  min-width: min-content;
+}
+
+@media (min-width: 1200px) {
+  .alert,
+  .login-panel {
+    max-width: 23rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .alert,
+  .login-panel {
+    max-width: 23rem;
+  }
+}
+
+.login-panel .panel-header {
+  padding: 22px;
+}
+
+.login-panel .panel-body {
+  padding: 0;
+}
+
+.login-panel .form-footer {
+  padding: 22px;
+}
+
+.login-panel .form-fields {
+  padding: 2.5rem;
+}
+
+.login-panel .form-footer {
+  background-color: #fff;
+}
+
+.login-panel .form-footer button {
+  width: 100%;
+  padding: 8px 16px;
+  font-weight: 600;
+}
+
+#login-form {
+  margin: 0;
+}
+
+#login-form input[type="text"],
+#login-form input[type="password"],
+#login-form .add-on {
+  border-radius: 5px !important;
+  font-size: 14px;
+  line-height: 20px;
+  height: 2.5rem;
+  background-color: #f4f4f4;
+}
+
+#login-form .input-prepend {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+#login-form .input-prepend input {
+  width: 100%;
+}
+
+#login-form .input-prepend select {
+  height: 34px;
+  width: calc(100% - 38px);
+}
+
+body > footer {
+  position: relative;
+  margin-top: 28px;
+  height: 28px;
+  text-align: center;
+}
+
+body > footer > p {
+  margin: 0;
+  padding: 6px 10px;
+}
+
+body > footer > p,
+body > footer > p a,
+body > footer > p a:hover,
+body > footer > p a:active,
+body > footer > p a:visited {
+  color: #f2f2f2;
+}
+
+.alert {
+  box-sizing: border-box;
+  margin: auto;
+  margin-top: 8px;
+  border-radius: 0;
+}
+
+.alert h4 + ul, .alert h4 + div {
+  margin-top: 8px;
+}
+
+.form-fields > .alert {
+  width: 100%;
+}
+
+#social-buttons {
+  display: flex;
+  flex-direction: column;
+  padding: 18px 22px;
+}
+
+#social-buttons button {
+  display: flex;
+  flex: 1;
+  padding: 8px 10px;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+#social-buttons .social-logo {
+  height: 18px;
+  width: 18px;
+}
+
+#social-buttons .social-title {
+  padding-left: 8px;
+}
