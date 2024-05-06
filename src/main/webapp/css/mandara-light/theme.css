@@ -1,0 +1,17 @@
+:root {
+  --kapsiki-01: #0CAE50;
+  --kapsiki-02: #004144;
+  --kapsiki-03: #007d79;
+  --kapsiki-gray: #A0A0A1;
+  --kapsiki-white: #ffffff;
+  --title-font-family: 'Inter'; }
+
+@font-face {
+  font-family: "Inter";
+  src: local("Inter"), url("./Inter/Inter-VariableFont_slnt,wght.ttf") format("truetype"); }
+
+.sidebar {
+  background: transparent;
+  color: #ddd;
+  border: 0 1px 0 0 solid gray;
+  z-index: 3; }

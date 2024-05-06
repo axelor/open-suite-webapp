@@ -1,0 +1,23 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the button component.
+// -----------------------------------------------------------------------------
+
+/*
+According to Carbon design rule, we don't center text in a button, even if the button is wide.
+https://carbondesignsystem.com/components/button/usage/
+*/
+.-esm-login__login__continueButton___VnN\+0 {
+  background-color: var(--kapsiki-01);
+  color: var(--kapsiki-white);
+  font-size: 1.2em;
+  font-family: var(--title-font-family);
+  font-weight: bold;
+  border-radius: 5px;
+  text-align: center;
+  border: none;
+  padding: 14px 15px 14px 15px;
+}
+
+.-esm-login__login__continueButton___VnN\+0:hover {
+  background-color: var(--kapsiki-gray);
+}
