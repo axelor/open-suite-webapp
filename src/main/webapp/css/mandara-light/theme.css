@@ -1,8 +1,9 @@
 :root {
-  --kapsiki-01: #0CAE50;
+  --kapsiki-orange: #eb5e28;
   --kapsiki-02: #004144;
   --kapsiki-03: #007d79;
   --kapsiki-gray: #A0A0A1;
+  --kapsiki-dark-gray: #222222;
   --kapsiki-white: #ffffff;
   --title-font-family: 'Inter'; }
 
@@ -15,3 +16,6 @@
   color: #ddd;
   border: 0 1px 0 0 solid gray;
   z-index: 3; }
+
+header .container-fluid {
+  border-bottom: 1px solid var(--kapsiki-orange); }
