@@ -32,7 +32,8 @@ public enum ModuleName {
   SUPPLIER_MANAGEMENT("axelor-supplier-management", "Supplier Management"),
   SUPPLIER_PORTAL("axelor-supplier-portal", "Supplier Portal"),
   SUPPLYCHAIN("axelor-supplychain", "Supply Chain"),
-  TALENT("axelor-talent", "Talent");
+  TALENT("axelor-talent", "Talent"),
+  INTERVENTION("axelor-intervention", "Intervention");
 
   private final String code;
 
