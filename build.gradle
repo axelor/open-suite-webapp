@@ -68,7 +68,7 @@ task archiveReports(type: Zip) {
     }
   }
 
-  classifier 'reports'
+  archiveClassifier = 'reports'
   includeEmptyDirs = false
   destinationDirectory = file("$buildDir/libs")
 }

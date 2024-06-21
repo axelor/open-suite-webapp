@@ -3,27 +3,34 @@ buildscript {
     gradlePluginPortal()
   }
   dependencies {
-    classpath "com.diffplug.spotless:spotless-plugin-gradle:4.5.1"
+    classpath "com.diffplug.spotless:spotless-plugin-gradle:6.25.0"
   }
 }
 File spotlessXmlFile = file("${projectDir}/gradle/spotless.xml.prefs")
 allprojects { p ->
 
+  // 'modules' directory is shown as a project : need to be excluded
+  if (!p.buildFile.exists()) {
+    return;
+  }
+
   apply plugin: com.diffplug.gradle.spotless.SpotlessPlugin
 
   spotless {
+    enforceCheck false
+
     java {
       target fileTree(projectDir) {
-        include '**/*.java'
+        include 'src/*/java/**/*.java'
         exclude '**/build/**'
         exclude '**/bin/**'
         exclude '**/out/**'
       }
       googleJavaFormat()
     }
-    xml {
+    format 'misc', {
       target fileTree(projectDir) {
-        include '**/*.xml'
+        include 'src/**/*.xml'
         exclude '**/build/**'
         exclude '**/bin/**'
         exclude '**/.project/**'
@@ -44,7 +51,10 @@ allprojects { p ->
     }
   }
 
+  tasks.register('formatCode') {
+    description "Add license and format code."
+    group "Axelor"
+    dependsOn 'licenseFormat', 'spotlessApply'
+  }
   build.dependsOn 'spotlessApply'
 }
-
-task formatCode(dependsOn: ['licenseFormat', 'spotlessApply'])
