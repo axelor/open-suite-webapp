@@ -74,6 +74,47 @@ task archiveReports(type: Zip) {
   destinationDirectory = file("$buildDir/libs")
 }
 
+task archiveTranslations(type: Zip) {
+	def fileName = ""
+	def filePath = new File("/src/main/resources/i18n")
+	def newFilePath = filePath.path+"/"
+	file("modules").traverse(type: groovy.io.FileType.DIRECTORIES, maxDepth: 1) { dir ->
+		if (new File(dir, "build.gradle").exists() && (new File(dir, filePath.path).exists())) {
+			def files = new File(dir, newFilePath).listFiles()
+			for(File file: files) {
+				if (project.hasProperty("languageCode") && file.getName().contains(project.getProperty("languageCode"))) {
+					from(file.getPath()){
+						fileName =  dir.getName()+"_"+file.getName()
+						def newFile = new File(dir, newFilePath+fileName)
+						rename{newFile.name}
+					}
+				}
+			}
+		}
+	}
+	classifier 'i18n'
+	includeEmptyDirs = false
+	destinationDirectory = project.hasProperty("destinationPath") ? file(project.getProperty("destinationPath")) : file("$rootDir/translationsFiles")
+}
+
+task copyTranslations (type: Copy){
+	def filePath = new File("/src/main/resources/i18n")
+	def newFilePath = ""
+	def fileName = ""
+	if(project.hasProperty("translationsFolderPath") && project.hasProperty("basePath")) {
+		def sourceDirFiles = new File("$rootDir/"+project.getProperty("translationsFolderPath")).listFiles()
+		for(File sourceFile : sourceDirFiles) {
+			from(sourceFile.getPath()){
+				def a = sourceFile.getName().split("_")
+				newFilePath = a[0]+filePath.path
+				fileName = a[1]+"_"+a[2]+""
+				rename{fileName}
+				into (newFilePath)
+			}
+		}
+		into("$rootDir/"+project.getProperty("basePath"))
+	}
+}
 
 task generateChangelog(type: GenerateAosChangelog) {
   group "Axelor application"
