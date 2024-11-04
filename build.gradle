@@ -11,7 +11,7 @@ plugins {
 
 axelor {
   title "Axelor ERP"
-  description "Axelor Entreprise Application"
+  description "Axelor Enterprise Application"
 }
 
 allprojects {
