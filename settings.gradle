@@ -47,7 +47,7 @@ dependencyResolutionManagement {
 }
 
 //Include all modules
-rootProject.name = "axelor-erp"
+rootProject.name = "kapsiki-erp"
 
 def modules = []
 file("modules").traverse(type: groovy.io.FileType.DIRECTORIES, maxDepth: 1) { it ->
