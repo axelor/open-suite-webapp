@@ -9,4 +9,4 @@ COPY build/libs/*.war webapps/ROOT.war
  
  
 # Start Tomcat (this is done by default in the base image)
-CMD ["catalina.sh", "run"]
+CMD ["catalina.sh", "run"] 
