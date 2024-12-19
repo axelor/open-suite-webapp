@@ -1,0 +1,1 @@
+import{f as a,c as t,l as o,m as e}from"./index-CYAzAkrO.js";import{f as m}from"./formatLong-4Ww5p3MJ.js";const f={code:"en-IE",formatDistance:a,formatLong:m,formatRelative:t,localize:o,match:e,options:{weekStartsOn:1,firstWeekContainsDate:4}};export{f as default,f as enIE};
