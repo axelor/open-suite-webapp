@@ -9,6 +9,8 @@ services:
       POSTGRES_DB: axelor
       POSTGRES_USER: axelor
       POSTGRES_PASSWORD: axelor
+    ports:
+      - "5432:5432"
     volumes:
       - /home/axelor/axelor/pgdata:/var/lib/postgresql/data
     restart: unless-stopped
