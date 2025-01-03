@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:12
+    container_name: db
+    environment:
+      POSTGRES_DB: axelor
+      POSTGRES_USER: axelor
+      POSTGRES_PASSWORD: axelor
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - axelor-network
+ 
+  axelor-app:
+    image: kapsiki/kapsiki-axelor:latest
+    restart: always
+    container_name: axelor-app
+    depends_on:
+      - db
+    environment:
+      AXELOR_CONFIG_DB_DEFAULT_URL: jdbc:postgresql://db:5432/axelor
+      AXELOR_CONFIG_DB_DEFAULT_USER: axelor
+      AXELOR_CONFIG_DB_DEFAULT_PASSWORD: axelor
+    ports:
+      - "8080:8080"
+    networks:
+      - axelor-network
+ 
+volumes:
+  pgdata:
+ 
+networks:
+  axelor-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.10.2.0/24
