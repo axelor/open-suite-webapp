@@ -86,7 +86,7 @@ task generateChangelog(type: GenerateAosChangelog) {
 
 task checkCsvEOL(type: CheckEOLCharsInCsv) {
   group "Axelor application"
-  description "Generate change logs from unreleased entries."
+  description "Check end-of-line characters in CSV files."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -97,7 +97,7 @@ task checkCsvEOL(type: CheckEOLCharsInCsv) {
 
 task checkBirtCredentials(type: CheckCredentialsInRptdesign) {
   group "Axelor application"
-  description "Generate change logs from unreleased entries."
+  description "Check if .rptdesign files (BIRT) contain credentials."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -105,7 +105,6 @@ task checkBirtCredentials(type: CheckCredentialsInRptdesign) {
     include '**/*.rptdesign'
   }
 }
-
 
 task checkXmlDomainsAttributes(type: CheckXmlDomainsAttributes) {
   group "Axelor application"
