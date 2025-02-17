@@ -1,7 +1,6 @@
 version: '3.8'
- 
-services:
 
+services:
   db:
     image: postgres:12
     container_name: db
@@ -12,14 +11,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - /home/axelor/axelor/pgdata:/var/lib/postgresql/data
+      - ./pgdata:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
       - axelor-network
- 
+
   axelor-app:
-    image: kapsiki/kapsiki-axelor:latest-v2
-    restart: always
+    image: kapsiki/kapsiki-axelor:latest
     container_name: axelor-app
     depends_on:
       - db
@@ -31,11 +29,18 @@ services:
       - "8080:8080"
     networks:
       - axelor-network
- 
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - axelor-app
+    networks:
+      - axelor-network
+
 networks:
   axelor-network:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.10.2.0/24  # Adjusted subnet to avoid conflicts
- 
