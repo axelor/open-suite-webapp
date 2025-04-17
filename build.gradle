@@ -19,7 +19,7 @@ allprojects {
   apply plugin: 'eclipse'
 
   group = 'com.axelor.apps'
-  version = '7.2.36'
+  version = '7.2.37'
 
   java {
     toolchain {
