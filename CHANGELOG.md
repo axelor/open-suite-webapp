@@ -1,3 +1,512 @@
+## [8.3.9] (2025-06-26)
+
+### Fixes
+#### Base
+
+* Product category: fixed sequence field display.
+* Partner price list: an exclusive sale/purchase partner price list can now be chosen by one partner.
+* Update dependency to Axelor Studio to 3.4.5.
+* Product: on product copy, purchase price and cost price are now correctly copied.
+* Update Axelor Message to 3.2.3.
+* Product company: computed sale price on change of 'autoUpdateSalePrice' or 'managPriceCoef'.
+
+#### Account
+
+* Account: ensured consistent VAT system display and editability.
+* Invoice/PFP: updated PFP validate status at invoice reconcile with advance payment or credit note.
+* Invoice: supplier invoice exchange rate is now based on origin date.
+* Accounting report: fixed calculation of Original value and Net carrying amount in accounting report 'Summary of gross values and depreciation'.
+* Accounting export / FEC export payroll entry: fixed the issue where only accounted moves were returned.
+* Move line tax: fixed tax line generation when two lines have the same taxes but different VAT system.
+* AccountingBatch: fixed performance issue when taking all accounts in closure/opening batch
+
+#### Bank Payment
+
+* Bank Reconciliation: blocked the reconciliation of multiple lines on a single move line.
+
+#### Business Project
+
+* InvoicingProject: fixed technical error when invoicing project with some lines to invoice at 0.
+
+#### Contract
+
+* Contract batch: fixed issue where contracts and invoices were not displayed in batch due to missing batch association.
+
+#### CRM
+
+* Agency: fixed agencies menu entry French translation.
+
+#### Human Resource
+
+* Leave request: fixed leave request confirm when using the leave reason as negative values.
+
+#### Production
+
+* Sale order: fixed error in log when choosing a product.
+* Sale order lines details: fixed scale error for cost price.
+
+#### Sale
+
+* Partner: fixed wrong computation of total price in 'Sale details by product'.
+* Sale order: trading name is correctly reset when changing company.
+* Sale order: fixed empty sale order lines on sale order report when lines are generated from configurator.
+* Partner: fixed error while opening form view of 'Sale details by product'.
+
+#### Supply Chain
+
+* Sale Order/Purchase Order/Invoice: fixed advance invoice amount on partial invoicing.
+* Interco: manually created purchase order from sale order are now tagged as interco when it should.
+* Sale order: invoicing state is correctly updated when editing lines quantity.
+* Invoice: fixed currency conversion to use the exchange rate based on the orderDate when generating invoice from purchase order.
+
+
+### Developer
+
+#### Account
+
+Added the `InvoiceTermPfpService` in the `ReconcileInvoiceTermComputationServiceImpl` and `ReconcileInvoiceTermComputationBudgetServiceImpl` constructor.
+
+#### Sale
+
+Added `SaleOrderLineComputeService` as an argument for `ConfiguratorSaleOrderDuplicateServiceImpl` constructor.
+
+#### Supply Chain
+
+Added 'AppSupplychainService' and 'IntercoService' to SaleOrderPurchaseServiceImpl and its extensions.
+
+---
+
+SaleOrderInvoiceService#updateInvoicingState has been moved to SaleInvoicingStateService#updateInvoicingState.
+By consequences, SaleInvoicingStateService has been added to SaleOrderServiceSupplychainServiceImpl, WorkflowCancelServiceSupplychainImpl and their respective extensions.
+
+---
+
+The method `getInvoiceLineGeneratorWithComputedTaxPrice` in `InvoiceLineOrderService` has changed its signature from 
+
+```java
+InvoiceLineGenerator getInvoiceLineGeneratorWithComputedTaxPrice(
+    Invoice invoice,
+    Product invoicingProduct,
+    BigDecimal percentToInvoice,
+    OrderLineTax orderLineTax);
+```
+to
+```java
+    InvoiceLineGeneratorSupplyChain getInvoiceLineGeneratorWithComputedTaxPrice(
+    Invoice invoice,
+    Product invoicingProduct,
+    BigDecimal percentToInvoice,
+    OrderLineTax orderLineTax,
+    SaleOrderLine saleOrderLine,
+    PurchaseOrderLine purchaseOrderLine);
+```
+
+## [8.3.8] (2025-06-12)
+
+### Fixes
+#### Base
+
+* Bank: fixed error when SWIFT address was empty.
+
+#### Account
+
+* InvoiceTerm/Invoice/Pfp: fixed automatic pfp validate status on invoice when using the invoice term to validate menu entry.
+* DepositSlip/PaymentVoucher: fixed deposit slip management when using payment mode with accounting mode value for collection.
+* Invoice/InvoiceTerm: fixed the amount init when manually splitting amounts.
+
+#### Bank Payment
+
+* Bank Reconciliation: fixed the balance computation when multiple reconcile where on the same move line.
+
+#### Business Project
+
+* Project: fixed error when trying to select new sale order line.
+
+
+### Developer
+
+#### Account
+
+The InvoiceTermServiceImpl.computePercentageSum method now return the amount without scale to be used in computation. If you want to scale it, use the currencyScaleService.getScaledValue(invoice, amount)
+
+## [8.3.7] (2025-06-02)
+
+### Fixes
+#### Base
+
+* Base: removed useless column in base product demo data.
+* Group: removed collaboration configuration since it is only available in AOP enterprise.
+* Purchase order: fixed main panel visibility to follow the 'Enable trading names management' configuration.
+
+#### Account
+
+* Invoice/PFP: fixed PFP status when all invoice terms are PFP validated.
+* Invoice: prevent automatic mail and hide mail panel for supplier invoices.
+* Invoice: fixed the display issue with the logo and address when 'Terms and Conditions' are included on the invoice BIRT report.
+* Account: fixed unnecessary display of mass entry move lines.
+* Payment mode: updated demo data for wire transfer.
+* Account: fixed domain for result profit account and result loss account on account config by company.
+
+#### Budget
+
+* BudgetStructure/Budget: fixed the budget line import.
+
+#### Human Resource
+
+* Lunch voucher: fixed outdated expenses wrongly deducted in lunch vouchers calculation.
+* Lunch voucher: excluded former employees from lunch voucher calculation.
+
+#### Production
+
+* Sale order: fixed an error that could occur when the bill of material linked to a line was personalized.
+
+#### Sale
+
+* Sale order: fixed global discount to be readonly when finalized.
+
+#### Stock
+
+* Stock location: fixed last inventory date in stock location line when validating an inventory.
+
+#### Supply Chain
+
+* Sale order: fixed the incoterm popup display when it was required.
+* Sale order: fixed partial invoicing based on discounted price.
+* Sale/purchase order: allow trading name to be editable when a sale/purchase order is generated from interco.
+
+
+### Developer
+
+#### Account
+
+Added `InvoiceTermPfpService` in the `InvoiceTermPfpValidateServiceImpl` constructor
+
+#### Human Resource
+
+`LunchVoucherMgtLineService#computeRestaurant` and `LunchVoucherMgtLineService#computeInvitation` have a new Period parameter.
+
+#### Production
+
+The constructor of SaleOrderLineBomSyncServiceImpl now requires `AppSaleRepository`.
+
+#### Supply Chain
+
+Removed the `SaleOrderCheckSupplychainServiceImpl` class.
+
+## [8.3.6] (2025-05-15)
+
+### Fixes
+#### Base
+
+* Update Axelor Open Platform to 7.3.7.
+* Partner: fixed performance issues when opening emails tab on partner form view.
+* Partner: when checking for duplicated registration code, correctly ignore whitespaces.
+* PriceList: Set the currency to match the currency of the active company.
+* Partner: fixed form view for project panel.
+
+#### Account
+
+* Accounting configuration/Move line: ensured consistent tax display and editability.
+* BillOfExchange/PaymentSession: fixed technical error when cancelling bank order payment then pay the exactly same invoice term.
+* Invoice: fixed invoice term due date when we update invoice due date with free payment condition.
+* Mass entry: fixed critical error when we validate more than ten moves in mass entry process.
+* Accounting batch: fixed an issue where the generated result entry (move) was not correctly linked to the corresponding close/open account batch.
+* Journal: fixed issue allowing moves or mass entry sessions to be created from journal buttons on inactive journals.
+* Auto reconcile/Partner: restricted auto reconcile between customer and supplier invoices on partner with compensation enabled.
+
+#### Bank Payment
+
+* BankOrder/Umr: fixed the selection of the partner active umr in bank order confirmation.
+* Bank payment config: removed the possibility to select view type account on internal and external bank to bank account.
+* Bank order: fixed an error message on missing bank order encryption password even if 'Enable bank order file encryption' was disabled.
+
+#### Budget
+
+* PurchaseOrder/Budget: fixed budget exceed error when using mono budget on purchase order.
+* Move/Budget: fixed an issue where only 'realized with no po' was imputed when creating budget on move line related to an invoice line.
+* Move/Budget: fixed negative amounts on realized and committed on daybook moveline budget imputation.
+
+#### Contract
+
+* Contract: fixed NPE when ventilating an invoice linked to a contract that has additional benefits.
+
+#### Human Resource
+
+* Expense: removed the possibility to duplicate an expense.
+* Allocation line: added x-order on from date for period field.
+* Timesheet line: fixed the error when creating a timesheet without an employee from the project view.
+* Expense: fixed duplicate move when we confirmed a bank order from an expense.
+
+#### Production
+
+* Configurator: fixed an issue where bill of material and prod process were generated twice.
+* Sale order: display an error message when trying to delete a line linked to manufacturing orders.
+
+#### Project
+
+* Project: added project time unit in demo data and set it to 'Day'.
+* Project: fixed Project activity dashboard to fetch only relevant messages, avoiding unnecessary loading and filtering.
+* Project/SaleOrder: fixed name computation when generating business project.
+* App project: fixed issue where custom fields for Project/Task caused save errors when name was not entered first with type 'select' or 'multiselect'.
+
+#### Sale
+
+* Sale order: fixed the issue of finalizing a sale order without sale order lines.
+* Sale order: reset the 'manual unlock' state when duplicating a sale order.
+* Configurator formula: fixed message type to show an info message instead of an alert when the formula works correctly.
+* Sale order: fixed an error occurring when adding lines to an order without production module.
+
+#### Stock
+
+* Stock location: fixed date time issue in location financial data report.
+
+#### Supply Chain
+
+* Stock move: fixed error message when checking available stock for requested and reserved quantities.
+
+
+### Developer
+
+#### Account
+
+In `AccountingCloseAnnualService`, the method `generateResultMove` now returns a `Move` instead of `void`.
+
+---
+
+In `MoveLineToolService.getMoveExcessDueList`, changed `Long invoiceId` parameter to `Invoice invoice`.
+
+#### Project
+
+Creation of a new service `ProjectNameComputeService`, and added `ProjectNameComputeService` in the `ProjectService` constructor.
+
+## [8.3.5] (2025-04-30)
+
+### Fixes
+#### Base
+
+* Updated Axelor Open Platform to 7.3.6.
+* Product: fixed domain filter for product variant values.
+* Product: fixed update product prices process to update company specific prices.
+* Template: on creating a new template manually, keep email account empty by default so the generated message can use default email account.
+* Fixed rounding mode in some quantities computation.
+* Sale order line: fixed an issue where warnings related to sale order line (like stock control) were not displayed to the user and blocked the process.
+
+#### Account
+
+* Bank reconciliation: fixed NPE when validating a bank reconciliation without journal while having an account on a bank reconciliation line.
+* Invoice: fixed 'Terms and Conditions','Client box in invoice' and 'Legal note on sale invoices' to support HTML tags in BIRT report.
+* Analytic move line: set analytic axis required when we create an analytic move line.
+
+#### Budget
+
+* Purchase order line: use the correct account when a purchase order line is set to 'fixed assets'.
+
+#### Business Project
+
+* Business Project Task: fixed an issue where total costs was not computed on unit cost change.
+* Invoice: fixed third-party payer when generating an invoice from an invoicing project.
+
+#### Contract
+
+* Contract invoicing batch: fixed an issue where it was not possible to generate more than one invoice for a same contract.
+
+#### Human Resource
+
+* Expense: fixed personal expense and personal expense amount french translation.
+* User: hide create employee button if the partner has already an employee.
+
+#### Mobile Settings
+
+* Mobile permissions: fixed demo data.
+
+#### Production
+
+* Manufacturing order: fixed an issue where producible quantity was taking into account component that were not managed in stock.
+* Sale order: fixed an error occurring when changing the price of a sale order line details.
+* MRP: added a explicit error message instead of a NPE when prod process is null on manufacturing proposal.
+* Sale order: fixed an error occurring when generating sale order line details with no cost price.
+* Sale order line details: fixed the unit price getting recomputed wrongly when changing quantity.
+* Prod process line: fixed domain of stock location to take into account only those usable on production
+
+#### Project
+
+* Project planning: fixed english message in confirmation popup.
+* Sprint: added a sprint form and grid with editing and adding functionalities disabled.
+
+#### Stock
+
+* Stock move: prevented generation of invoices when 'generate Invoice from stock move' configuration is disabled in supplychain app.
+
+#### Supply Chain
+
+* Declaration of exchanges: will now reset fiscal year and if necessary country on change of company.
+* Supplychain: fixed total W.T. of invoices generated from a stock move of a purchase order with ATI.
+
+### Developer
+
+Fixed ControllerMethodInterceptor to avoid adding exception management on non void and non public methods in controller.
+
+#### Business Project
+
+Added `PartnerAccountService` to the constructor of `ProjectGenerateInvoiceServiceImpl`.
+
+## [8.3.4] (2025-04-17)
+
+### Fixes
+#### Base
+
+* Updated Axelor Open Platform to 7.3.5.
+* Updated axelor-studio dependency to 3.4.2.
+* Base: fixed base roles are not imported.
+* Partner: fixed agencies domain filter.
+
+#### Account
+
+* Reconcile: removed check on tax for opening/closure.
+* Invoice: fixed an issue in the BIRT report where a partner or company partner had multiple accounting situations for different companies.
+* Payment voucher: fixed translation for error message when move amounts have been changed since the imputation.
+* Account management: fixed fields not required in editable grid of payment mode.
+* Invoice: fixed due date when we save with free payment condition.
+* Accounting report: set currency required for 'Bank reconciliation statement' report.
+* Invoice: fixed price list not filled the first time we change the partner.
+
+#### Bank Payment
+
+* Bank reconciliation: fixed issue when try to load bank statement in different currency than bank details.
+
+#### Business Project
+
+* Business project task: fixed an issue where modifying quantity was resetting unit price.
+
+#### CRM
+
+* Partner: fixed 'Generate Project' button still present even with job costing app disabled.
+
+#### Human Resource
+
+* Timesheet: prevent 'To date' edition on completed timesheets.
+* Project allocation: fixed initialization with planned time in mass generation.
+* Leave Request: fixed the NPE caused by the employee's empty week planning.
+* Leave request: leave reason and duration are now required when using multi-leave assistant.
+
+#### Production
+
+* Purchase order: fixed an issue where subcontracted order was reset to standard on validation.
+* Sale order: fixed translation for 'Details Lines (Tree)'.
+
+#### Project
+
+* Project: fixed wrong compute of full name.
+* Project task: fixed npe on project task gantt views.
+
+#### Purchase
+
+* Supplier catalog: fixed wrong fetched information for product without catalog.
+
+#### Sale
+
+* Sale order: fixed 'Generate production order' button displayed when app production is deactivated.
+* Sale order: fixed the issue where stock location was overwritten upon changing the partner when trading name was null.
+* Sale order: fixed missing error message on pack products.
+* Sale order: fixed the alert message before confirming the sale order.
+
+#### Stock
+
+* Stock move line: fixed total net mass calculation when real quantities are generated.
+* Stock location: fixed quantity scaling in stock location line grid and form views.
+
+#### Supply Chain
+
+* Sale Order: do not remove shipment cost line if the line is already invoiced.
+* Sale order: fixed sale order invoicing state when a line has a negative amount.
+
+
+### Developer
+
+#### Sale
+
+The method `confirmCheckAlert` in `SaleOrderCheckService` now returns `List<String>` instead of `String`.
+
+#### Supply Chain
+
+Added `InvoiceRepository` to the constructor of `SaleOrderShipmentServiceImpl`.
+
+## [8.3.3] (2025-04-03)
+
+### Fixes
+#### Base
+
+* Update to Axelor Open Platform 7.3.4.
+* Day planning: added sequence in demo data.
+* Base batch: fixed issue in recompute all addresses batch.
+* Fixed SIRET check before creation using partner Sirene API call.
+* Partner: when creating/filling a partner from Sirene API, fill the NIC.
+* Partner: fixed wrong registration number check warning translation.
+
+#### Account
+
+* Fixed an user interface issue where it was allowed to create a new tax where the user should only be able to select one.
+* Invoice: show 'Price excl. Tax' on invoice report even if it is 0.
+* Bank order/National treasury transfer: fixed internal money transfer from bank order by inverting credit and debit.
+* Accounting batch: fixed balance amount on close/open account batch.
+* Invoice: fixed bad error handling when skipping validation is active.
+* Invoice term: fixed display condition for PFP panel.
+* Payment voucher: fixed control when we register payment in multicurrency.
+* Fixed asset: fixed null value on moveline for ongoing cession.
+
+#### Budget
+
+* Budget: fixed domain issues for analytic axis and account in Budget from Budget structure.
+* Global budget/Budget level/Budget: fixed the visibility of the simulated budget amount fields.
+* Purchase order line: fixed budget domain in budget distribution.
+
+#### Business Project
+
+* Business project task: fixed an issue at task creation when employee has a product.
+* Invoicing project: fixed an issue where non validated timesheet lines were included.
+
+#### Contract
+
+* Contract line: fixed domain for product based on contract target type.
+* Contract: added french translation for the 'Related Equipment' panel title.
+
+#### Human Resource
+
+* Project: fixed an error occurring when creating a timesheet and the user had no employee.
+* Timesheet line: fixed an issue where a timesheet line was not linked to the employee's timesheet.
+
+#### Production
+
+* Bill of material: fixed an issue where a component could not be deleted from the BOM line list after the tree view was opened.
+* Sale order: fill default prod process of bill of material when choosing a product.
+
+#### Sale
+
+* Sale order: fixed the alert when finalizing an order and the price list is not valid.
+* Sale order: fixed wrong behaviour on a prospect with accepted credit.
+* App sale: fixed French translation for line list display type helper.
+* Sale order: fixed NPE when creating a sale order without active company.
+
+#### Stock
+
+* Stock move: fixed average price not updated on product when stock move is canceled.
+* Inventory: gap and real values computation now correctly takes into account company product cost/sale/purchase price.
+
+#### Supply Chain
+
+* Sale order: fixed NPE when invoicing a sale order with title line.
+
+
+### Developer
+
+#### Base
+
+Added `PartnerService` and `AppBaseService` to the constructor of `PartnerGenerateService`.
+
+#### Account
+
+Added `CurrencyService` and `CurrencyScaleService` to the constructor of `PaymentVoucherControlService`.
+
 ## [8.3.2] (2025-03-20)
 
 ### Fixes
@@ -276,6 +785,13 @@ DELETE FROM meta_action WHERE name = 'referential.conf.api.configuration';
 * App business project: removed configurations related to time management in app business project (time units and default hours per day) to use the configurations already present in app base.
 * Project financial data: added a link to the project in project financial data view.
 
+[8.3.9]: https://github.com/axelor/axelor-open-suite/compare/v8.3.8...v8.3.9
+[8.3.8]: https://github.com/axelor/axelor-open-suite/compare/v8.3.7...v8.3.8
+[8.3.7]: https://github.com/axelor/axelor-open-suite/compare/v8.3.6...v8.3.7
+[8.3.6]: https://github.com/axelor/axelor-open-suite/compare/v8.3.5...v8.3.6
+[8.3.5]: https://github.com/axelor/axelor-open-suite/compare/v8.3.4...v8.3.5
+[8.3.4]: https://github.com/axelor/axelor-open-suite/compare/v8.3.3...v8.3.4
+[8.3.3]: https://github.com/axelor/axelor-open-suite/compare/v8.3.2...v8.3.3
 [8.3.2]: https://github.com/axelor/axelor-open-suite/compare/v8.3.1...v8.3.2
 [8.3.1]: https://github.com/axelor/axelor-open-suite/compare/v8.3.0...v8.3.1
 [8.3.0]: https://github.com/axelor/axelor-open-suite/compare/v8.2.9...v8.3.0
