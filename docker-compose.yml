@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+
+  app:
+    image: kapsiki/kapsiki-axelor-test:8.4.1
+    container_name: axelor-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      AXELOR_CONFIG_DB_DEFAULT_URL: jdbc:postgresql://db:5432/axelor
+      AXELOR_CONFIG_DB_DEFAULT_USER: axelor
+      AXELOR_CONFIG_DB_DEFAULT_PASSWORD: axelor
+      AXELOR_CONFIG_DATA_UPLOAD_DIR: /opt/axelor/uploads
+    volumes:
+      - ./axelor_data:/opt/axelor/uploads
+    networks:
+      - axelor-network
+  db:
+    image: postgres:12
+    container_name: db
+    environment:
+      POSTGRES_DB: axelor
+      POSTGRES_USER: axelor
+      POSTGRES_PASSWORD: axelor
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - axelor-network
+volumes:
+  postgres-data:
+
+networks:
+  axelor-network:
+    driver: bridge
