@@ -19,11 +19,11 @@ allprojects {
   apply plugin: 'eclipse'
 
   group = 'com.axelor.apps'
-  version = '8.5.0'
+  version = '9.0.0'
 
   java {
     toolchain {
-      languageVersion = JavaLanguageVersion.of(11)
+      languageVersion = JavaLanguageVersion.of(21)
     }
   }
 
