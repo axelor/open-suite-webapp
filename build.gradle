@@ -39,6 +39,10 @@ allprojects {
   configurations {
     runtimeClasspath.exclude group: "org.eclipse.birt.runtime.3_7_1", module: "org.apache.commons.codec"
     runtimeClasspath.exclude group: "org.eclipse.birt.runtime.3_7_1", module: "com.lowagie.text"
+
+  }
+  configurations.all {
+    exclude group: 'org.glassfish.jaxb', module: 'jaxb-runtime'
   }
 }
 
