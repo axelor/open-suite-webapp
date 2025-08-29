@@ -43,6 +43,10 @@ allprojects {
   }
   configurations.all {
     exclude group: 'org.glassfish.jaxb', module: 'jaxb-runtime'
+
+    //While axelor-studio still have this transitive dependency, we need to exclude
+    //it completely to avoid building issue.
+    exclude group: 'org.codehaus.groovy', module: 'groovy-all'
   }
 }
 
