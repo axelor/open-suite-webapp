@@ -19,7 +19,7 @@ allprojects {
   apply plugin: 'eclipse'
 
   group = 'com.axelor.apps'
-  version = '8.3.6'
+  version = '8.4.6'
 
   java {
     toolchain {
@@ -51,14 +51,6 @@ dependencies {
 }
 
 apply from: 'gradle/style.gradle'
-
-task("dataImport", type: JavaExec) {
-  mainClass = "com.axelor.apps.erp.Main"
-  classpath = sourceSets.main.runtimeClasspath
-  if (System.getProperty("exec.args") != null) {
-    args System.getProperty("exec.args").split()
-  }
-}
 
 task archiveReports(type: Zip) {
   file("modules").traverse(type: groovy.io.FileType.DIRECTORIES, maxDepth: 1) { dir ->
