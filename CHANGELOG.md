@@ -1,109 +1,184 @@
-## [8.4.1] (2025-07-03)
-
-### Fixes
-#### Base
-
-* Data Backup: fixed translations and added help for some fields.
-
-#### Account
-
-* MoveLine/TaxSet: fixed technical error generating movelines without taxes in some process
-* AnalyticMoveLine/MoveLine : fixed the reset of analytic accounts on moveline when changing it on analytic move line
-* MassEntryMove: fixed the error message list.
-* Move: improve move validation time fixing global audit tracker
-* MassEntryMove: fixed the counterpart process without saving the move.
-
-#### Human Resource
-
-* Issue on Windows when we try to build the AOS project.
-
-#### Production
-
-* Sale order: display quantity and total duration for operation sale order line details.
-
-#### Purchase
-
-* Purchase order line: fixed an issue where quantity was not reset to valid when managing multiple quantity.
-* Call for tender: added an option to activate the feature.
-
-#### Stock
-
-* Inventory: fixed missing parameter for inventory birt template.
-
-
-### Developer
-
-#### Base
-
-Migration script -
-
-```
-UPDATE meta_field
-SET label = 'Relative dates',
-description = 'Allows exporting dates by calculating the difference with the export date. During import, the data will be updated based on the import date and the previously saved offset.'
-WHERE name = 'isRelativeDate' AND meta_model IN (SELECT id FROM meta_model WHERE name = 'DataBackup');
-
-UPDATE meta_field
-SET description = 'Batch size used when reading data. Allows you to optimize performance based on database volume.'
-WHERE name = 'fetchLimit' AND meta_model IN (SELECT id FROM meta_model WHERE name = 'DataBackup');
-
-UPDATE meta_field
-SET description = 'Can be used in order to keep a fixed reference to update the current existing database. Not required for loading into another database.'
-WHERE name = 'updateImportId' AND meta_model IN (SELECT id FROM meta_model WHERE name = 'DataBackup');
-```
-
-#### Account
-
-Migration script -
-
-```
-ALTER TABLE account_move ALTER COLUMN mass_entry_errors TYPE text;
-```
-
----
-
-MassEntryMoveCreateService.createMoveFromMassEntryList now take a move instead of the move id
-
-#### Purchase
-
-The following script must be played if the database is not auto updated:
-```
-ALTER TABLE studio_app_purchase ADD COLUMN manage_call_for_tender boolean;
-```
-
-## [8.4.0] (2025-06-26)
+## [8.5.0] (2025-10-17)
 
 ### Features
 #### Base
 
-* Updated Axelor Open Platform to 7.4. You can find all information on this release [here](https://github.com/axelor/axelor-open-platform/blob/7.4/CHANGELOG.md).
-* Updated Axelor Studio dependency to 3.5. You can find all information on this release [here](https://github.com/axelor/axelor-studio/blob/release/3.5/CHANGELOG.md).
+* Updated Axelor Utils dependency to 3.5.
+* Map: added an assistant to create map views.
+* Partner: created a new API endpoint to create a partner.
 
+#### CRM
+
+* Opportunity: added a button to create a new quotation from opportunity form.
+
+#### HR
+
+* Expense: added multi-currency support.
+* Leave request: created a new batch to generate leave requests.
 
 #### Purchase
 
-* Added a new call for tenders feature.
+* Purchase order: added possibility to modify a validated order.
 
 #### Sale
 
-* Sale order: allowed for partial validation of quotation line. Quotation and orders are separated if the configuration is activated.
-* Sale order: managed carrier prices by freight carrier mode.
+* Sale order: added shipping cost to sale order.
+* Sale order: created a new API endpoint to define payment information on sale order creation.
+* Sale order: created a new API endpoint to define partner information on sale order creation.
 
 #### Account
 
-* Partner: added different UMRs for different bank details on the same partner.
-* Analytic Move line: in the move line reverse values, added a percentage on each line to be able to create multiple lines per axis.
-* Fixed Asset: implemented mass disposal process.
-* Invoice: managed company tax number on the invoice.
+* Invoice: added a new button to remove a payment from an invoice.
+* Invoice: added a new button to cancel a payment from an invoice.
+* FEC import: manage analytic move lines.
+* FEC import: added a new button to visualize the imported lines.
+* Account: added a new button to copy accounts to other companies.
+
+#### Bank payment
+
+* Bank statement: added CAMT.053 file support.
+
+#### Stock
+
+* Packaging: created a new API endpoint to manage packaging.
+* Packaging: created a new API endpoint to manage packaging line.
+* Packaging: created a new API endpoint to create a logistical form.
+* Packaging: created a new API endpoint to manage logistical form.
+* Product: added a default stock location configuration.
+* Stock location: added consignment stock for subcontracting.
+* Stock move: created a new API endpoint to update a stock move description.
 
 #### Production
 
-* Sale order: added automatic creation of production order from sale order.
+* Packaging: added packaging feature and improved logistical form.
 
-#### Budget
+#### Maintenance
 
-* Budget: allowed to split the amount on multiple periods.
+* Maintenance: created a new API endpoint to create maintenance requests.
 
- 
-[8.4.1]: https://github.com/axelor/axelor-open-suite/compare/v8.4.0...v8.4.1
-[8.4.0]: https://github.com/axelor/axelor-open-suite/compare/v8.3.9...v8.4.0
+#### Production
+
+* Production order: created a new batch to created production order.
+* Operation order: created a new API endpoint to create and manage consumed product on operation order.
+
+#### Project
+
+* Project: added favourites projects and observer members.
+
+#### Contract
+
+* Contract: added a new button to create an intervention from a contract.
+* Contract: created a new API endpoint to manage a to-do list.
+
+#### Quality
+
+* Product: added a new product characteristics feature.
+* Tracking number: added a new product characteristics feature.
+* Partner: added a new quality tab in form.
+* Product: added a new quality tab in form.
+* Quality: improved quality audit.
+* Quality: added required documents feature.
+* Quality improvement: created a new API endpoint to manage attached files.
+
+#### Mobile Settings
+
+* Maintenance: added new configuration to manage maintenance requests.
+* QI detection: added new configuration to set a default value for QI detection.
+
+### Changes
+
+#### Base
+
+* Added colors for selections.
+* Added check messages on init and demo data.
+* Data backup: added a reference date to be taken into account.
+* Data backup: added a new import origin column.
+* Data backup: sorted imported file column.
+* Translation: added a tracking workflow with history.
+* Product: moved unit fields to the correct panels.
+* Data import: technical improvement of CSV data import.
+* Avanced export: added an option to select the title of the column to export.
+
+#### HR
+
+* Employee: added storage of the daily salary cost in employee form.
+* Job application: improved the view and added new fields.
+* Extra hours: removed max limitation on increase field.
+
+#### Purchase
+
+* Call for tenders: added generation of a sale order from offers.
+* Call for tenders: added a new default sequence.
+* Call for tenders: added generation of call for tenders from MRP.
+* Partner price list: added possibility to directly select purchase partner from the form.
+
+#### Sale
+
+* Partner price list: added possibility to directly select sale partner from the form.
+
+#### Account
+
+* Reconcile: added new fields on grid view.
+* Accounting report: updated the title of the field 'Display only not completely lettered move lines' for 'Exclude totally reconciled moves'.
+* Journal: updated demo data.
+* Fixed asset: managed different customer on fixed asset disposal.
+
+
+#### Bank payment
+
+* Bank statement query: added translatable property to the name field.
+
+#### Stock
+
+* Stock move: grouped grid views by status.
+
+#### Supplychain
+
+* Sale order line: added estimated shipping date.
+* Purchase order line: added estimated receipt date.
+* Purchase order: automatically compute 'interco' field on purchase order generation.
+
+#### Project
+
+* Project planning time: grouped grid view by employee field.
+* Timesheet line: grouped grid view by employee field.
+
+#### Contract
+
+* Contract: grouped grid view by status field.
+
+#### Business project
+
+* Removed business project from community edition.
+
+### Fixes
+
+#### Base
+
+* Moved print email method to axelor-message.
+* Sale order/partner: fixed translations.
+* App base: fixed translation of product sequence type.
+* Init/demo data: fixed some init and demo data.
+
+#### Sale
+
+* Invoice: fixed an issue where an invoice ventilation could throw an exception.
+
+#### Account
+
+* Preparatory process: fixed an issue with multi tax.
+
+#### Stock
+
+* Mass stock move: improved display and process.
+
+#### Supplychain
+
+* Sale order: fixed the display of stock move linked to a sale order.
+
+#### Production
+
+* Bill of material: added default value for calculation quantity.
+* Manuf order: fixed relation with production order.
+
+[8.5.0]: https://github.com/axelor/axelor-open-suite/compare/v8.4.8...v8.5.0
