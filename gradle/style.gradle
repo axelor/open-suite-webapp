@@ -3,7 +3,7 @@ buildscript {
     gradlePluginPortal()
   }
   dependencies {
-    classpath "com.diffplug.spotless:spotless-plugin-gradle:6.25.0"
+    classpath "com.diffplug.spotless:spotless-plugin-gradle:8.0.0"
   }
 }
 File spotlessXmlFile = file("${projectDir}/gradle/spotless.xml.prefs")
