@@ -6,6 +6,22 @@ buildscript {
     classpath "com.diffplug.spotless:spotless-plugin-gradle:8.0.0"
   }
 }
+
+def getHeaderFile = { Project proj, String style ->
+  def fileName = style == null ? "header.txt" : "header-${style}.txt"
+  def paths = [
+          "src/license", ".", proj.getRootDir().getPath() + "/gradle/license", proj.getRootDir().getPath()
+  ]
+  for (def path : paths) {
+    final File file = proj.file(path + "/" + fileName);
+    if (file.exists()) {
+      return file;
+    }
+  }
+  return null
+}
+
+
 File spotlessXmlFile = file("${projectDir}/gradle/spotless.xml.prefs")
 allprojects { p ->
 
@@ -27,6 +43,7 @@ allprojects { p ->
         exclude '**/out/**'
       }
       googleJavaFormat()
+      licenseHeaderFile(getHeaderFile(project, null))
     }
     format 'misc', {
       target fileTree(projectDir) {
@@ -54,7 +71,7 @@ allprojects { p ->
   tasks.register('formatCode') {
     description "Add license and format code."
     group "Axelor"
-    dependsOn 'licenseFormat', 'spotlessApply'
+    dependsOn 'spotlessApply'
   }
   build.dependsOn 'spotlessApply'
 }
