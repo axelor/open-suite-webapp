@@ -60,7 +60,7 @@ dependencies {
 
 apply from: 'gradle/style.gradle'
 
-tasks.register('archiveReports', Zip) {
+task archiveReports(type: Zip) {
   file("modules").traverse(type: groovy.io.FileType.DIRECTORIES, maxDepth: 1) { dir ->
     if (new File(dir, "build.gradle").exists() && new File(dir, "/src/main/resources/reports").exists()) {
       new File(dir, "/src/main/resources/reports/").listFiles().each { report ->
@@ -75,18 +75,18 @@ tasks.register('archiveReports', Zip) {
 }
 
 
-tasks.register('generateChangelog', GenerateAosChangelog) {
-  group = "Axelor application"
-  description = "Generate change logs from unreleased entries."
+task generateChangelog(type: GenerateAosChangelog) {
+  group "Axelor application"
+  description "Generate change logs from unreleased entries."
   files = fileTree(projectDir) {
     include '**/changelogs/**/*.yml'
     include '**/changelogs/**/*.yaml'
   }
 }
 
-tasks.register('checkCsvEOL', CheckEOLCharsInCsv) {
-  group = "Axelor application"
-  description = "Check end-of-line characters in CSV files."
+task checkCsvEOL(type: CheckEOLCharsInCsv) {
+  group "Axelor application"
+  description "Check end-of-line characters in CSV files."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -95,9 +95,9 @@ tasks.register('checkCsvEOL', CheckEOLCharsInCsv) {
   }
 }
 
-tasks.register('checkBirtCredentials', CheckCredentialsInRptdesign) {
-  group = "Axelor application"
-  description = "Check if .rptdesign files (BIRT) contain credentials."
+task checkBirtCredentials(type: CheckCredentialsInRptdesign) {
+  group "Axelor application"
+  description "Check if .rptdesign files (BIRT) contain credentials."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -106,9 +106,9 @@ tasks.register('checkBirtCredentials', CheckCredentialsInRptdesign) {
   }
 }
 
-tasks.register('checkXmlDomainsAttributes', CheckXmlDomainsAttributes) {
-  group = "Axelor application"
-  description = "Verify errors in XML domain files."
+task checkXmlDomainsAttributes(type: CheckXmlDomainsAttributes) {
+  group "Axelor application"
+  description "Verify errors in XML domain files."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -117,9 +117,9 @@ tasks.register('checkXmlDomainsAttributes', CheckXmlDomainsAttributes) {
   }
 }
 
-tasks.register('checkXmlViewsAttributes', CheckXmlViewsAttributes) {
-  group = "Axelor application"
-  description = "Verify errors in XML view files."
+task checkXmlViewsAttributes(type: CheckXmlViewsAttributes) {
+  group "Axelor application"
+  description "Verify errors in XML view files."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -128,9 +128,9 @@ tasks.register('checkXmlViewsAttributes', CheckXmlViewsAttributes) {
   }
 }
 
-tasks.register('checkXmlImportsAttributes', CheckXmlImportsAttributes) {
-  group = "Axelor application"
-  description = "Verify errors in XML import files."
+task checkXmlImportsAttributes(type: CheckXmlImportsAttributes) {
+  group "Axelor application"
+  description "Verify errors in XML import files."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -142,6 +142,6 @@ tasks.register('checkXmlImportsAttributes', CheckXmlImportsAttributes) {
   }
 }
 
-tasks.register('checkXml') { dependsOn['checkXmlDomainsAttributes', 'checkXmlViewsAttributes', 'checkXmlImportsAttributes'] }
+task checkXml(dependsOn: ['checkXmlDomainsAttributes','checkXmlViewsAttributes', 'checkXmlImportsAttributes'])
 
 build.finalizedBy archiveReports
