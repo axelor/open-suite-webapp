@@ -33,7 +33,7 @@ allprojects { p ->
   apply plugin: com.diffplug.gradle.spotless.SpotlessPlugin
 
   spotless {
-    enforceCheck false
+    enforceCheck = false
 
     java {
       target fileTree(projectDir) {
