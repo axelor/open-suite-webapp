@@ -4,6 +4,7 @@ import com.axelor.gradle.tasks.CheckXmlImportsAttributes
 import com.axelor.gradle.tasks.CheckXmlViewsAttributes
 import com.axelor.gradle.tasks.GenerateAosChangelog
 import com.axelor.gradle.tasks.CheckEOLCharsInCsv
+import com.axelor.gradle.tasks.CheckJavaInjectAnnotationImport
 
 plugins {
   id 'com.axelor.app'
@@ -135,6 +136,17 @@ task checkXmlImportsAttributes(type: CheckXmlImportsAttributes) {
     include "**/modules/**/src/main/resources/data-import/*.xml"
     include "**/modules/**/src/main/resources/data-init/*.xml"
     include '**/modules/**/src/main/resources/import-configs/*.xml'
+  }
+}
+
+task checkJavaInjectAnnotationImport(type: CheckJavaInjectAnnotationImport) {
+  group "Axelor application"
+  description "Verify Inject annotation import in Java files."
+  files = fileTree(projectDir) {
+    exclude '**/build'
+    exclude '**/bin'
+    exclude '**/out'
+    include "**/modules/**/src/main/java/**/*.java"
   }
 }
 
