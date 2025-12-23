@@ -7,10 +7,16 @@
 	href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
 <link rel="stylesheet"
 	href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-
+	<style>
+	.leaflet-marker-icon{
+        width:0 !important;
+        height:0 !important;
+        }
+	</style>
 </head>
 <body>
 	<div id="map" style="width: 100%; height: 100%; position: absolute;"></div>
+	<script type="text/javascript" src="js/apphome.js"></script>
 	<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 	<script
 		src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
@@ -31,35 +37,71 @@
 	</script>
 
 	<script>
-		var map = L.map('map').setView([44.907852, 7.673789],16);
-		var dx = getQueryVariable("dx");
-		var dy = getQueryVariable("dy");
-		var ax = getQueryVariable("ax");
-		var ay = getQueryVariable("ay");
-		
-		var bounds = new L.LatLngBounds();
-		var marker1 = new L.marker(dx, dy);
-		var marker2 = new L.marker(ax, ay);
-		bounds.extend(marker1.getLatLng());
-		bounds.extend(marker2.getLatLng());
-
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			maxZoom: 18,
-			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
-		}).addTo(map);
-
-		
-		L.Routing.control({
-			waypoints : [ L.latLng(dx, dy), L.latLng(ax, ay) ],
-			routeWhileDragging: true,
-		    geocoder: L.Control.Geocoder.nominatim()
-		}).on('routingerror', function(e) {	        
-	        alert('Route not Found !');
+	var map = L.map('map').setView([44.907852, 7.673789], 16);
+	var url = getAppHome() + "/ws/map/" + getQueryVariable("object");
+	var id = getQueryVariable("id");
+	if (id) {
+	    url += "/" + id;
+	}
+	fetch(url, {
+	    method: 'GET',
+	    headers: {
+	        'Content-Type': 'application/json'
+	    }
+	})
+	    .then(function (response) {
+	        return response.json();
 	    })
-	    .addTo(map);
-		
-		map.fitBounds(bounds);
+	    .then(function (result) {
+	        var waypoints = [];
+	        var errors = [];
+	        if (result.status == 0) {
+	            for (var i = 0; i < result.data.length; i++) {
+	                var { latit, longit, address, errorMsg} = result.data[i];
+	                if (errorMsg){
+	                	errors.push("\u2022 " +errorMsg);
+	                	continue;
+	                }
+	                waypoints.push(L.Routing.waypoint(L.latLng(latit, longit),address));
+	            }
+	            if (errors.length > 0) {
+            	    alert(errors.join("\n"));
+            	}
+	            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	                maxZoom: 18,
+	                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+	            }).addTo(map);
 
+	            L.Routing.control({
+	                waypoints: waypoints,
+	                routeWhileDragging: true,
+	                addWaypoints: false,
+	                geocoder: L.Control.Geocoder.nominatim(),
+	                createMarker: function(i, waypoint, n) {
+	                	var popup = L.popup({
+	                        offset: [0, -30]
+	                    });
+	                    var marker = L.marker(waypoint.latLng ,{
+	                        draggable: true,
+	                        icon: L.divIcon({ 
+	                        		html: '<div style="position: relative; display: inline-block; top:-35px; left:-6px;"><img src="../leaflet/images/marker-icon.png"><div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px; font-weight: bold; color: white;">' + String.fromCharCode(65 + i) + '</div></div>'
+	                        	})
+	                    }).addTo(map)
+	                    .on('click', function onMapClick(e) {
+	            			popup
+	        				.setLatLng(e.latlng)
+	        				.setContent(waypoint.name)
+	        				.openOn(map);
+	        		});
+	                return marker;
+	                }
+
+	            }).on('routingerror', function (e) {
+	                alert('Route not Found !');
+	            }).addTo(map);
+	        }
+	    })
+	    .catch(error => alert("Request failed: " + error));
 	</script>
 </body>
 </html>
