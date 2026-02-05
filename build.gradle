@@ -152,4 +152,4 @@ task checkJavaInjectAnnotationImport(type: CheckJavaInjectAnnotationImport) {
 
 task checkXml(dependsOn: ['checkXmlDomainsAttributes','checkXmlViewsAttributes', 'checkXmlImportsAttributes'])
 
-build.finalizedBy archiveReports
+assemble.finalizedBy archiveReports
