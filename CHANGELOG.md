@@ -1,3 +1,129 @@
+## [8.4.25] (2026-04-30)
+
+### Fixes
+#### Base
+
+* Update studio dependency to 3.5.8.
+* Advanced export: fixed duplicated rows when a selection field is overridden.
+* File source connector: fixed SFTP private key path not resolved error.
+* Base: fixed batch history panel refresh after first save on a new record.
+* ProjectPlanningTime: fixed projectPlanningTime's endDateTime computation issue
+* Company: replaced the display of workshopList with a panel dashlet.
+* Base: fixed intermittent 'file could not be generated' error during sale order finalization by closing the FileInputStream after attach.
+* Base: fixed per-company configuration grids rendering empty when multi-company mode is disabled.
+* Partner: fixed missing automatic completion of type, company and currency when creating a third party using Sirene API.
+* PriceList: fix typeSelect field not editable when creating from Referential
+* AppService: add cacheable() on getApp queries to reduce DB load for app configuration lookups.
+
+#### Account
+
+* Accounting reports: fixed empty custom report generated on a newly created company.
+* Invoice: fixed 'Suppl. Invoices to pay' to include validated advance payment invoices too.
+* Accounting batch: fixed opening-only close/open accounts batch failing when generate result move is enabled.
+* Move: fixed MappingException when changing payment condition on an unsaved duplicated move.
+* Account: add dedicated merge action for customer and supplier credit notes.
+* Accounting report: fixed 'DADS report declaration preparatory process' report to work when company's customer account is not configured.
+* Payment Session: fixed pagination skipping invoice terms beyond the first page during session validation.
+* Account: hide print button in mass entry grid and form views.
+
+#### Bank Payment
+
+* Bank reconciliation: fix isPosted flag and ending balance calculation
+* Bank statement: fix column width and font in Birt reports.
+* Move: fixed HibernateException on onLoad after generating counterpart when invoice terms are created.
+
+#### Budget
+
+* Sale order: fixed same name panel in sale order form.
+
+#### Cash Management
+
+* Opportunity : fixed company bank details not auto-filled on opportunity and not carried over to sale order.
+* Forecast: exclude archived reports and summaries from dashboard.
+
+#### Contract
+
+* Contract: filled ref/refId on traceback so the failing contract is identified when a batch raises an error.
+
+#### Human Resource
+
+* HR: added button to display accounting moves linked to an expense.
+* Timesheet: fixed timesheet line unit display
+* HR batch: fixed french translation for leave reasons field in leave management batch.
+
+#### Production
+
+* Production: fixed NPE and incorrect form displayed when clicking a component node in the BOM tree view.
+* Sale order: use AppSaleService to fetch AppSale configuration.
+* MRP: included manufacturing orders consuming a product when MRP is filtered on raw materials, so projected stock reflects expected consumption.
+
+#### Purchase
+
+* Purchaser order: fixed migration script which is incorrectly setting amount invoiced to 0 on all purchase orders.
+* Purchase: allow editing trading name on draft purchase orders.
+
+#### Quality
+
+* Company: fixed french translation of Quality config button.
+
+#### Sale
+
+* Sale order: fixed multiple quantities check skipped on a new sale order line.
+* Sale: fixed performance issue in sale order line loading caused by repeated DI resolution.
+* Sale order line: fixed type selection in sale order line when pack management is disabled.
+* Sale order line: fixed delivery state hilite regardless of sale order status.
+* Sale order : fixed error when adding a pack without any products while editable tree view is activated.
+
+#### Stock
+
+* Stock location: fixed drag and drop in tree view.
+* Stock location: fixed an error when saving a valued stock location.
+* Stock location: fixed value indicator not displayed in edit mode.
+* StockMove: fixed NPE when we mass invoice and the stock move has an address null.
+* Stock: fixed stock location form marked dirty when opened.
+* Stock: fixed demo data import failure caused by a missing carrier partner reference in stock_logisticalForm.
+
+#### Supply Chain
+
+* Sale order: fixed customer credit overrun not being detected at quotation finalization when the current quotation pushes the total above the accepted credit.
+* Supplychain: fixed performance issue in sale order to stock move generation for orders with many lines.
+* MRP: fixed NullPointerException in MRP processing when a product had a null productTypeSelect or excludeFromMrp.
+
+
+### Developer
+
+#### Base
+
+- PartnerGenerateService: modified configurePartner method signature to include a new parameter Map<String, Boolean> partnerTypeData.
+
+#### Bank Payment
+
+During bank reconciliation validation, lines with a posted number (postedNbr)
+but no associated move line were not marked as posted (isPosted) and were
+incorrectly blocked by the incomplete line check.
+
+The ending balance was also miscalculated for these lines, as their
+credit/debit amounts were ignored when no move line was linked.
+
+Additionally, when a move line is reconciled without a bank statement line,
+the reconciled amount on the move line is now correctly set.
+
+#### Cash Management
+
+- CashManagementModule: Added binding of OpportunitySaleOrderSupplychainServiceImpl to OpportunitySaleOrderCashManagementServiceImpl.
+
+#### Production
+
+In `SaleOrderLineBomSyncServiceImpl`, replaced `AppSaleRepository` with `AppSaleService` in the constructor.
+
+#### Stock
+
+- StockLocationUtilsService: removed methods `getStockLocationValue(StockLocation)` and `getStockLocationValue(Long, Long)`.
+
+Script to run:
+DELETE FROM meta_action
+WHERE name = 'action-stock-location-method-set-stock-location-value';
+
 ## [8.4.24] (2026-04-16)
 
 ### Fixes
@@ -2717,6 +2843,7 @@ ALTER TABLE studio_app_purchase ADD COLUMN manage_call_for_tender boolean;
 * Budget: allowed to split the amount on multiple periods.
 
  
+[8.4.25]: https://github.com/axelor/axelor-open-suite/compare/v8.4.24...v8.4.25
 [8.4.24]: https://github.com/axelor/axelor-open-suite/compare/v8.4.23...v8.4.24
 [8.4.23]: https://github.com/axelor/axelor-open-suite/compare/v8.4.22...v8.4.23
 [8.4.22]: https://github.com/axelor/axelor-open-suite/compare/v8.4.21...v8.4.22
