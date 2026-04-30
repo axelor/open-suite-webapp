@@ -1,3 +1,71 @@
+## [8.3.34] (2026-04-30)
+
+### Fixes
+#### Base
+
+* Update studio dependency to 3.4.12.
+* Advanced export: fixed duplicated rows when a selection field is overridden.
+* File source connector: fixed SFTP private key path not resolved error.
+* Base: fixed per-company configuration grids rendering empty when multi-company mode is disabled.
+
+#### Account
+
+* Invoice: fixed 'Suppl. Invoices to pay' to include validated advance payment invoices too.
+* Move: fixed MappingException when changing payment condition on an unsaved duplicated move.
+* Payment Session: fixed pagination skipping invoice terms beyond the first page during session validation.
+* Account: hide print button in mass entry grid and form views.
+
+#### Bank Payment
+
+* Move: fixed HibernateException on onLoad after generating counterpart when invoice terms are created.
+* Bank reconciliation: fix validation, ending balance, and improve performance
+
+#### Cash Management
+
+* Opportunity : fixed company bank details not auto-filled on opportunity and not carried over to sale order.
+
+#### Production
+
+* Sale order: use AppSaleService to fetch AppSale configuration.
+
+#### Purchase
+
+* Purchaser order: fixed migration script which is incorrectly setting amount invoiced to 0 on all purchase orders.
+
+
+### Developer
+
+#### Bank Payment
+
+Several issues in bank reconciliation have been fixed:
+- Reconciliation lines that had already been partially reconciled (with a
+  posted number) but had no associated accounting move line were not marked
+  as posted during validation, causing incorrect behavior.
+- The remaining amount to reconcile on bank statement lines was not
+  updated for those lines during validation.
+- When a move line is reconciled without a linked bank statement line,
+  the reconciled amount on the move line is now correctly set.
+- The ending balance was incorrectly calculated when lines had a posted
+  number but no move line; their amounts are now included in the computation.
+- The incomplete line check no longer blocks lines that already have a
+  posted number.
+
+Performance and UX improvements:
+- The automatic balance recomputation triggered on every line change has
+  been removed to improve performance on large reconciliations.
+- A dedicated "Compute balances" button (highlighted in green) is now
+  available to manually trigger balance recalculation.
+- The "Reconcile selected" button now saves the record before executing
+  reconciliation to avoid data loss.
+
+#### Cash Management
+
+- CashManagementModule: Added binding of OpportunitySaleOrderSupplychainServiceImpl to OpportunitySaleOrderCashManagementServiceImpl.
+
+#### Production
+
+In `SaleOrderLineBomSyncServiceImpl`, replaced `AppSaleRepository` with `AppSaleService` in the constructor.
+
 ## [8.3.33] (2026-04-16)
 
 ### Fixes
@@ -3179,6 +3247,7 @@ DELETE FROM meta_action WHERE name = 'referential.conf.api.configuration';
 * App business project: removed configurations related to time management in app business project (time units and default hours per day) to use the configurations already present in app base.
 * Project financial data: added a link to the project in project financial data view.
 
+[8.3.34]: https://github.com/axelor/axelor-open-suite/compare/v8.3.33...v8.3.34
 [8.3.33]: https://github.com/axelor/axelor-open-suite/compare/v8.3.32...v8.3.33
 [8.3.32]: https://github.com/axelor/axelor-open-suite/compare/v8.3.31...v8.3.32
 [8.3.31]: https://github.com/axelor/axelor-open-suite/compare/v8.3.30...v8.3.31
