@@ -1,3 +1,60 @@
+## [8.2.42] (2026-04-30)
+
+### Fixes
+#### Base
+
+* Update studio dependency to 3.3.18.
+* File source connector: fixed SFTP private key path not resolved error.
+* AppService: add cacheable() on getApp queries to reduce DB load for app configuration lookups.
+
+#### Account
+
+* Move: fixed MappingException when changing payment condition on an unsaved duplicated move.
+* Payment session: fixed incorrect total displayed and compensation not applied with Bank Order Confirmation trigger.
+* Accounting report: fixed 'DADS report declaration preparatory process' report to work when company's customer account is not configured.
+* Payment Session: fixed pagination skipping invoice terms beyond the first page during session validation.
+* Account: hide print button in mass entry grid and form views.
+
+#### Bank Payment
+
+* Bank statement: fix column width and font in Birt reports.
+* Move: fixed HibernateException on onLoad after generating counterpart when invoice terms are created.
+* Bank reconciliation: fix validation, ending balance, and improve performance
+
+#### Contract
+
+* Contract: filled ref/refId on traceback so the failing contract is identified when a batch raises an error.
+
+#### Supply Chain
+
+* Supplychain: fixed performance issue in sale order to stock move generation for orders with many lines.
+
+
+### Developer
+
+#### Bank Payment
+
+Several issues in bank reconciliation have been fixed:
+- Reconciliation lines that had already been partially reconciled (with a
+  posted number) but had no associated accounting move line were not marked
+  as posted during validation, causing incorrect behavior.
+- The remaining amount to reconcile on bank statement lines was not
+  updated for those lines during validation.
+- When a move line is reconciled without a linked bank statement line,
+  the reconciled amount on the move line is now correctly set.
+- The ending balance was incorrectly calculated when lines had a posted
+  number but no move line; their amounts are now included in the computation.
+- The incomplete line check no longer blocks lines that already have a
+  posted number.
+
+Performance and UX improvements:
+- The automatic balance recomputation triggered on every line change has
+  been removed to improve performance on large reconciliations.
+- A dedicated "Compute balances" button (highlighted in green) is now
+  available to manually trigger balance recalculation.
+- The "Reconcile selected" button now saves the record before executing
+  reconciliation to avoid data loss.
+
 ## [8.2.41] (2026-04-16)
 
 ### Fixes
@@ -2668,6 +2725,7 @@ A new configuration is now available in App Sale to choose the normal grid view 
 * Deposit slip: manage bank details in generated accounting entries.
 * Payment: use correctly the payment date instead of today date when computing currency rate.
 
+[8.2.42]: https://github.com/axelor/axelor-open-suite/compare/v8.2.41...v8.2.42
 [8.2.41]: https://github.com/axelor/axelor-open-suite/compare/v8.2.40...v8.2.41
 [8.2.40]: https://github.com/axelor/axelor-open-suite/compare/v8.2.39...v8.2.40
 [8.2.39]: https://github.com/axelor/axelor-open-suite/compare/v8.2.38...v8.2.39
