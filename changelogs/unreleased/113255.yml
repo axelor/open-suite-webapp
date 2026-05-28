@@ -1,5 +1,6 @@
 ---
 title: Upgrade to AOP 8.2.0
+module: axelor-base
 description: |
   Check AOP 8.2.0 migration guide at https://docs.axelor.com/adk/8.2/migrations/migration-8.2.html
   Don't forget to check your encryption.algorithm property value before running anything.
