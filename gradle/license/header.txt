@@ -16,6 +16,3 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
- function getAppHome () {
-	return location.protocol + '//' + location.host + location.pathname.substring(0, location.pathname.search(/\/map\/.*/));
- }
