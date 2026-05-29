@@ -1,3 +1,1128 @@
+## [9.0.10] (2026-05-28)
+
+### Fixes
+#### Base
+
+* Upgrade to AOP 8.2.0
+* Unit conversion: fixed an error that could occur during processes involving unit conversions.
+* Partner: fixed missing name of panel-dashlets.
+* fixed invalid null comparison in domain filters broken in Hibernate 6.
+* Mailing list message: fixed 'My Mailing lists' visibility to limit users from viewing non-shared mailing lists.
+
+#### Account
+
+* Invoice: restored automatic generation of invoice notes on ventilation.
+* Accounting report: fixed wrong French translation for DAS2 contact partner phone missing message.
+* Accounting report: fixed French translation for missing account reporting sequence error message.
+* Invoice: fixed cannot cancel an advance invoice which is not paid yet.
+* Move: fixed wrong French translation for move deletion error message.
+* Accounting report: fixed aged balance query to include credit move lines and preserve selected report type when applying model.
+* Invoice: fixed NPE when selecting the origin date before the partner on a supplier invoice.
+* Account: fixed invoice PFP status update after term validation from move line view.
+* Closure assistant: fixed grid view fields to display fiscal year and company correctly.
+* Invoice: fixed 'Authorize auto reconcile on invoice' fails to impute existing credit notes due to unexpected Compensation check.
+* Invoice: fixed ventilation failure when a deductible tax line is shared by invoice lines with and without a co-applied non-deductible tax.
+* ACCOUNTING: added 'Payment' application type to cancel reason and dedicated menu.
+* FEC Import: fixed reconcile group imported when validation is not activated or anomaly encountered, and orphaned reconcile groups are now deleted.
+
+#### Helpdesk
+
+* Client portal / Ticket: fixed resolved tickets filter which uses invalid statusSelect field in client portal dashboard.
+* Ticket: fixed end date is not being set when resolving the ticket.
+
+#### Human Resource
+
+* Expense: fixed an error where ventilating an expense with multiple expense lines on different dates with taxes caused a 'duplicate tax movelines' error.
+
+#### Marketing
+
+* Campaign: fixed emailing report panel always visible regardless of emailing boolean.
+
+#### Production
+
+* Manuf order: fixed an issue where the stock move generated for scrapped products on a manufacturing order was empty.
+* Production: fixed internal server error on manufacturing dashboard.
+* Sale order: fixed the sale order line price when BOM is exploded into details.
+
+#### Purchase
+
+* Purchase order: fixed stock moves fragmented when line stock location is empty.
+* Purchase request: fixed missing translation on generated purchase orders tab title.
+
+#### Sale
+
+* Sale order pricing: pricing scale values are no longer overwritten by the standard line recomputation on change or save.
+* Sale order: fixed end of pack line is not inherited on the sale order when 'Split quotations and orders' is activated.
+
+#### Stock
+
+* Stock move: fixed an error occurring when using 'Pick all' on a mass stock move.
+* Stock: fixed inventory validation not updating the last inventory date and quantity on sub-location stock lines.
+* Stock: fixed Stock financial data report history lookup causing severe slowdown and incorrect zero-quantity valuation snapshots.
+
+#### Supply Chain
+
+* Supplychain: fixed sale order confirm with automatic stock move generation.
+* Sale order: fixed bad injection of InvoiceServiceSupplychainImpl instead of interface in SaleOrderInvoiceServiceImpl.
+
+
+### Developer
+
+#### Base
+
+Check AOP 8.2.0 migration guide at https://docs.axelor.com/adk/8.2/migrations/migration-8.2.html
+Don't forget to check your encryption.algorithm property value before running anything.
+
+---
+
+`UnitConversionServiceImpl.unitConversionCache` is now `static` and shared across all instances instead of being allocated per instance.
+
+#### Account
+
+Added InvoiceNoteService as parameter in InvoiceServiceImpl constructor
+Added InvoiceNoteService as parameter in InvoiceServiceSupplychainImpl constructor
+
+---
+
+Added MoveLineRepository and ReconcileGroupRepository to FECImporter constructor.
+
+#### Helpdesk
+
+Added TicketStatusService as parameter in ClientViewServiceImpl constructor
+
+#### Human Resource
+
+The method `computeExpenseLinesTotalTax` in `ExpenseVentilateServiceImpl` was refactored to group
+tax amounts by `(TaxLine, vatSystem)` instead of by date. Tax move lines now have `taxLineSet`,
+`taxRate`, `taxCode`, and `vatSystemSelect` properly set to avoid duplicate detection.
+
+New class `ExpenseTaxConfiguration` was added to handle tax grouping.
+
+Modified files:
+- `ExpenseVentilateServiceImpl.java`
+- `ExpenseTaxConfiguration.java` (new)
+
+#### Sale
+
+- Changed return type of `SaleOrderLinePricingService.computePricingScale` from `void` to `Map<String, Object>`.
+- Added `AppBaseService appBaseService` and `SaleOrderLinePricingService saleOrderLinePricingService` in `SaleOrderLineComputeServiceImpl` and `SaleOrderLineComputeSupplychainServiceImpl`.
+
+#### Supply Chain
+
+The constructor of `SaleOrderInvoiceServiceImpl` (and its subclasses `SaleOrderInvoiceContractServiceImpl`, `SaleOrderBudgetServiceImpl`) has changed.
+`InvoiceServiceSupplychainImpl invoiceService` has been replaced by two interface-typed parameters:
+- `InvoiceService invoiceService`
+- `InvoiceServiceSupplychain invoiceServiceSupplychain`
+
+## [9.0.9] (2026-05-13)
+
+### Fixes
+#### Base
+
+* Product: fixed code of packaging product demo data.
+* Base: fixed the simulated date when running in dev mode on a non-UTC server, which was shifted by one day.
+* Price list: fixed partner price list panel title not reflecting the price list type.
+
+#### Account
+
+* Move: fixed functional origin badge not displayed in form view.
+* Closure assistant: fixed error on required fields when creating a new annual closure.
+* Payment session: fixed unbalanced accounting move when re-validating a session containing a refund after cancelling a bank order.
+* Analytic review: fix detached entity error when reversing many analytic move lines.
+
+#### Contract
+
+* Contract: prevent enabling grouped invoicing without automatic invoicing.
+
+#### Human Resource
+
+* Message template: fixed demo data import overriding 'Changed password' message template due to importId conflicts in expense templates.
+
+#### Production
+
+* Manuf order: fixed an issue where subcontracting cost was halved on intermediate cost sheets, and removed the restriction blocking partial real quantity changes on outsourcing service stock move lines.
+* Production: machine operating duration is now correctly updated when finishing an operation order.
+
+#### Project
+
+* Project task: changed highlight of column to row in grid view.
+* Invoice: fixed the business project related code of the invoice report.
+
+#### Quality
+
+* Control entry: unified the java process used by all add control entry buttons.
+* Quality: fixed init data for control type name and translated control entry plan line fields.
+* Quality: fixed view layout for control entry, control plan, and stock move line.
+
+#### Sale
+
+* Sale order: fixed error when adding a title line in sale order line details list.
+
+#### Stock
+
+* Stock move: fixed availability status computed on expected quantity instead of real quantity.
+* Stock move: fixed the display of lines with 0 quantity in Picking order BIRT report.
+* Stock API: fixed required fields check on realization of supplier stock move when 'Require to fill the shipment information' is enabled.
+* Stock move: fixed error on product removal on planned supplier arrival.
+* Stock move: removed the quality control entry panel from the stock move form.
+
+#### Supply Chain
+
+* Stock reservation: fixed an issue where the requested reserved quantity was capped on the planned quantity instead of the real quantity when the auto-fill delivery real quantity configuration was enabled.
+
+
+### Developer
+
+#### Quality
+
+ControlEntryService: added addControlEntry(Context) and onControlPlanChange(ControlEntry) methods.
+ControlEntryServiceImpl: constructor now requires ControlPlanRepository and ControlEntryRepository.
+ControlEntryProductionServiceImpl: new class in axelor-production extending ControlEntryServiceImpl.
+
+-- Script
+DELETE FROM meta_action WHERE name IN (
+  'action-product-view-add-control-entry',
+  'action-manuf-order-view-add-control-entry',
+  'action-operation-order-view-add-control-entry',
+  'action-stock-move-line-view-add-control-entry',
+  'action-tracking-number-view-add-control-entry',
+  'action-control-plan-attrs-control-plan-on-change'
+);
+
+#### Stock
+
+-- Script
+DELETE FROM meta_action WHERE name IN ('action-stock-move-view-control-entry', 'action-stock-move-view-add-control-entry');
+
+## [9.0.8] (2026-04-30)
+
+### Fixes
+#### Base
+
+* Company: new legal information fields
+* Update studio dependency to 4.0.6.
+* App Base: fixed today date field appearing twice on the form view.
+* Advanced export: fixed duplicated rows when a selection field is overridden.
+* Partner: fixed wrong field name in setContactPartnerDomain causing contactPartnerSet to allow selecting any partner.
+* File source connector: fixed SFTP private key path not resolved error.
+* Base: fixed batch history panel refresh after first save on a new record.
+* ProjectPlanningTime: fixed projectPlanningTime's endDateTime computation issue
+* Company: replaced the display of workshopList with a panel dashlet.
+* Base: fixed intermittent 'file could not be generated' error during sale order finalization by closing the FileInputStream after attach.
+* Message: fixed temporary email sending not being blocked when email sending is deactivated in the base app.
+* Base: fixed per-company configuration grids rendering empty when multi-company mode is disabled.
+* Partner: fixed missing automatic completion of type, company and currency when creating a third party using Sirene API.
+* PriceList: fix typeSelect field not editable when creating from Referential
+
+#### Account
+
+* Accounting reports: fixed empty custom report generated on a newly created company.
+* Invoice line: new field eco-tax amount and mention, with default defined on product.
+* Invoice: fixed 'Suppl. Invoices to pay' to include validated advance payment invoices too.
+* Invoice: add vatSystemSelect field
+* InvoiceNote: updated modelisation to extract invoice type in a new separate object.
+* Invoice: fixed BIRT report failing with 'column does not exist' and duplicate column metadata after the vatLiabilitySelect/vatSystemSelect rename.
+* Accounting batch: fixed opening-only close/open accounts batch failing when generate result move is enabled.
+* Move: fixed MappingException when changing payment condition on an unsaved duplicated move.
+* BankDetails: add field InvoiceNoteType.
+* Account: add dedicated merge action for customer and supplier credit notes.
+* AccountConfig: New field penaltyRateNote to separate penalty rate note from legal note
+* Vat exemption reason: added VAT exemption reason in VAT summary table in invoice and sale order reports.
+* Accounting report: fixed 'DADS report declaration preparatory process' report to work when company's customer account is not configured.
+* Vat exemption reason: added VAT exemption reason management on invoices, sale orders, and purchase orders.
+* Payment Session: fixed pagination skipping invoice terms beyond the first page during session validation.
+* Account: hide print button in mass entry grid and form views.
+* InvoiceNote: updated management of invoice category.
+
+#### Bank Payment
+
+* Bank reconciliation: fix isPosted flag and ending balance calculation
+* Bank statement: fix column width and font in Birt reports.
+* Move: fixed HibernateException on onLoad after generating counterpart when invoice terms are created.
+
+#### Budget
+
+* Sale order: fixed same name panel in sale order form.
+
+#### Cash Management
+
+* Opportunity : fixed company bank details not auto-filled on opportunity and not carried over to sale order.
+* Forecast: exclude archived reports and summaries from dashboard.
+
+#### Contract
+
+* Contract: fixed an error raised when validating a revaluation formula.
+* Contract: filled ref/refId on traceback so the failing contract is identified when a batch raises an error.
+
+#### Human Resource
+
+* HR: added button to display accounting moves linked to an expense.
+* Timesheet: fixed timesheet line unit display
+* HR batch: fixed french translation for leave reasons field in leave management batch.
+
+#### Production
+
+* Manufacturing order: fixed double WAP computation and duplicate stock location line history entry when finishing a manufacturing order.
+* Production: fixed NPE and incorrect form displayed when clicking a component node in the BOM tree view.
+* Sale order: use AppSaleService to fetch AppSale configuration.
+* MRP: included manufacturing orders consuming a product when MRP is filtered on raw materials, so projected stock reflects expected consumption.
+* Production: fixed tracking number continuity during partial production.
+
+#### Purchase
+
+* Call tender: fixed the currency error when generating a purchase order due to a contact being selected as supplier partner.
+* Purchase: allow editing trading name on draft purchase orders.
+* Call tender: fixed error when generating purchase order without a company.
+
+#### Quality
+
+* Company: fixed french translation of Quality config button.
+
+#### Sale
+
+* Sale order: fixed multiple quantities check skipped on a new sale order line.
+* Sale: fixed performance issue in sale order line loading caused by repeated DI resolution.
+* Sale order line: fixed type selection in sale order line when pack management is disabled.
+* Sale order line: fixed delivery state hilite regardless of sale order status.
+* Sale order : fixed error when adding a pack without any products while editable tree view is activated.
+
+#### Stock
+
+* Inventory: fixed duplicate inventory lines for tracked products when filling lines.
+* Stock location: fixed drag and drop in tree view.
+* Stock location: fixed an error when saving a valued stock location.
+* Stock location: fixed value indicator not displayed in edit mode.
+* StockMove: fixed NPE when we mass invoice and the stock move has an address null.
+* Stock: fixed stock location form marked dirty when opened.
+* Stock: fixed demo data import failure caused by a missing carrier partner reference in stock_logisticalForm.
+
+#### Supply Chain
+
+* Sale order: fixed customer credit overrun not being detected at quotation finalization when the current quotation pushes the total above the accepted credit.
+* Supplychain: fixed performance issue in sale order to stock move generation for orders with many lines.
+* MRP: fixed NullPointerException in MRP processing when a product had a null productTypeSelect or excludeFromMrp.
+* Sale Order: fixed LazyInitializationException when generating stock moves for lines with different estimated shipping dates.
+
+
+### Developer
+
+#### Base
+
+- Company: New fields legalInformation and legalFormAndCapital.
+
+Script to run : 
+ALTER TABLE base_company                                                                                                                                    
+    ADD COLUMN IF NOT EXISTS legal_information VARCHAR(255),                                                                                                
+    ADD COLUMN IF NOT EXISTS legal_form_and_capital VARCHAR(255);
+
+---
+
+- PartnerGenerateService: modified configurePartner method signature to include a new parameter Map<String, Boolean> partnerTypeData.
+
+#### Account
+
+- Product: New fields defaultEcoTaxAmount and defaultEcoTaxMention.
+- InvoiceLine: New fields ecoTaxAmount and ecoTaxMention.
+
+Script to run : 
+ALTER TABLE base_product
+  ADD COLUMN IF NOT EXISTS default_eco_tax_amount DECIMAL(20,10),
+  ADD COLUMN IF NOT EXISTS default_eco_tax_mention VARCHAR(255);
+
+ALTER TABLE account_invoice_line
+  ADD COLUMN IF NOT EXISTS eco_tax_amount DECIMAL(20,10),
+  ADD COLUMN IF NOT EXISTS eco_tax_mention VARCHAR(255);
+
+---
+
+add vatSystemSelect field on invoices and simplified computation process using previous partner.accountingSituation.vatSystemSelect
+
+- Invoice: New field vatSystemSelect.
+
+Script to run: 
+-- 1. Add vat_system_select column on account_invoice
+ALTER TABLE account_invoice
+    ADD COLUMN IF NOT EXISTS vat_system_select INTEGER;
+
+-- 2. Backfill supplier invoices (operation_type_select IN (1, 2))
+-- from AccountingSituation of the invoice's partner
+UPDATE account_invoice inv
+SET vat_system_select = sit.vat_system_select
+FROM account_accounting_situation sit
+WHERE sit.partner = inv.partner
+  AND sit.company = inv.company
+  AND sit.vat_system_select IN (1, 2)
+  AND inv.operation_type_select IN (1, 2)
+  AND inv.status_select IN (1, 2, 3)
+  AND inv.vat_system_select IS NULL;
+
+-- 3. Backfill customer invoices (operation_type_select IN (3, 4))
+-- from AccountingSituation of the company's partner
+UPDATE account_invoice inv
+SET vat_system_select = sit.vat_system_select
+FROM account_accounting_situation sit, base_company c
+WHERE c.id = inv.company
+  AND sit.partner = c.partner
+  AND sit.company = inv.company
+  AND sit.vat_system_select IN (1, 2)
+  AND inv.operation_type_select IN (3, 4)
+  AND inv.status_select IN (1, 2, 3)
+  AND inv.vat_system_select IS NULL;
+
+-- 4. Fallback: default to 1 (Standard regime) for unresolvable invoices
+UPDATE account_invoice
+SET vat_system_select = 1
+WHERE vat_system_select IS NULL OR vat_system_select = 0;
+
+---
+
+Replace free-text name/type fields on InvoiceNote with a M2O reference
+to a new InvoiceNoteType entity (code + name).
+This standardizes note classification using UNTDID 4451 codes
+(AAB, AAI, ABL, ACC, ADN, BAR, BAQ, BLU, PMT, PMD, REG, SUR)
+for electronic invoicing compliance.
+
+Steps:
+1. Create account_invoice_note_type table with standard reference data
+2. Add invoice_note_type FK column on account_invoice_note
+3. Migrate existing records: match type → code, create new types for unmatched
+4. Add invoice_note_type FK column on base_bank_details (#110332)
+5. Drop old columns (name, type) from account_invoice_note
+
+Script to run : 
+-- 1. Create InvoiceNoteType table
+CREATE TABLE IF NOT EXISTS account_invoice_note_type (
+  id BIGINT NOT NULL,
+  version INTEGER DEFAULT 0,
+  archived BOOLEAN,
+  created_on TIMESTAMP,
+  updated_on TIMESTAMP,
+  created_by BIGINT,
+  updated_by BIGINT,
+  import_id VARCHAR(255),
+  import_origin VARCHAR(255),
+  attrs JSONB,
+  code VARCHAR(255) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  CONSTRAINT account_invoice_note_type_pkey PRIMARY KEY (id)
+);
+
+CREATE SEQUENCE IF NOT EXISTS account_invoice_note_type_seq START WITH 1 INCREMENT BY 1;
+
+-- Reset sequence to max existing id if table already has data
+SELECT setval('account_invoice_note_type_seq',
+  GREATEST((SELECT COALESCE(MAX(id), 0) FROM account_invoice_note_type) + 1, 1), false);
+
+-- 2. Insert standard UNTDID 4451 reference data
+INSERT INTO account_invoice_note_type (id, version, code, name, created_on)
+SELECT nextval('account_invoice_note_type_seq'), 0, v.code, v.name, NOW()
+FROM (VALUES
+  ('AAB', 'Payment term'),
+  ('AAI', 'General information'),
+  ('ABL', 'Government information'),
+  ('ACC', 'Factor assignment clause'),
+  ('ADN', 'Type of transaction reason'),
+  ('BAR', 'Processing Instructions'),
+  ('BAQ', 'VAT exemption reason'),
+  ('BLU', 'Waste information'),
+  ('PMT', 'Payment information'),
+  ('PMD', 'Payment detail/remittance information'),
+  ('REG', 'Regulatory information'),
+  ('SUR', 'Supplier remarks')
+) AS v(code, name)
+WHERE NOT EXISTS (
+  SELECT 1 FROM account_invoice_note_type t WHERE t.code = v.code
+);
+
+SELECT setval('account_invoice_note_type_seq',
+  GREATEST((SELECT COALESCE(MAX(id), 0) FROM account_invoice_note_type) + 1, 1), false);
+
+-- 3. Add invoice_note_type FK column on account_invoice_note
+ALTER TABLE account_invoice_note
+  ADD COLUMN IF NOT EXISTS invoice_note_type BIGINT;
+
+-- 4. Migrate existing InvoiceNote records
+
+-- 4a. Create InvoiceNoteType for unmatched non-null types
+INSERT INTO account_invoice_note_type (id, version, code, name, created_on)
+SELECT
+  nextval('account_invoice_note_type_seq'),
+  0,
+  sub.type,
+  COALESCE(sub.first_name, sub.type),
+  NOW()
+FROM (
+  SELECT
+      n.type,
+      (SELECT n2.name
+       FROM account_invoice_note n2
+       WHERE n2.type = n.type
+         AND n2.name IS NOT NULL
+         AND n2.name <> ''
+       LIMIT 1) AS first_name
+  FROM account_invoice_note n
+  WHERE n.type IS NOT NULL
+    AND n.type <> ''
+    AND n.type NOT IN (SELECT code FROM account_invoice_note_type)
+  GROUP BY n.type
+) sub;
+
+-- 4b. Link InvoiceNote records to their InvoiceNoteType
+UPDATE account_invoice_note n
+SET invoice_note_type = t.id
+FROM account_invoice_note_type t
+WHERE n.type IS NOT NULL
+AND n.type != ''
+AND n.type = t.code;
+
+-- 4c. Log count of notes left with NULL invoice_note_type
+-- (notes whose original `type` was NULL or empty).
+DO $$
+DECLARE
+  null_count BIGINT;
+BEGIN
+  SELECT COUNT(*) INTO null_count
+  FROM account_invoice_note
+  WHERE invoice_note_type IS NULL;
+  IF null_count > 0 THEN
+      RAISE NOTICE
+          '[#109676] % InvoiceNote rows left without invoice_note_type (original type was NULL or empty)',
+          null_count;
+  END IF;
+END $$;
+
+-- 5. Add FK constraint
+ALTER TABLE account_invoice_note
+  DROP CONSTRAINT IF EXISTS fk_account_invoice_note_invoice_note_type;
+
+ALTER TABLE account_invoice_note
+  ADD CONSTRAINT fk_account_invoice_note_invoice_note_type
+  FOREIGN KEY (invoice_note_type)
+  REFERENCES account_invoice_note_type(id);
+
+-- 6. Add invoice_note_type FK column on base_bank_details (#110332)
+ALTER TABLE base_bank_details
+  ADD COLUMN IF NOT EXISTS invoice_note_type BIGINT;
+
+ALTER TABLE base_bank_details
+  DROP CONSTRAINT IF EXISTS fk_base_bank_details_invoice_note_type;
+
+ALTER TABLE base_bank_details
+  ADD CONSTRAINT fk_base_bank_details_invoice_note_type
+  FOREIGN KEY (invoice_note_type)
+  REFERENCES account_invoice_note_type(id);
+
+-- 7. Drop old columns
+ALTER TABLE account_invoice_note
+  DROP COLUMN IF EXISTS name,
+  DROP COLUMN IF EXISTS type;
+
+---
+
+- Invoice: removed specificNoteOnInvoiceToDisplayPanel and added bank detail note computation in note lists on ventilation.
+
+Script to run: 
+ALTER TABLE base_bank_details
+  ADD COLUMN IF NOT EXISTS invoice_note_type BIGINT;
+
+ALTER TABLE base_bank_details
+  DROP CONSTRAINT IF EXISTS fk_base_bank_details_invoice_note_type;
+
+ALTER TABLE base_bank_details
+  ADD CONSTRAINT fk_base_bank_details_invoice_note_type
+  FOREIGN KEY (invoice_note_type)
+  REFERENCES account_invoice_note_type(id);
+
+---
+
+- AccountConfig: New field penaltyRateNote.
+
+Script to run : 
+ALTER TABLE account_account_config
+  ADD COLUMN IF NOT EXISTS penalty_rate_note TEXT;
+
+---
+
+A new entity `VatExemptionReason` (table `account_vat_exemption_reason`) has been introduced in
+axelor-base to store standard EU/FR VAT exemption codes (e.g. VATEX-EU-AE, VATEX-EU-IC, VATEX-EU-G).
+
+The `vatExemptionReason` field (many-to-one to `VatExemptionReason`) has been added to the following entities:
+- `TaxEquiv` (axelor-base) — statically assigned per tax equivalence rule
+- `FiscalPosition` (axelor-base) — fallback reason when customerSpecificNote is true
+- `Partner` (axelor-base) — partner-level override when customerSpecificNote is true
+- `InvoiceLine` (axelor-account)
+- `InvoiceLineTax` (axelor-account)
+- `SaleOrderLine` (axelor-sale)
+- `SaleOrderLineTax` (axelor-sale)
+- `PurchaseOrderLine` (axelor-purchase)
+- `PurchaseOrderLineTax` (axelor-purchase)
+
+Resolution logic (implemented in `OrderLineTaxService.resolveVatExemptionReason`):
+- If `fiscalPosition.customerSpecificNote` is true: use `partner.vatExemptionReason`, falling back to `fiscalPosition.vatExemptionReason` if the partner reason is null.
+- Otherwise: use `taxEquiv.vatExemptionReason`.
+
+The specific note displayed on the document is now sourced from `vatExemptionReason.note` when present,
+falling back to `taxEquiv.specificNote`.
+
+--- Constructor changes ---
+
+`InvoiceLineServiceImpl` — new parameter `OrderLineTaxService orderLineTaxService` added at the end.
+
+`InvoiceLineSupplychainService` (axelor-supplychain) — new parameter `OrderLineTaxService orderLineTaxService` added.
+
+`SaleOrderLineTaxServiceImpl` — new parameter `OrderLineTaxService orderLineTaxService` added at the end.
+
+`SaleOrderLineFiscalPositionServiceImpl` — new parameter `OrderLineTaxService orderLineTaxService` added at the end.
+
+`SaleOrderLineProductServiceImpl` — new parameter `OrderLineTaxService orderLineTaxService` added at the end.
+
+`SaleOrderLineProductSupplychainServiceImpl` (axelor-supplychain) — new parameter `OrderLineTaxService orderLineTaxService` added; forwarded to super().
+
+
+--- New API ---
+
+`OrderLineTaxService` (axelor-base):
+  VatExemptionReason resolveVatExemptionReason(FiscalPosition fiscalPosition, TaxEquiv taxEquiv, Partner partner);
+
+--- Demo data ---
+
+New file `account_taxExemptionReason.csv` (EN and FR) providing 11 standard EU/FR exemption reason records.
+Existing file `account_taxEquiv.csv` (EN and FR) updated with a new `vatExemptionReason_code` column
+linking each tax equivalence rule to the appropriate exemption code.
+
+--- Migration script ---
+
+-- Create VatExemptionReason table
+CREATE TABLE account_vat_exemption_reason (
+  id                  BIGINT NOT NULL,
+  archived            BOOLEAN,
+  import_id           CHARACTER VARYING(255),
+  import_origin       CHARACTER VARYING(255),
+  process_instance_id CHARACTER VARYING(255),
+  version             INTEGER,
+  created_on          TIMESTAMP(6) WITHOUT TIME ZONE,
+  updated_on          TIMESTAMP(6) WITHOUT TIME ZONE,
+  attrs               JSONB,
+  code                CHARACTER VARYING(255) NOT NULL,
+  name                CHARACTER VARYING(255) NOT NULL,
+  note                TEXT NOT NULL,
+  created_by          BIGINT,
+  updated_by          BIGINT,
+  CONSTRAINT account_vat_exemption_reason_pkey PRIMARY KEY (id),
+  CONSTRAINT uk_45cls6n7anyc3uvtlrk30qwsg UNIQUE (import_id),
+  CONSTRAINT uk_mmety0ylwddkkoouqdjj2bweg UNIQUE (code),
+  CONSTRAINT fk_rj551obg6gydoq5rqbotlspqj FOREIGN KEY (created_by) REFERENCES auth_user(id),
+  CONSTRAINT fk_hntwiq8h6xox2gwgj1p5hcw8b FOREIGN KEY (updated_by) REFERENCES auth_user(id)
+);
+CREATE INDEX account_vat_exemption_reason_name_idx ON account_vat_exemption_reason (name);
+
+-- Add vatExemptionReason column to TaxEquiv
+ALTER TABLE account_tax_equiv
+  ADD COLUMN IF NOT EXISTS vat_exemption_reason BIGINT,
+  ADD CONSTRAINT fk_9oarhmr8lmiuk22aaum7mv1cr
+    FOREIGN KEY (vat_exemption_reason) REFERENCES account_vat_exemption_reason(id);
+
+-- Add vatExemptionReason column to FiscalPosition
+ALTER TABLE account_fiscal_position
+  ADD COLUMN IF NOT EXISTS vat_exemption_reason BIGINT,
+  ADD CONSTRAINT fk_9gk5x59ubme5j4ah5767nxq04
+    FOREIGN KEY (vat_exemption_reason) REFERENCES account_vat_exemption_reason(id);
+
+-- Add vatExemptionReason column to Partner
+ALTER TABLE base_partner
+  ADD COLUMN IF NOT EXISTS vat_exemption_reason BIGINT,
+  ADD CONSTRAINT fk_kdtmpwgucpdl237qmd7qmbsud
+    FOREIGN KEY (vat_exemption_reason) REFERENCES account_vat_exemption_reason(id);
+
+-- Add vatExemptionReason column to InvoiceLine
+ALTER TABLE account_invoice_line
+  ADD COLUMN IF NOT EXISTS vat_exemption_reason BIGINT,
+  ADD CONSTRAINT fk_8iumyh08vva5e12ghetgvrbtp
+    FOREIGN KEY (vat_exemption_reason) REFERENCES account_vat_exemption_reason(id);
+
+-- Add vatExemptionReason column to InvoiceLineTax
+ALTER TABLE account_invoice_line_tax
+  ADD COLUMN IF NOT EXISTS vat_exemption_reason BIGINT,
+  ADD CONSTRAINT fk_2qn28jl8wurud5ab05b11na99
+    FOREIGN KEY (vat_exemption_reason) REFERENCES account_vat_exemption_reason(id);
+
+-- Add vatExemptionReason column to SaleOrderLine
+ALTER TABLE sale_sale_order_line
+  ADD COLUMN IF NOT EXISTS vat_exemption_reason BIGINT,
+  ADD CONSTRAINT fk_pi3ws18w8qw11iuc9worbw7vp
+    FOREIGN KEY (vat_exemption_reason) REFERENCES account_vat_exemption_reason(id);
+
+-- Add vatExemptionReason column to SaleOrderLineTax
+ALTER TABLE sale_sale_order_line_tax
+  ADD COLUMN IF NOT EXISTS vat_exemption_reason BIGINT,
+  ADD CONSTRAINT fk_5sa3d2cd74unv4tpu9ga77nei
+    FOREIGN KEY (vat_exemption_reason) REFERENCES account_vat_exemption_reason(id);
+
+-- Add vatExemptionReason column to PurchaseOrderLine
+ALTER TABLE purchase_purchase_order_line
+  ADD COLUMN IF NOT EXISTS vat_exemption_reason BIGINT,
+  ADD CONSTRAINT fk_ssmlm5sg6syiqma2q9el7usao
+    FOREIGN KEY (vat_exemption_reason) REFERENCES account_vat_exemption_reason(id);
+
+-- Add vatExemptionReason column to PurchaseOrderLineTax
+ALTER TABLE purchase_purchase_order_line_tax
+  ADD COLUMN IF NOT EXISTS vat_exemption_reason BIGINT,
+  ADD CONSTRAINT fk_98soi4hx4knmlr57865ea152y
+    FOREIGN KEY (vat_exemption_reason) REFERENCES account_vat_exemption_reason(id);
+
+---
+
+- AccountConfig: New field defaultInvoiceCategory.
+- Invoice: new field invoiceCategory, computed according to invoice lines product type.
+- AccountConfig: modified typeList mechanism (in InvoiceProductStatement) to use new selection.
+- Invoice: deleted invoiceProductStatement and replaced it by a new mention in invoiceNoteList with code 'REG'.
+Script to run : 
+ALTER TABLE account_account_config
+  ADD COLUMN IF NOT EXISTS penalty_rate_note TEXT,
+  ADD COLUMN IF NOT EXISTS default_invoice_category_select VARCHAR(255);
+
+ALTER TABLE account_invoice
+  ADD COLUMN IF NOT EXISTS invoice_category_select VARCHAR(255);
+
+ALTER TABLE base_company
+  ADD COLUMN IF NOT EXISTS legal_information VARCHAR(255),
+  ADD COLUMN IF NOT EXISTS legal_form_and_capital VARCHAR(255);
+
+UPDATE account_invoice_product_statement SET type_list = 'goods' WHERE type_list = 'storable';
+UPDATE account_invoice_product_statement SET type_list = 'services' WHERE type_list = 'service';
+UPDATE account_invoice_product_statement SET type_list = 'mixed' WHERE type_list = 'storable,service';
+UPDATE account_invoice_product_statement SET type_list = 'mixed'
+WHERE type_list LIKE '%storable%' AND type_list LIKE '%service%' AND type_list != 'mixed';
+
+UPDATE account_invoice i
+SET invoice_category_select = 'goods'
+WHERE i.operation_type_select IN (1, 3)
+  AND i.operation_sub_type_select = 1
+  AND i.status_select IN (2, 3)
+  AND i.invoice_category_select IS NULL
+  AND EXISTS (
+    SELECT 1 FROM account_invoice_line il WHERE il.invoice = i.id
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM account_invoice_line il
+    LEFT JOIN base_product p ON il.product = p.id
+    WHERE il.invoice = i.id
+      AND (p.product_type_select != 'storable' OR il.product IS NULL)
+);
+
+UPDATE account_invoice i
+SET invoice_category_select = 'services'
+WHERE i.operation_type_select IN (1, 3)
+  AND i.operation_sub_type_select = 1
+  AND i.status_select IN (2, 3)
+  AND i.invoice_category_select IS NULL
+  AND EXISTS (
+    SELECT 1 FROM account_invoice_line il WHERE il.invoice = i.id
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM account_invoice_line il
+    LEFT JOIN base_product p ON il.product = p.id
+    WHERE il.invoice = i.id
+      AND (p.product_type_select != 'service' OR il.product IS NULL)
+  );
+
+UPDATE account_invoice i
+SET invoice_category_select = ac.default_invoice_category_select
+FROM account_account_config ac
+WHERE ac.company = i.company
+  AND i.operation_type_select IN (1, 3)
+  AND i.operation_sub_type_select = 1
+  AND i.status_select IN (2, 3)
+  AND i.invoice_category_select IS NULL
+  AND ac.default_invoice_category_select IS NOT NULL
+  AND EXISTS (
+    SELECT 1 FROM account_invoice_line il WHERE il.invoice = i.id
+);
+
+CREATE SEQUENCE IF NOT EXISTS account_invoice_note_seq START WITH 1 INCREMENT BY 1;
+SELECT setval('account_invoice_note_seq',
+  GREATEST((SELECT COALESCE(MAX(id), 0) FROM account_invoice_note) + 1, 1), false);
+
+INSERT INTO account_invoice_note (id, version, invoice, invoice_note_type, note, created_on)
+SELECT
+  nextval('account_invoice_note_seq'),
+  0,
+  i.id,
+  nt.id,
+  i.invoice_product_statement,
+  NOW()
+FROM account_invoice i
+CROSS JOIN account_invoice_note_type nt
+WHERE nt.code = 'REG'
+  AND i.status_select = 3
+  AND i.invoice_product_statement IS NOT NULL
+  AND i.invoice_product_statement != '';
+
+ALTER TABLE account_invoice
+  DROP COLUMN IF EXISTS invoice_product_statement;
+
+#### Bank Payment
+
+During bank reconciliation validation, lines with a posted number (postedNbr)
+but no associated move line were not marked as posted (isPosted) and were
+incorrectly blocked by the incomplete line check.
+
+The ending balance was also miscalculated for these lines, as their
+credit/debit amounts were ignored when no move line was linked.
+
+Additionally, when a move line is reconciled without a bank statement line,
+the reconciled amount on the move line is now correctly set.
+
+#### Cash Management
+
+- CashManagementModule: Added binding of OpportunitySaleOrderSupplychainServiceImpl to OpportunitySaleOrderCashManagementServiceImpl.
+
+#### Production
+
+ManufOrderStockMoveService: added finishInStockMoves, finishOutStockMoves, partialFinishIn, partialFinishOut methods.
+CostSheetService: added two computeCostPrice overloads accepting an overrideProducedQty (used by ManufOrder finish when OUT moves are still planned) and an additional pair of excludedConsumedLineIds / excludedProducedLineIds sets. The exclusion sets complement the date-based filter on previousCostSheetDate (which has off-by-one semantics) so the cost sheet stays strictly batch-specific even when partial and final finishes happen on the same day.
+ManufOrderWorkflowServiceImpl: constructor now requires UnitConversionService.
+
+---
+
+In `SaleOrderLineBomSyncServiceImpl`, replaced `AppSaleRepository` with `AppSaleService` in the constructor.
+
+#### Stock
+
+Constructor of `InventoryService` now requires a `ProductCompanyService`.
+
+---
+
+- StockLocationUtilsService: removed methods `getStockLocationValue(StockLocation)` and `getStockLocationValue(Long, Long)`.
+
+Script to run:
+DELETE FROM meta_action
+WHERE name = 'action-stock-location-method-set-stock-location-value';
+
+## [9.0.7] (2026-04-16)
+
+### Fixes
+#### Base
+
+* Role: fixed the form view not properly extending axelor-core view.
+* Birt template config line: removed remaining data init.
+* Permission assistant: fixed invalid imported permissions when the condition is left empty.
+* Company: removed non-existing fields from demo data.
+* Partner: block save when registration code is required for companies but empty.
+* REST API: fixed an issue where some unauthorized actions were not blocked correctly.
+* Base: fixed active company, trading name and active project quick menus displaying items in random order instead of alphabetical.
+* Product: fixed duplicating a product copies price list content into existing price lists.
+* Update Axelor Open Platform to 8.1.2
+
+#### Account
+
+* Accounting report type: fixed missing company records in demo data.
+* Account: fixed payment session eligible terms including incompatible payment mode types.
+* Mass entry: fixed error when trying to delete a move of type mass entry.
+* FEC Import: fixed missing currency on imported moves when Idevise column is empty.
+* Accounting report: fixed Aged balance report to use only validated invoice payments.
+* Invoice: fix VAT system forced to payment on advance payment invoice tax lines.
+* Accounting chart: fixed FRA_PCG tax import leaving activeTaxLine null due to incomplete importIds in account_tax.csv.
+* Accounting batch: fixed SemanticException when running close/open accounts batch.
+* Accounting situation: Fix missing debt recovery field on partner.
+* Invoice: fixed company bank details not being auto-filled when selecting a factorized customer.
+* Analytic: fixed analytic percentage validation bypass when saving a move in edit mode.
+* Account: fixed NPE when sorting invoices with null date or id in notification process.
+* Invoice : fixed VAT on advance payments are not included in cash VAT declaration report.
+* Invoice term: fixed NPE on invoice term payment update when invoice term is not linked to an invoice.
+* Payment session: fixed incorrect total displayed and compensation not applied with Bank Order Confirmation trigger.
+* Invoice term: fixed Send notify email button not opening the email wizard on PFP form views.
+* PFP: fix partial validation not creating a new invoice term when validated from the invoice term view.
+* Account: fixed wrong designation on the BIRT report from draft credit note.
+* Payment condition: added help on isFree field.
+* Payment mode: fixed payment mode import files by removing reference to the removed invoiceLabel field.
+
+#### Bank Payment
+
+* Bank order: fixed impossible to cancel a bank order if the associated payment session has a refund.
+
+#### Budget
+
+* Budget: fixed mismatch between Realized with/without PO form amounts and listing filters.
+
+#### Cash Management
+
+* Forecast dashboard: fix chronological ordering of months across years in 'chart.forecast.in.out.total' chart.
+* Forecast recap: apply payment terms on purchase and sale orders.
+* Forecast recap: added non-blocking warning when overlapping forecast recaps/reports are detected for the same company, period and bank details.
+
+#### Contract
+
+* Contract: fixed error when 'Only invoice consumption before Invoice period end Date' is enabled and 'Periodic Invoicing' is disabled while invoicing contract.
+* Contract: added validation to prevent the first period end date from being earlier than the supposed activation date.
+* Contract: display the invoice moment field regardless of the automatic invoicing field.
+
+#### CRM
+
+* Prospect: fixed lost conversion error.
+* Partner: fixed partner merge issue when duplicated partner is having events.
+
+#### GDPR
+
+* GDPR Request: fixed duplicate rows generated in CSV export due to collection fields.
+
+#### Human Resource
+
+* Expense: show the payment button on expense with company card.
+
+#### Production
+
+* Manufacturing order: fixed outsourced produced stock moves targeting the wrong stock location.
+* Production: fixed automatic production order not generated for sale order lines created via product configurator.
+* Sale order: fixed sublines being cleared when changing supply method on a sale order line without a bill of material.
+* Production: fixed consume in stock moves button not working when consuming products by operation phase.
+* Production: fixed LazyInitializationException when confirming sale order with automatic manufacturing order planning enabled.
+* Sale order: fixed NPE error when adding a pack while editable tree view is activated.
+* Production: fixed an error when creating a new consumed product from a manufacturing order.
+* Production: fixed an issue where the real quantity could be changed on service product lines linked to a subcontracting purchase order.
+* Configurator: fixed old bill of material not being deleted when regenerating a product.
+
+#### Project
+
+* Project: fixed dashboard tasks button label to 'View all tasks'.
+
+#### Purchase
+
+* Purchase order: fixed an error occurring when installing purchase order demo data.
+* Purchase order: fixed trading name field being read-only in the outsourcing purchase order.
+
+#### Quality
+
+* Quality: fixed EN demo-data import error on QIResolutionDecision.
+
+#### Sale
+
+* Sale order: fixed stock allocation sale order line duplication issue.
+* Sale order: fixed freight carrier mode and carrier partner not copied from partner on sale order creation.
+* Partner: fixed archived customers/prospects displayed on the map.
+* Sale order: fixed deliveryAddressStr not recomputed on save when address content changes.
+* Dashboard: fixed chart labels for translated select values.
+* Sale order: fixed unnecessary Mapper.toMap usage on sale order line change.
+
+#### Stock
+
+* Stock location: changed stock location value from transient to formula field.
+* Stock: refresh stock move availability badge after line update.
+* Stock move: fixed an error when changing a stock move line type to title.
+* Stock: fixed NPE on fromStockLocation when duplicating stock move.
+
+#### Supply Chain
+
+* Purchase order: fixed missing translation on cancel reason error message.
+* Timetable: fixed error while generating an invoice from the menu form, when the timetable is not related to the order.
+* MRP: fixed calculation staying stuck in started status when an error occurs.
+* Supplychain: invoices generated from a stock move of a purchase order are now correctly generated with the purchase order and advance payments of the purchase order.
+* Sale order: fixed delivery state on lines not initialized after order confirmation when automatic stock move generation is disabled.
+
+
+### Developer
+
+#### Base
+
+Several REST controllers now execute their SecurityCheck chain correctly before continuing.
+
+Custom code or integrations that relied on these endpoints succeeding despite missing access rights
+will no longer work after this fix.
+
+If a custom process was incorrectly using these API flows without the required permissions,
+it must be updated to grant the proper access rights or to call the process with an authorized user.
+
+#### Account
+
+- InvoicePaymentMoveCreateServiceImpl and InvoicePaymentMoveCreateServiceImpl consturctors are updated to introduce MoveLineTaxService
+
+---
+
+-- migration script
+DELETE FROM meta_action WHERE name = 'action-invoice-term-attrs-set-initial-pfp-amount';
+
+#### Production
+
+SaleOrderLineProductionService added to ConfiguratorServiceProductionImpl constructor.
+
+---
+
+Added action-stock-move-line-group-real-qty-onchange override in axelor-production StockMoveLine views.
+
+#### Supply Chain
+
+- MrpService.saveErrorInMrp(Mrp, Exception) signature changed to saveErrorInMrp(Mrp, Throwable).
+- MrpServiceImpl.call() now throws Exception instead of AxelorException.
+- MrpServiceImpl.onRunnerException(Exception) signature changed to onRunnerException(Throwable).
+- MrpJob.runCalculationWithExceptionManagement(Mrp) now throws Exception instead of AxelorException.
+
+---
+
+Added InvoiceService in the StockMoveInvoiceBudgetServiceImpl constructor
+
+## [9.0.6] (2026-04-02)
+
+### Fixes
+#### Base
+
+* Tag: fixed tag domain not filtering by trading name.
+* Partner: fixed IBAN validation not enforced on supplier and customer forms.
+* Address: fixed possible npe on save of address.
+* Address: fixed actionPanel visiblity when creating new record.
+
+#### Account
+
+* Payment session: fixed session total amount decreasing after validation with compensation.
+* Accounting entries imported from FEC files now normalize negative debit or credit values.
+* Payment voucher: fixed moves with 'ignore in debt recovery' not appearing in invoice terms retrieval.
+* Accounting report: fixed general balance report displays empty account name and code for moves at new status.
+* Accounting report: fixed domain filtering on journal, account and partner fields for custom multi-company reports.
+* Invoice: fixed 1 cent gap between reverse charge tax lines.
+* Invoice: fixed tax total computation difference with sale order in ATI mode.
+* Invoice/Order: fixed warning message wrongly displayed when no tax is needed.
+* Accounting entries: fixed the imported amount in currency during FEC imports.
+* Invoice term: fixed missing move line link when creating a new invoice term on a ventilated invoice.
+* Period: improved anomaly management during the close process so that moves failing validation are reported instead of blocking the entire closure.
+* Invoice chart: fixed the turn over displayed on chart 'Customer Turnover history by month (on invoices)' which wrongly includes end of pack line when show total is true.
+
+#### Bank Payment
+
+* BankReconciliation: fixed ending balance computation to use currency amount instead of debit/credit when reconciling in a foreign currency.
+* Move: added a warning when move lines are linked to a validated bank reconciliation.
+* Bank order: fixed an issue where bank order file was accessible via DMSFile.
+* Accounting report / Bank reconciliation statement: fixed bank statement lines not displayed on the report when issued from a csv bank statement.
+
+#### Budget
+
+* Budget: fixed the duplicated budget imputation when adding a budget on move linked to an invoice.
+
+#### Cash Management
+
+* Forecast recap: always apply estimated duration and payment condition on orders.
+
+#### Contract
+
+* Contract version: fixed duration selections to exclude unrelated values.
+* Contract: fixed contract lines order not preserved on new version creation.
+
+#### CRM
+
+* Catalog: fixed an issue where the email form was not displayed after sending an email from a catalog.
+
+#### Human Resource
+
+* Expense: fixed kilometric distance counter reset and wrong rate bracket applied after reimbursement.
+* Timesheet: fixed editor labels not being translated.
+* Timesheet: fixed missing New and Delete buttons in the timesheet line editor.
+* Project planning time: fixed synchronization issue between project planning time and calendar event.
+
+#### Production
+
+* Production: fixed an issue where using 'Consume in stock moves' on a Manufacturing Order could also realize finished-product stock moves.
+* Production: fixed machine charge dashboard percentage precision by using seconds instead of truncated minutes.
+* Sale order: fixed an error occurring when personalizing bill of material from sale order.
+* Sale order: fixed operation quantity returning 0 for semi-finished product when exploding multi-level BOM.
+* Manufacturing order: fixed an issue where cost sheet generated had a wrong status.
+* Production: fixed circular self-injection of BillOfMaterialService in BillOfMaterialServiceImpl.
+* Stock details by product: fixed projected stock not showing manufacturing order component consumptions.
+* Cost sheet: fixed human resource cost not scaled by number of cycles when using per-hour cost type.
+* Production: fixed wrong stock move line generation in operation order when updating planned quantity.
+
+#### Project
+
+* Project template : fixed error while generating a project from a project template with several tasks.
+
+#### Purchase
+
+* Purchase order: fixed trading name field being read-only when the purchase order was generated from a call for tenders.
+* Purchase order lines: fixed the slowdown when selecting a product.
+
+#### Quality
+
+* Quality control / Quality Alert: fixed inconsistent date issue.
+
+#### Sale
+
+* Configurator: fixed an error message occurring when opening an attribute line.
+* Configurator: fixed unique constraint violation when importing a configurator with numeric attribute names.
+* Sale: fixed circular self-injection of ProductRestService in ProductRestServiceImpl.
+* Sale: optimized margin computation by caching considerZeroCost flag outside loops.
+* Configurator: fixed product code being overwritten on sale order line regeneration.
+* Sale order: improved performance when generating report with large database.
+* Configurator: fixed an issue occurring when trying to export a configurator.
+
+#### Stock
+
+* Mass stock move invoicing: fixed partial stock move invoicing.
+* Tracking number: fixed the display of available qty when selecting a tracking number from a stock move line with a child stock location.
+
+#### Supply Chain
+
+* Birt: fixed missing currency unit display on unit price and tax table columns in sale order, invoice, and purchase order reports.
+* Sale/Purchase order: fixed advance payment invoice generated with multiple lines instead of a single one in case of same taxes.
+* Sale/Purchase order: fixed invoiced amount not cumulating when ventilating multiple invoices.
+* Stock move: fixed missing fiscal position on invoices generated from direct stock moves and backorders.
+* Stock move: fixed an error preventing realization of a stock move with reserved sale order lines.
+
+
+### Developer
+
+#### Base
+
+TagService#getTagDomain now takes an additional TradingName parameter.
+
+#### Account
+
+Changed the ImportMoveFecServiceImpl constructor, replacing the MoveLineToolService by ImportMoveLineAmountService
+
+---
+
+- PeriodServiceAccountImpl: added TraceBackRepository in constructor.
+- PeriodServiceAccount: added new public methods getMoves(), getAnomalyCount(), and getAnomalies(String moveIds, int anomalyCount).
+- MoveValidateService: changed accountingMultiple(Query<Move>) return type from void to Pair<List<Move>, Integer>.
+
+#### Bank Payment
+
+Added BankReconciliationLineRepository as parameter in the MoveAttrsBankPaymentServiceImpl constructor
+
+#### CRM
+
+- CatalogService: changed sendEmail(Catalog, Template, List<Partner>) return type from void to Message.
+
+#### Production
+
+Changed some OperationOrderChartServiceImpl method's names.
+- calculateNumberOfMinutesPerHour in calculateNumberOfSecondsPerHour
+- getNumberOfMinutesMachineUsedTotal in getNumberOfSecondsMachineUsedTotal
+- getNumberOfMinutesPerDay in calculatePercentagePerDay
+- calculateMinutes in calculateSeconds
+
+---
+
+Added UnitRepository to BomLineCreationServiceImpl constructor.
+
+---
+
+Constructor of `OperationOrderStockMoveServiceImpl` has two new parameters:
+`StockMoveProductionService stockMoveProductionService`,
+`OperationOrderService operationOrderService`
+
+#### Purchase
+
+Changed the SupplierCatalogServiceImpl constructor to use AppBaseService appBaseService and inject SupplierCatalogRepository.
+
+#### Sale
+
+sale_order_line_proc was using a CASE which prevented PSQL to use index 'sale_sale_order_line_sale_order_idx'. So it was scanning the entire table and then filtering it in memory. Changed to a UNION ALL to permit the use of indexes. The rptdesign file needs to be replaced in the SaleOrder PDF BirtTemplate to get these changes.
+
+#### Stock
+
+Added SupplyChainConfigService and StockMoveRepository as parameter in StockMoveMultiInvoiceServiceImpl constructor
+
+---
+
+Added StockLocationLineFetchService as parameter in the StockMoveLineStockLocationServiceImpl constructor
+
 ## [9.0.5] (2026-03-19)
 
 ### Fixes
@@ -749,6 +1874,11 @@ Replaced the attrs action `action-purchase-order-line-attrs-delivery-panel` with
 
 * Project: improve task tree management.
 
+[9.0.10]: https://github.com/axelor/axelor-open-suite/compare/v9.0.9...v9.0.10
+[9.0.9]: https://github.com/axelor/axelor-open-suite/compare/v9.0.8...v9.0.9
+[9.0.8]: https://github.com/axelor/axelor-open-suite/compare/v9.0.7...v9.0.8
+[9.0.7]: https://github.com/axelor/axelor-open-suite/compare/v9.0.6...v9.0.7
+[9.0.6]: https://github.com/axelor/axelor-open-suite/compare/v9.0.5...v9.0.6
 [9.0.5]: https://github.com/axelor/axelor-open-suite/compare/v9.0.4...v9.0.5
 [9.0.4]: https://github.com/axelor/axelor-open-suite/compare/v9.0.3...v9.0.4
 [9.0.3]: https://github.com/axelor/axelor-open-suite/compare/v9.0.2...v9.0.3
