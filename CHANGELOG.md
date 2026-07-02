@@ -1,3 +1,31 @@
+## [8.2.46] (2026-07-02)
+
+### Fixes
+#### Base
+
+* Updated xsd schema URL to fix a build issue.
+
+#### Account
+
+* Reconciliation: fixed NPE when unlettering an advance payment move with tax payment move lines having no reconcile.
+* Move line: fixed lettering without partner ignoring payment difference threshold, causing always-partial reconciliation.
+* Invoice term : fixed readonly condition of due date in form view opening from menu.
+* Account: fixed Mass Entry validation failing when move lines have different partners.
+* Accounting batch: fixed the date of analytic distribution lines on generated moves to use the move accounting date instead of the origin date for the 'Accounting cut-off' batch.
+* Invoice: fixed internal server error when recording a payment on a foreign currency invoice where the company-currency micro-residual converts to zero in the invoice currency.
+
+#### Bank Payment
+
+* Bank payment: fixed CFONB120 multi-period import rejected on non-chronological period order.
+
+#### Budget
+
+* Budget: fixed committed amount not updated if a budget distribution line is deleted.
+
+#### Contract
+
+* Contract: fixed validation to prevent setting a first period end date earlier than today when no supposed activation date is defined.
+
 ## [8.2.45] (2026-06-11)
 
 ### Fixes
@@ -232,6 +260,134 @@ Added BankReconciliationLineRepository as parameter in the MoveAttrsBankPaymentS
 ---
 
 Added PartnerAccountService to SaleOrderInvoiceServiceImpl and services extending it.
+
+#### Bank Payment
+
+-- migration script
+
+-- Step 1: fix starting_balance and ending_balance for validated reconciliations
+-- ending = bsl_initial + cumulative SUM(move line deltas), starting = same without current rec
+WITH
+reconciliation_data AS (
+    -- move line delta per validated reconciliation; rn=1 marks the first in each bank_details group
+    SELECT
+        br.id,
+        br.bank_details,
+        br.currency,
+        br.bank_statement,
+        br.include_other_bank_statements,
+        ROW_NUMBER() OVER (PARTITION BY br.bank_details ORDER BY br.id) AS rn,
+        COALESCE(
+            SUM(
+                CASE
+                    WHEN co.currency IS DISTINCT FROM br.currency THEN ml.currency_amount
+                    ELSE ml.debit - ml.credit
+                END
+            ),
+            0
+        ) AS ml_delta
+    FROM bankpayment_bank_reconciliation br
+    LEFT JOIN base_company co ON co.id = br.company
+    LEFT JOIN (
+        SELECT DISTINCT bank_reconciliation, move_line
+        FROM bankpayment_bank_reconciliation_line
+        WHERE move_line IS NOT NULL
+    ) brl ON brl.bank_reconciliation = br.id
+    LEFT JOIN account_move_line ml ON ml.id = brl.move_line
+    WHERE br.bank_details IS NOT NULL
+      AND br.status_select = 2
+    GROUP BY br.id, co.currency
+),
+initial_bsl AS (
+    -- initial bank statement balance for the first validated reconciliation per bank_details
+    SELECT
+        rd.bank_details,
+        (
+            SELECT bsl.credit - bsl.debit
+            FROM bankpayment_bank_statement_line_afb120 bsl
+            JOIN bankpayment_bank_statement bs ON bs.id = bsl.bank_statement
+            JOIN bankpayment_bank_statement br_bs ON br_bs.id = rd.bank_statement
+            WHERE bsl.bank_details = rd.bank_details
+              AND bsl.currency = rd.currency
+              AND bs.status_select = 2
+              AND bsl.line_type_select = 1
+              AND (
+                  (rd.include_other_bank_statements = false AND bsl.bank_statement = rd.bank_statement)
+                  OR
+                  (rd.include_other_bank_statements = true AND bs.bank_statement_file_format = br_bs.bank_statement_file_format)
+              )
+            ORDER BY bsl.operation_date ASC, bsl.sequence ASC
+            LIMIT 1
+        ) AS starting_balance
+    FROM reconciliation_data rd
+    WHERE rd.rn = 1
+),
+cumulative AS (
+    SELECT
+        rd.id,
+        ib.starting_balance AS bsl_initial,
+        SUM(rd.ml_delta) OVER (
+            PARTITION BY rd.bank_details ORDER BY rd.id
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        ) AS cumulative_ml,
+        COALESCE(SUM(rd.ml_delta) OVER (
+            PARTITION BY rd.bank_details ORDER BY rd.id
+            ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING
+        ), 0) AS prev_cumulative_ml
+    FROM reconciliation_data rd
+    JOIN initial_bsl ib ON ib.bank_details = rd.bank_details
+)
+UPDATE bankpayment_bank_reconciliation br
+SET
+    starting_balance = c.bsl_initial + c.prev_cumulative_ml,
+    ending_balance   = c.bsl_initial + c.cumulative_ml
+FROM cumulative c
+WHERE br.id = c.id;
+
+-- Step 2: fix starting_balance and ending_balance for non-validated subsequent reconciliations
+WITH non_validated_data AS (
+    SELECT
+        br.id,
+        (
+            SELECT br2.ending_balance
+            FROM bankpayment_bank_reconciliation br2
+            WHERE br2.bank_details = br.bank_details
+              AND br2.id < br.id
+              AND br2.status_select = 2
+            ORDER BY br2.id DESC
+            LIMIT 1
+        ) AS prev_ending,
+        COALESCE(
+            SUM(
+                CASE
+                    WHEN co.currency IS DISTINCT FROM br.currency THEN ml.currency_amount
+                    ELSE ml.debit - ml.credit
+                END
+            ),
+            0
+        ) AS ml_delta
+    FROM bankpayment_bank_reconciliation br
+    LEFT JOIN base_company co ON co.id = br.company
+    LEFT JOIN (
+        SELECT DISTINCT bank_reconciliation, move_line
+        FROM bankpayment_bank_reconciliation_line
+        WHERE move_line IS NOT NULL
+    ) brl ON brl.bank_reconciliation = br.id
+    LEFT JOIN account_move_line ml ON ml.id = brl.move_line
+    WHERE br.bank_details IS NOT NULL
+      AND br.status_select != 2
+      AND EXISTS (
+          SELECT 1 FROM bankpayment_bank_reconciliation br2
+          WHERE br2.bank_details = br.bank_details AND br2.id < br.id AND br2.status_select = 2
+      )
+    GROUP BY br.id, co.currency
+)
+UPDATE bankpayment_bank_reconciliation br
+SET
+    starting_balance = nvd.prev_ending,
+    ending_balance   = nvd.prev_ending + nvd.ml_delta
+FROM non_validated_data nvd
+WHERE br.id = nvd.id;
 
 #### Contract
 
@@ -2774,6 +2930,7 @@ A new configuration is now available in App Sale to choose the normal grid view 
 * Deposit slip: manage bank details in generated accounting entries.
 * Payment: use correctly the payment date instead of today date when computing currency rate.
 
+[8.2.46]: https://github.com/axelor/axelor-open-suite/compare/v8.2.45...v8.2.46
 [8.2.45]: https://github.com/axelor/axelor-open-suite/compare/v8.2.44...v8.2.45
 [8.2.44]: https://github.com/axelor/axelor-open-suite/compare/v8.2.43...v8.2.44
 [8.2.43]: https://github.com/axelor/axelor-open-suite/compare/v8.2.42...v8.2.43
