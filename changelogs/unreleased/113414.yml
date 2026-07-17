@@ -1,0 +1,3 @@
+---
+title: "User: fixed the password pattern config key after the upgrade to AOP 8.2."
+module: axelor-base
