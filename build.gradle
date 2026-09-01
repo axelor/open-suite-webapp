@@ -5,6 +5,7 @@ import com.axelor.gradle.tasks.CheckXmlViewsAttributes
 import com.axelor.gradle.tasks.GenerateAosChangelog
 import com.axelor.gradle.tasks.CheckEOLCharsInCsv
 import com.axelor.gradle.tasks.CheckJavaInjectAnnotationImport
+import com.axelor.gradle.tasks.CheckAppOverrideGuard
 
 plugins {
   id 'com.axelor.app'
@@ -148,6 +149,18 @@ task checkJavaInjectAnnotationImport(type: CheckJavaInjectAnnotationImport) {
     exclude '**/out'
     include "**/modules/**/src/main/java/**/*.java"
   }
+}
+
+task checkAppOverrideGuard(type: CheckAppOverrideGuard) {
+  group "Axelor application"
+  description "Verify that Java overrides of a lower module check the installation of their app."
+  files = fileTree(projectDir) {
+    exclude '**/build'
+    exclude '**/bin'
+    exclude '**/out'
+    include "**/modules/**/src/main/java/**/*.java"
+  }
+  allowlist = files("modules/axelor-open-suite/config/app-override-guard-allowlist.txt")
 }
 
 task checkXml(dependsOn: ['checkXmlDomainsAttributes','checkXmlViewsAttributes', 'checkXmlImportsAttributes'])
