@@ -1,0 +1,114 @@
+# GitLab CI for open-suite-webapp, 8.5-dev variant (AOP 7.4 / Java 11).
+#
+# Port of the GitHub Actions workflows that lived in axelor-open-suite
+# (.github/workflows/gradle.yml and publish-snapshot.yml), seen from the
+# webapp side: the webapp is checked out with its axelor-open-suite submodule,
+# then the same Gradle checks, build, tests and nightly snapshot publish run.
+#
+# Pipelines run on merge requests, on pushes to dev / wip / *-dev, and on
+# schedules (snapshot publish only).
+
+stages:
+  - check
+  - build
+  - test
+  - publish
+
+image: axelor/app-builder:7.4
+
+variables:
+  # The submodule URL in .gitmodules is git@github.com:..., which the runner
+  # cannot use. Submodules are fetched manually in before_script over HTTPS.
+  GIT_SUBMODULE_STRATEGY: none
+  GIT_DEPTH: 20
+  GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.console=plain"
+  SNAPSHOT_REPOSITORY: "https://repository.axelor.com/nexus/repository/maven-snapshots/"
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    # Avoid a duplicate branch pipeline when an MR is already open for the branch
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH == "dev" || $CI_COMMIT_BRANCH == "wip"
+    - if: $CI_COMMIT_BRANCH =~ /^\d+\.\d+-dev$/
+
+default:
+  interruptible: true
+  before_script:
+    - git config --global url."https://github.com/".insteadOf "git@github.com:"
+    - git submodule sync --recursive
+    - git submodule update --init --recursive --depth 1
+    - chmod +x gradlew
+  cache:
+    key: gradle-$CI_COMMIT_REF_SLUG
+    fallback_keys:
+      - gradle-dev
+    paths:
+      - .gradle/wrapper
+      - .gradle/caches
+
+.ci-job:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: on_success
+
+# Same static checks as the GitHub "Java CI" workflow. --continue reports every
+# failing check, not only the first one.
+# generateChangelog must run in its own Gradle invocation: it reads the whole
+# project directory, so Gradle 8 fails its validation when it runs next to
+# tasks that write there (spotlessJava, generateCode).
+checks:
+  extends: .ci-job
+  stage: check
+  needs: []
+  script:
+    - ./gradlew --continue
+        spotlessCheck
+        checkCsvEOL
+        checkBirtCredentials
+        checkXml
+    - ./gradlew generateChangelog
+
+build:
+  extends: .ci-job
+  stage: build
+  needs: []
+  tags: [heavy]
+  timeout: 2h
+  script:
+    - ./gradlew -xtest clean build
+
+test:
+  extends: .ci-job
+  stage: test
+  needs: []
+  tags: [heavy]
+  timeout: 3h
+  script:
+    - ./gradlew test
+  artifacts:
+    when: always
+    expire_in: 1 week
+    reports:
+      junit:
+        - "**/build/test-results/test/TEST-*.xml"
+
+# Nightly snapshot publish (GitHub "Publish snapshot" workflow). Triggered by
+# pipeline schedules targeting dev and wip. Requires the CI/CD variables
+# NEXUS_DEPLOYMENT_USERNAME and NEXUS_DEPLOYMENT_PASSWORD (masked, protected).
+publish-snapshot:
+  stage: publish
+  interruptible: false
+  tags: [heavy]
+  timeout: 2h
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    - ./gradlew publish
+        -PmavenRepository=$SNAPSHOT_REPOSITORY
+        -PmavenUsername=$NEXUS_DEPLOYMENT_USERNAME
+        -PmavenPassword=$NEXUS_DEPLOYMENT_PASSWORD
