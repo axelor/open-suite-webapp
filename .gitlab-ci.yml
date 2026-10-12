@@ -1,18 +1,20 @@
 # GitLab CI for open-suite-webapp.
 #
-# Port of the GitHub Actions workflows that lived in axelor-open-suite
-# (.github/workflows/gradle.yml and publish-snapshot.yml), seen from the
-# webapp side: the webapp is checked out with its axelor-open-suite submodule,
-# then the same Gradle checks, build, tests and nightly snapshot publish run.
+# Port of the GitHub Actions workflow that lived in axelor-open-suite
+# (.github/workflows/gradle.yml), seen from the webapp side: the webapp is
+# checked out with its axelor-open-suite submodule, then the same Gradle checks,
+# build and tests run.
 #
-# Pipelines run on merge requests, on pushes to dev / wip / *-dev, and on
-# schedules (snapshot publish only).
+# Pipelines run on merge requests and on pushes to dev / wip / *-dev.
+#
+# The SNAPSHOT publish lives in axelor-open-suite's .gitlab-ci.yml: it builds
+# the tip of the AOS branch, not the commit pinned by this repository's
+# submodule.
 
 stages:
   - check
   - build
   - test
-  - publish
 
 image: axelor/app-builder:8.2
 
@@ -23,12 +25,10 @@ variables:
   GIT_DEPTH: 20
   GRADLE_USER_HOME: "$CI_PROJECT_DIR/.gradle"
   GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.console=plain"
-  SNAPSHOT_REPOSITORY: "https://repository.axelor.com/nexus/repository/maven-snapshots/"
 
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_PIPELINE_SOURCE == "schedule"
     # Avoid a duplicate branch pipeline when an MR is already open for the branch
     - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
       when: never
@@ -50,19 +50,12 @@ default:
       - .gradle/wrapper
       - .gradle/caches
 
-.ci-job:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: on_success
-
 # Same static checks as the GitHub "Java CI" workflow. --continue reports every
 # failing check, not only the first one.
 # generateChangelog must run in its own Gradle invocation: it reads the whole
 # project directory, so Gradle 8 fails its validation when it runs next to
 # tasks that write there (spotlessJava, generateCode).
 checks:
-  extends: .ci-job
   stage: check
   needs: []
   script:
@@ -75,7 +68,6 @@ checks:
     - ./gradlew generateChangelog
 
 build:
-  extends: .ci-job
   stage: build
   needs: []
   tags: [heavy]
@@ -84,7 +76,6 @@ build:
     - ./gradlew -xtest clean build
 
 test:
-  extends: .ci-job
   stage: test
   needs: []
   tags: [heavy]
@@ -97,19 +88,3 @@ test:
     reports:
       junit:
         - "**/build/test-results/test/TEST-*.xml"
-
-# Nightly snapshot publish (GitHub "Publish snapshot" workflow). Triggered by
-# pipeline schedules targeting dev and wip. Requires the CI/CD variables
-# NEXUS_DEPLOYMENT_USERNAME and NEXUS_DEPLOYMENT_PASSWORD (masked, protected).
-publish-snapshot:
-  stage: publish
-  interruptible: false
-  tags: [heavy]
-  timeout: 2h
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-  script:
-    - ./gradlew publish
-        -PmavenRepository=$SNAPSHOT_REPOSITORY
-        -PmavenUsername=$NEXUS_DEPLOYMENT_USERNAME
-        -PmavenPassword=$NEXUS_DEPLOYMENT_PASSWORD
