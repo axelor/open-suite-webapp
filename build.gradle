@@ -38,10 +38,11 @@ allprojects {
     }
   }
 
-  configurations {
-    runtimeClasspath.exclude group: "org.eclipse.birt.runtime.3_7_1", module: "org.apache.commons.codec"
-    runtimeClasspath.exclude group: "org.eclipse.birt.runtime.3_7_1", module: "com.lowagie.text"
-
+  configurations.configureEach {
+    if (name == 'runtimeClasspath') {
+      exclude group: "org.eclipse.birt.runtime.3_7_1", module: "org.apache.commons.codec"
+      exclude group: "org.eclipse.birt.runtime.3_7_1", module: "com.lowagie.text"
+    }
   }
   configurations.all {
     exclude group: 'org.glassfish.jaxb', module: 'jaxb-runtime'
@@ -74,8 +75,8 @@ task archiveReports(type: Zip) {
 
 
 task generateChangelog(type: GenerateAosChangelog) {
-  group "Axelor application"
-  description "Generate change logs from unreleased entries."
+  group = "Axelor application"
+  description = "Generate change logs from unreleased entries."
   files = fileTree(projectDir) {
     include '**/changelogs/**/*.yml'
     include '**/changelogs/**/*.yaml'
@@ -83,8 +84,8 @@ task generateChangelog(type: GenerateAosChangelog) {
 }
 
 task checkCsvEOL(type: CheckEOLCharsInCsv) {
-  group "Axelor application"
-  description "Check end-of-line characters in CSV files."
+  group = "Axelor application"
+  description = "Check end-of-line characters in CSV files."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -94,8 +95,8 @@ task checkCsvEOL(type: CheckEOLCharsInCsv) {
 }
 
 task checkBirtCredentials(type: CheckCredentialsInRptdesign) {
-  group "Axelor application"
-  description "Check if .rptdesign files (BIRT) contain credentials."
+  group = "Axelor application"
+  description = "Check if .rptdesign files (BIRT) contain credentials."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -105,8 +106,8 @@ task checkBirtCredentials(type: CheckCredentialsInRptdesign) {
 }
 
 task checkXmlDomainsAttributes(type: CheckXmlDomainsAttributes) {
-  group "Axelor application"
-  description "Verify errors in XML domain files."
+  group = "Axelor application"
+  description = "Verify errors in XML domain files."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -116,8 +117,8 @@ task checkXmlDomainsAttributes(type: CheckXmlDomainsAttributes) {
 }
 
 task checkXmlViewsAttributes(type: CheckXmlViewsAttributes) {
-  group "Axelor application"
-  description "Verify errors in XML view files."
+  group = "Axelor application"
+  description = "Verify errors in XML view files."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -127,8 +128,8 @@ task checkXmlViewsAttributes(type: CheckXmlViewsAttributes) {
 }
 
 task checkXmlImportsAttributes(type: CheckXmlImportsAttributes) {
-  group "Axelor application"
-  description "Verify errors in XML import files."
+  group = "Axelor application"
+  description = "Verify errors in XML import files."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -141,8 +142,8 @@ task checkXmlImportsAttributes(type: CheckXmlImportsAttributes) {
 }
 
 task checkJavaInjectAnnotationImport(type: CheckJavaInjectAnnotationImport) {
-  group "Axelor application"
-  description "Verify Inject annotation import in Java files."
+  group = "Axelor application"
+  description = "Verify Inject annotation import in Java files."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
@@ -152,8 +153,8 @@ task checkJavaInjectAnnotationImport(type: CheckJavaInjectAnnotationImport) {
 }
 
 task checkAppOverrideGuard(type: CheckAppOverrideGuard) {
-  group "Axelor application"
-  description "Verify that Java overrides of a lower module check the installation of their app."
+  group = "Axelor application"
+  description = "Verify that Java overrides of a lower module check the installation of their app."
   files = fileTree(projectDir) {
     exclude '**/build'
     exclude '**/bin'
